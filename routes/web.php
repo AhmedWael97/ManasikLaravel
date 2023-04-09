@@ -35,3 +35,15 @@ Route::prefix('/Roles')->group(function() {
     Route::post('/update','App\Http\Controllers\RoleController@update')->name('Roles-Update');
     Route::get('/delete/{id}','App\Http\Controllers\RoleController@destroy')->name('Roles-Delete');
 });
+
+
+//Users
+Route::prefix('/Users')->group(function() {
+    Route::get('/index','App\Http\Controllers\UserController@index')->name('Users');
+    Route::get('/view/{id}','App\Http\Controllers\UserController@view')->name('Users-View');
+    Route::get('/create','App\Http\Controllers\UserController@create')->name('Users-Create');
+    Route::post('/store','App\Http\Controllers\UserController@store')->name('Users-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\UserController@edit')->name('Users-Edit');
+    Route::post('/update','App\Http\Controllers\UserController@update')->name('Users-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\UserController@destroy')->name('Users-Delete');
+});

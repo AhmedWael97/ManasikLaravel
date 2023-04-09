@@ -128,7 +128,7 @@
 
           @can('Users')
           <li class="nav-item">
-            <a href="#" class="nav-link {{ is_active('Users')  ? 'active' : '' }}">
+            <a href="{{ route('Users') }}" class="nav-link {{ is_active('Users')  ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 {{ translate('Users') }}

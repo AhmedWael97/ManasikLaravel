@@ -5,12 +5,12 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>{{ translate('Roles') }}</h1>
+            <h1>{{ translate('Users') }}</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ Route('Home') }}">{{ translate('Home') }}</a></li>
-                <li class="breadcrumb-item active"> {{ translate('Roles') }}</li>
+                <li class="breadcrumb-item active"> {{ translate('Users') }}</li>
             </ol>
             </div>
         </div>
@@ -23,9 +23,9 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
-                    <a href="{{ route('Roles-Create') }}" class="btn btn-primary">
+                    <a href="{{ route('Users-Create') }}" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i>
-                        {{ translate('Add New Role') }}
+                        {{ translate('Add New User') }}
                     </a>
                   </h3>
                 </div>
@@ -40,31 +40,62 @@
                                 {{ translate('Name') }}
                             </th>
                             <th>
-                                {{ translate('Permissions') }}
+                                {{ translate('Role') }}
+                            </th>
+                            <th>
+                                {{ translate('Email') }}
+                            </th>
+                            <th>
+                                {{ translate('Phone') }}
+                            </th>
+                            <th>
+                                {{ translate('Is Active') }}
                             </th>
                             <th>
                                 {{ translate('Actions') }}
                             </th>
                         </thead>
                         <tbody>
-                            @foreach ($Roles as $key=>$role)
+                            @foreach ($Users as $key=>$user)
                                 <tr>
                                     <td>
                                         {{ ++$key }}
                                     </td>
                                     <td>
-                                        {{ $role->name }}
+                                        {{ $user->name }} | {{ $user->name_ar }}
                                     </td>
                                     <td>
-                                        @foreach( $role->permissions->pluck('name')  as $n)
-                                            <span class="badge badge-primary"> {{ $n }} </span>
-                                        @endforeach
+                                        @if(count($user->roles) >= 1)
+                                            {{ $user->roles[0]->name }}
+                                        @else
+                                            -
+                                        @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('Roles-Edit',$role->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
+                                        {{ $user->email }}
+                                    </td>
+                                    <td>
+                                        {{ $user->phone }}
+                                    </td>
+                                    <td>
+                                        @if($user->is_active )
+                                            <span class="badge badge-success">
+                                                {{ translate('Active') }}
+                                            </span>
+                                        @else
+                                            <span class="badge badge-danger">
+                                                {{ translate('Not Active') }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('Roles-Delete',$role->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Users-Delete',$user->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
                                             <i class="fas fa-trash"></i>
                                         </a>
 
