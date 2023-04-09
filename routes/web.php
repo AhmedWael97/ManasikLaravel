@@ -18,7 +18,7 @@ Route::get('/', function () {
         return redirect('/home');
     }
     return view('Auth.login');
-});
+})->name('login');
 
 // Auth
 Route::post('/login','App\Http\Controllers\AuthController@login')->name('Login');
