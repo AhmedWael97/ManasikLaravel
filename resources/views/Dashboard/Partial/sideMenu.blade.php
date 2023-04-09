@@ -136,6 +136,82 @@
             </a>
           </li>
           @endcan
+          @can('Country_View')
+          <li class="nav-item">
+            <a href="{{ route('country-index') }}" class="nav-link {{ is_active('country-index')  ? 'active' : '' }}">
+              <i class="nav-icon fas fa-globe-europe"></i>
+             
+              <p>
+                {{ translate('Countries') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+          @can('Currency_View')
+          <li class="nav-item">
+            <a href="{{ route('currency-index') }}" class="nav-link {{ is_active('currency-index')  ? 'active' : '' }}">
+        
+              <i class="nav-icon fas fa-coins"></i>
+              <p>
+                {{ translate('Currencies') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('Gender_View')
+          <li class="nav-item">
+            <a href="{{ route('gender-index') }}" class="nav-link {{ is_active('gender-index')  ? 'active' : '' }}">
+          
+              <i class="nav-icon fas fa-venus-mars"></i>
+              <p>
+                {{ translate('Genders') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+          @can('Job_View')
+          <li class="nav-item">
+            <a href="{{ route('job-index') }}" class="nav-link {{ is_active('job-index')  ? 'active' : '' }}">
+             
+              <i class="nav-icon fas fa-align-justify"></i>
+              <p>
+                {{ translate('Jobs') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+           @can('Language_View')
+          <li class="nav-item">
+            <a href="{{ route('language-index') }}" class="nav-link {{ is_active('language-index')  ? 'active' : '' }}">
+             
+              <i class="nav-icon fas fa-language"></i>
+              <p>
+                {{ translate('Languages') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+           @can('Nationality_View')
+          <li class="nav-item">
+            <a href="{{ route('nationality-index') }}" class="nav-link {{ is_active('nationality-index')  ? 'active' : '' }}">
+              
+              <i class="nav-icon fas fa-globe"></i>
+              <p>
+                {{ translate('Nationalities') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
 
         </ul>
       </nav>
