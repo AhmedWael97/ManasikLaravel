@@ -18,4 +18,8 @@ class Service extends Model
     public function parent () {
         return $this->hasOne('\App\Models\Service','id','parent_id');
     }
+
+    public function kfaratChoices() {
+        return $this->hasMany('\App\Models\ServiceKfaratChoice','service_id','id');
+    }
 }

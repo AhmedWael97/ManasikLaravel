@@ -50,7 +50,7 @@ Route::prefix('/Users')->group(function() {
 
 
 
-//Users
+//Services
 Route::prefix('/Services')->group(function() {
     Route::get('/index','App\Http\Controllers\ServiceController@index')->name('Services');
     Route::get('/view/{id}','App\Http\Controllers\ServiceController@view')->name('Services-View');
@@ -60,4 +60,15 @@ Route::prefix('/Services')->group(function() {
     Route::post('/update','App\Http\Controllers\ServiceController@update')->name('Services-Update');
     Route::get('/delete/{id}','App\Http\Controllers\ServiceController@destroy')->name('Services-Delete');
     Route::get('/delete/step/{id}','App\Http\Controllers\ServiceController@destroyStep')->name('Services-Delete-step');
+});
+
+
+//KfaratChoice
+Route::prefix('/KfaratChoice')->group(function() {
+    Route::get('/index','App\Http\Controllers\KfaratChoiceController@index')->name('KfaratChoice');
+    Route::get('/create','App\Http\Controllers\KfaratChoiceController@create')->name('KfaratChoice-Create');
+    Route::post('/store','App\Http\Controllers\KfaratChoiceController@store')->name('KfaratChoice-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\KfaratChoiceController@edit')->name('KfaratChoice-Edit');
+    Route::post('/update','App\Http\Controllers\KfaratChoiceController@update')->name('KfaratChoice-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\KfaratChoiceController@destroy')->name('KfaratChoice-Delete');
 });
