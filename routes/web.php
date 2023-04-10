@@ -94,6 +94,8 @@ Route::prefix('nationality')->group(function() {
     Route::post('/update','App\Http\Controllers\NationalityController@update')->name('nationality-update');
     Route::get('/delete/{id}','App\Http\Controllers\NationalityController@destroy')->name('nationality-delete');
 
+});
+
 
 //Users
 Route::prefix('/Users')->group(function() {
@@ -130,4 +132,4 @@ Route::prefix('/KfaratChoice')->group(function() {
     Route::post('/update','App\Http\Controllers\KfaratChoiceController@update')->name('KfaratChoice-Update');
     Route::get('/delete/{id}','App\Http\Controllers\KfaratChoiceController@destroy')->name('KfaratChoice-Delete');
     });
-});
+
