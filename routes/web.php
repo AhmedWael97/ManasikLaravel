@@ -47,3 +47,17 @@ Route::prefix('/Users')->group(function() {
     Route::post('/update','App\Http\Controllers\UserController@update')->name('Users-Update');
     Route::get('/delete/{id}','App\Http\Controllers\UserController@destroy')->name('Users-Delete');
 });
+
+
+
+//Users
+Route::prefix('/Services')->group(function() {
+    Route::get('/index','App\Http\Controllers\ServiceController@index')->name('Services');
+    Route::get('/view/{id}','App\Http\Controllers\ServiceController@view')->name('Services-View');
+    Route::get('/create','App\Http\Controllers\ServiceController@create')->name('Services-Create');
+    Route::post('/store','App\Http\Controllers\ServiceController@store')->name('Services-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\ServiceController@edit')->name('Services-Edit');
+    Route::post('/update','App\Http\Controllers\ServiceController@update')->name('Services-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\ServiceController@destroy')->name('Services-Delete');
+    Route::get('/delete/step/{id}','App\Http\Controllers\ServiceController@destroyStep')->name('Services-Delete-step');
+});

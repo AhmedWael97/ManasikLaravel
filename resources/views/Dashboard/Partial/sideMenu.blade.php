@@ -10,11 +10,13 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="" class="img-circle elevation-2" alt="User Image">
+         <i class="fas fa-user" style="font-size: 50px"></i>
         </div>
         <div class="info">
           <a href="#" class="d-block">
             {{ Auth::user()->name }}
+            <br>
+            <small class="text-danger">({{ auth()->user()->roles[0]->name }})</small>
           </a>
         </div>
       </div>
@@ -132,6 +134,17 @@
               <i class="nav-icon fas fa-users"></i>
               <p>
                 {{ translate('Users') }}
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('Services')
+          <li class="nav-item">
+            <a href="{{ route('Services') }}" class="nav-link {{ is_active('Services')  ? 'active' : '' }}">
+              <i class="nav-icon fas fa-list-alt"></i>
+              <p>
+                {{ translate('Services') }}
               </p>
             </a>
           </li>

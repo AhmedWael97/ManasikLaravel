@@ -33,7 +33,11 @@ class DatabaseSeeder extends Seeder
         $user->assignRole($role);
 
         //addingPermissions
-        $pers = ['Roles', 'Role_Create','Role_Edit','Role_Delete','Users','Users_Create','Users_Update','Users_Delete'];
+        $pers = [
+            'Roles', 'Role_Create','Role_Edit','Role_Delete',
+            'Users','Users_Create','Users_Update','Users_Delete',
+            'Services','Services_Create','Services_Update','Services_Delete',
+        ];
         foreach($pers as $per) {
            $permission = Permission::create([
             'name' => $per,
