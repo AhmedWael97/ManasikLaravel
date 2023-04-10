@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             'Roles', 'Role_Create','Role_Edit','Role_Delete',
             'Users','Users_Create','Users_Update','Users_Delete',
             'Services','Services_Create','Services_Update','Services_Delete',
+            'KfaratChoice','KfaratChoice_Create','KfaratChoice_Update','KfaratChoice_Delete',
         ];
         foreach($pers as $per) {
            $permission = Permission::create([

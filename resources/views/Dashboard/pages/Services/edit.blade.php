@@ -1,5 +1,9 @@
 @extends('Dashboard.Layout.app')
 @section('css')
+<!-- Select2 -->
+  <link rel="stylesheet" href="{{ url('/') }}/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ url('/') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
 @endsection
 
 @section('content')
@@ -230,7 +234,18 @@
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
+                        <div class="form-group">
+                            <label> {{ translate('Kfarat Choices') }} </label>
 
+                            <select class="form-control select2" name="choices[]" multiple style="width: 50%;">
+
+                                @foreach ( $kfaratChoices as $choice)
+                                    <option value="{{ $choice->id }}" {{ in_array($choice->id, $choosenKfarat) ? 'selected' : '' }}>
+                                        {{ $choice->name_en }} | {{ $choice->name_ar }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                       </div>
                     </div>
                 </div>
@@ -245,8 +260,12 @@
 @endsection
 
 @section('js')
+<!-- Select2 -->
+<script src="{{url('/')}}/plugins/select2/js/select2.full.min.js"></script>
+
     <script>
         $(document).ready(function() {
+            $('.select2').select2();
             $('.addStep').click(function() {
                 var row = '<tr>'+
                                         '<td>'+

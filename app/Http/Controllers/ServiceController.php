@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use Exception;
 use App\Models\ServiceStep;
+use App\Models\KfaratChoice;
+use App\Models\ServiceKfaratChoice;
 class ServiceController extends Controller
 {
     public function __construct() {
@@ -25,6 +27,7 @@ class ServiceController extends Controller
     public function create() {
         return view('Dashboard.pages.Services.create')->with([
             'parents' => Service::select('id','name_en','name_ar')->get(),
+            'kfaratChoices' => KfaratChoice::get(),
         ]);
     }
 
@@ -67,6 +70,16 @@ class ServiceController extends Controller
             }
         }
 
+        if($request->has('choices') && count($request->choices) >= 1) {
+            foreach($request->choices as $choice) {
+                $newServiceChoice = new ServiceKfaratChoice([
+                    'kfarat_choice_id' => $choice,
+                    'service_id' => $service->id,
+                ]);
+                $newServiceChoice->save();
+            }
+        }
+
         return redirect()->route('Services')->with('success',translate('Saved Successfully'));
       } catch(Exception $e) {
         return back()->with('warning', $e->getMessage());
@@ -75,9 +88,15 @@ class ServiceController extends Controller
 
     public function edit($id) {
         $service = Service::findOrFail($id);
+        $arrayChoosen = [];
+        foreach( KfaratChoice::whereIn('id',$service->kfaratChoices->pluck('kfarat_choice_id'))->select('id')->get()->pluck('id') as $id) {
+            array_push($arrayChoosen , $id);
+        }
         return view('Dashboard.pages.Services.edit')->with([
             'parents' => Service::select('id','name_en','name_ar')->get(),
             'service' => $service,
+            'kfaratChoices' => KfaratChoice::get(),
+            'choosenKfarat' => $arrayChoosen,
         ]);
     }
 
@@ -146,6 +165,20 @@ class ServiceController extends Controller
 
         $service->save();
 
+        $choosenKfarat = ServiceKfaratChoice::where('service_id',$service->id)->get();
+        foreach($choosenKfarat as $term) {
+            $term->delete();
+        }
+
+        if($request->has('choices') && count($request->choices) >= 1) {
+            foreach($request->choices as $choice) {
+                $newServiceChoice = new ServiceKfaratChoice([
+                    'kfarat_choice_id' => $choice,
+                    'service_id' => $service->id,
+                ]);
+                $newServiceChoice->save();
+            }
+        }
         return redirect()->route('Services')->with('success',translate('Saved Successfully'));
       } catch(Exception $e) {
         return back()->with('warning', $e->getMessage());

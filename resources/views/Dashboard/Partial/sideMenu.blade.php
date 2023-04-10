@@ -139,6 +139,17 @@
           </li>
           @endcan
 
+          @can('KfaratChoice')
+          <li class="nav-item">
+            <a href="{{ route('KfaratChoice') }}" class="nav-link {{ is_active('KfaratChoice')  ? 'active' : '' }}">
+              <i class="nav-icon fas fa-check-square"></i>
+              <p>
+                {{ translate('Kfarat Choices') }}
+              </p>
+            </a>
+          </li>
+          @endcan
+
           @can('Services')
           <li class="nav-item">
             <a href="{{ route('Services') }}" class="nav-link {{ is_active('Services')  ? 'active' : '' }}">
@@ -149,6 +160,8 @@
             </a>
           </li>
           @endcan
+
+
 
         </ul>
       </nav>
