@@ -129,4 +129,5 @@ Route::prefix('/KfaratChoice')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\KfaratChoiceController@edit')->name('KfaratChoice-Edit');
     Route::post('/update','App\Http\Controllers\KfaratChoiceController@update')->name('KfaratChoice-Update');
     Route::get('/delete/{id}','App\Http\Controllers\KfaratChoiceController@destroy')->name('KfaratChoice-Delete');
+    });
 });
