@@ -66,6 +66,8 @@ class DatabaseSeeder extends Seeder
                 'Nationality_Create',
                 'Nationality_Update',
                 'Nationality_Delete',
+            'Services','Services_Create','Services_Update','Services_Delete',
+            'KfaratChoice','KfaratChoice_Create','KfaratChoice_Update','KfaratChoice_Delete',
         ];
         foreach($pers as $per) {
            $permission = Permission::create([

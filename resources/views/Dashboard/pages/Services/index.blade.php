@@ -5,12 +5,12 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>{{ translate('Users') }}</h1>
+            <h1>{{ translate('Services') }}</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ Route('Home') }}">{{ translate('Home') }}</a></li>
-                <li class="breadcrumb-item active"> {{ translate('Users') }}</li>
+                <li class="breadcrumb-item active"> {{ translate('Services') }}</li>
             </ol>
             </div>
         </div>
@@ -23,9 +23,9 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
-                    <a href="{{ route('Users-Create') }}" class="btn btn-primary">
+                    <a href="{{ route('Services-Create') }}" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i>
-                        {{ translate('Add New User') }}
+                        {{ translate('Add New Service') }}
                     </a>
                   </h3>
                 </div>
@@ -40,62 +40,50 @@
                                 {{ translate('Name') }}
                             </th>
                             <th>
-                                {{ translate('Role') }}
+                                {{ translate('Max Limit') }}
                             </th>
                             <th>
-                                {{ translate('Email') }}
+                                {{ translate('Price') }}
                             </th>
                             <th>
-                                {{ translate('Phone') }}
+                                {{ translate('Executer Price') }}
                             </th>
                             <th>
-                                {{ translate('Is Active') }}
+                                {{ translate('Serivce Parent') }}
                             </th>
                             <th>
                                 {{ translate('Actions') }}
                             </th>
                         </thead>
                         <tbody>
-                            @foreach ($Users as $key=>$user)
+                            @foreach ($Services as $key=>$service)
                                 <tr>
                                     <td>
                                         {{ ++$key }}
                                     </td>
                                     <td>
-                                        {{ $user->name }} | {{ $user->name_ar }}
+                                        {{ $service->name_en }} | {{ $service->name_ar }}
                                     </td>
                                     <td>
-                                        @if(count($user->roles) >= 1)
-                                            {{ $user->roles[0]->name }}
-                                        @else
-                                            -
-                                        @endif
+                                        {{ $service->max_limit }}
                                     </td>
                                     <td>
-                                        {{ $user->email }}
+                                        {{ $service->price }}
                                     </td>
                                     <td>
-                                        {{ $user->phone }}
+                                        {{ $service->executer_price }}
                                     </td>
                                     <td>
-                                        @if($user->is_active )
-                                            <span class="badge badge-success">
-                                                {{ translate('Active') }}
-                                            </span>
-                                        @else
-                                            <span class="badge badge-danger">
-                                                {{ translate('Not Active') }}
-                                            </span>
-                                        @endif
+                                        {{ $service->parent->name ?? translate('Parent Service') }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('Users-Delete',$user->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Services-Delete',$service->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
                                             <i class="fas fa-trash"></i>
                                         </a>
 

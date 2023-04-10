@@ -18,7 +18,7 @@ Route::get('/', function () {
         return redirect('/home');
     }
     return view('Auth.login');
-});
+})->name('login');
 
 // Auth
 Route::post('/login','App\Http\Controllers\AuthController@login')->name('Login');
@@ -35,6 +35,7 @@ Route::prefix('/Roles')->group(function() {
     Route::post('/update','App\Http\Controllers\RoleController@update')->name('Roles-Update');
     Route::get('/delete/{id}','App\Http\Controllers\RoleController@destroy')->name('Roles-Delete');
 });
+
 
 //Country
 Route::prefix('country')->group(function() {
@@ -92,4 +93,40 @@ Route::prefix('nationality')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\NationalityController@edit')->name('nationality-edit');
     Route::post('/update','App\Http\Controllers\NationalityController@update')->name('nationality-update');
     Route::get('/delete/{id}','App\Http\Controllers\NationalityController@destroy')->name('nationality-delete');
+
+
+//Users
+Route::prefix('/Users')->group(function() {
+    Route::get('/index','App\Http\Controllers\UserController@index')->name('Users');
+    Route::get('/view/{id}','App\Http\Controllers\UserController@view')->name('Users-View');
+    Route::get('/create','App\Http\Controllers\UserController@create')->name('Users-Create');
+    Route::post('/store','App\Http\Controllers\UserController@store')->name('Users-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\UserController@edit')->name('Users-Edit');
+    Route::post('/update','App\Http\Controllers\UserController@update')->name('Users-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\UserController@destroy')->name('Users-Delete');
+});
+
+
+
+//Services
+Route::prefix('/Services')->group(function() {
+    Route::get('/index','App\Http\Controllers\ServiceController@index')->name('Services');
+    Route::get('/view/{id}','App\Http\Controllers\ServiceController@view')->name('Services-View');
+    Route::get('/create','App\Http\Controllers\ServiceController@create')->name('Services-Create');
+    Route::post('/store','App\Http\Controllers\ServiceController@store')->name('Services-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\ServiceController@edit')->name('Services-Edit');
+    Route::post('/update','App\Http\Controllers\ServiceController@update')->name('Services-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\ServiceController@destroy')->name('Services-Delete');
+    Route::get('/delete/step/{id}','App\Http\Controllers\ServiceController@destroyStep')->name('Services-Delete-step');
+});
+
+
+//KfaratChoice
+Route::prefix('/KfaratChoice')->group(function() {
+    Route::get('/index','App\Http\Controllers\KfaratChoiceController@index')->name('KfaratChoice');
+    Route::get('/create','App\Http\Controllers\KfaratChoiceController@create')->name('KfaratChoice-Create');
+    Route::post('/store','App\Http\Controllers\KfaratChoiceController@store')->name('KfaratChoice-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\KfaratChoiceController@edit')->name('KfaratChoice-Edit');
+    Route::post('/update','App\Http\Controllers\KfaratChoiceController@update')->name('KfaratChoice-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\KfaratChoiceController@destroy')->name('KfaratChoice-Delete');
 });

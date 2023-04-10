@@ -5,12 +5,12 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>{{ translate('Users') }}</h1>
+            <h1>{{ translate('Kfarat Choices') }}</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ Route('Home') }}">{{ translate('Home') }}</a></li>
-                <li class="breadcrumb-item active"> {{ translate('Users') }}</li>
+                <li class="breadcrumb-item active"> {{ translate('Kfarat Choices') }}</li>
             </ol>
             </div>
         </div>
@@ -23,9 +23,9 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
-                    <a href="{{ route('Users-Create') }}" class="btn btn-primary">
+                    <a href="{{ route('KfaratChoice-Create') }}" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i>
-                        {{ translate('Add New User') }}
+                        {{ translate('Add New Kfarat Choice') }}
                     </a>
                   </h3>
                 </div>
@@ -37,65 +37,45 @@
                                 #
                             </th>
                             <th>
-                                {{ translate('Name') }}
+                                {{ translate('English Name') }}
                             </th>
                             <th>
-                                {{ translate('Role') }}
+                                {{ translate('Arabic Name') }}
                             </th>
                             <th>
-                                {{ translate('Email') }}
+                                {{ translate('Image') }}
                             </th>
                             <th>
-                                {{ translate('Phone') }}
-                            </th>
-                            <th>
-                                {{ translate('Is Active') }}
+                                {{ translate('Menu Image') }}
                             </th>
                             <th>
                                 {{ translate('Actions') }}
                             </th>
                         </thead>
                         <tbody>
-                            @foreach ($Users as $key=>$user)
+                            @foreach ($Choices as $key=>$choice)
                                 <tr>
                                     <td>
                                         {{ ++$key }}
                                     </td>
                                     <td>
-                                        {{ $user->name }} | {{ $user->name_ar }}
+                                        {{ $choice->name_en }}
                                     </td>
                                     <td>
-                                        @if(count($user->roles) >= 1)
-                                            {{ $user->roles[0]->name }}
-                                        @else
-                                            -
-                                        @endif
+                                        {{ $choice->name_ar }}
                                     </td>
                                     <td>
-                                        {{ $user->email }}
+                                        <img src="{{ url('/images/kfarat_choices') }}/{{ $choice->image }}" style="width:auto; height:50px" />
                                     </td>
                                     <td>
-                                        {{ $user->phone }}
+                                        <img src="{{ url('/images/kfarat_choices') }}/{{ $choice->menu_image_path }}" style="width:auto; height:50px" />
                                     </td>
+
                                     <td>
-                                        @if($user->is_active )
-                                            <span class="badge badge-success">
-                                                {{ translate('Active') }}
-                                            </span>
-                                        @else
-                                            <span class="badge badge-danger">
-                                                {{ translate('Not Active') }}
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
+                                        <a href="{{ route('KfaratChoice-Edit',['id' => $choice->id]) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('Users-Delete',$user->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
+                                        <a href="{{ route('KfaratChoice-Delete',$choice->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
                                             <i class="fas fa-trash"></i>
                                         </a>
 
