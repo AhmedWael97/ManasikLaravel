@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Currency extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'convert_value',
+        'symbol',
+    ];
+
+    public function user(){
+        return $this->belongsTo('App\Models\User' ,'user_id','id');
+    }
 }

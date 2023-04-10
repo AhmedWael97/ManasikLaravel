@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Language extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'code',
+    ];
+
+    public function user(){
+        return $this->belongsTo('App\Models\User' ,'user_id','id');
+    }
 }
