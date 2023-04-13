@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\V1\AuthenticateController;
+use App\Http\Controllers\API\V1\BasicController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,7 +23,21 @@ Route::prefix('v1')->group(function () {
             Route::post('/register','register');
         });
     });
-});
+    Route::prefix('basic')->group(function() {
+        Route::controller(BasicController::class)->group(function() {
+            Route::get('/getMyAccountData','getMyAccountData');
+            Route::get('/getCountries','getCountries');
+            Route::get('/getCurrency','getCurrency');
+            Route::get('/getJob','getJob');
+            Route::get('/getGender','getGender');
+            Route::get('/getMyBalance','getMyBalance');
+            Route::get('/getLangs','getLangs');
+            Route::get('/getNationality','getNationality');
+            Route::get('/getServices','getServices');
+        });
+    });
+
+})->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

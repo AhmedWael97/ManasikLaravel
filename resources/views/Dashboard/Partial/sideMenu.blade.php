@@ -15,6 +15,9 @@
         <div class="info">
           <a href="#" class="d-block">
             {{ Auth::user()->name }}
+            @if(Auth::user()->wallet != null)
+             -  {{ Auth::user()->wallet->amount  }} ({{ Auth::user()->wallet->currency->symbol }})
+            @endif
             <br>
             <small class="text-danger">({{ auth()->user()->roles[0]->name }})</small>
           </a>
@@ -138,11 +141,24 @@
             </a>
           </li>
           @endcan
+
+
+          @can('Wallet')
+          <li class="nav-item">
+            <a href="{{ route('Wallet') }}" class="nav-link {{ is_active('Wallet')  ? 'active' : '' }}">
+              <i class="nav-icon fas fa-wallet"></i>
+              <p>
+                {{ translate('Wallet') }}
+              </p>
+            </a>
+          </li>
+          @endcan
+
           @can('Country_View')
           <li class="nav-item">
             <a href="{{ route('country-index') }}" class="nav-link {{ is_active('country-index')  ? 'active' : '' }}">
               <i class="nav-icon fas fa-globe-europe"></i>
-             
+
               <p>
                 {{ translate('Countries') }}
 
@@ -153,7 +169,7 @@
           @can('Currency_View')
           <li class="nav-item">
             <a href="{{ route('currency-index') }}" class="nav-link {{ is_active('currency-index')  ? 'active' : '' }}">
-        
+
               <i class="nav-icon fas fa-coins"></i>
               <p>
                 {{ translate('Currencies') }}
@@ -166,7 +182,7 @@
           @can('Gender_View')
           <li class="nav-item">
             <a href="{{ route('gender-index') }}" class="nav-link {{ is_active('gender-index')  ? 'active' : '' }}">
-          
+
               <i class="nav-icon fas fa-venus-mars"></i>
               <p>
                 {{ translate('Genders') }}
@@ -178,7 +194,7 @@
           @can('Job_View')
           <li class="nav-item">
             <a href="{{ route('job-index') }}" class="nav-link {{ is_active('job-index')  ? 'active' : '' }}">
-             
+
               <i class="nav-icon fas fa-align-justify"></i>
               <p>
                 {{ translate('Jobs') }}
@@ -191,7 +207,7 @@
            @can('Language_View')
           <li class="nav-item">
             <a href="{{ route('language-index') }}" class="nav-link {{ is_active('language-index')  ? 'active' : '' }}">
-             
+
               <i class="nav-icon fas fa-language"></i>
               <p>
                 {{ translate('Languages') }}
@@ -204,7 +220,7 @@
            @can('Nationality_View')
           <li class="nav-item">
             <a href="{{ route('nationality-index') }}" class="nav-link {{ is_active('nationality-index')  ? 'active' : '' }}">
-              
+
               <i class="nav-icon fas fa-globe"></i>
               <p>
                 {{ translate('Nationalities') }}

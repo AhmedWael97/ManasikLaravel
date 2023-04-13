@@ -25,6 +25,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123456789'),
             'phone' => '1234567890',
             'phone_verified_at' => date('Y-m-d h:i:s'),
+            'job_id' => 1,
+            'country_id' => 1,
+            'nationality_id' =>1,
+            'lang_id' => 1,
+            'is_active' => 1,
         ]);
 
         //CreateRoles
@@ -68,6 +73,7 @@ class DatabaseSeeder extends Seeder
                 'Nationality_Delete',
             'Services','Services_Create','Services_Update','Services_Delete',
             'KfaratChoice','KfaratChoice_Create','KfaratChoice_Update','KfaratChoice_Delete',
+            'Wallet','Wallet_Create','Wallet_Update','Wallet_Delete',
         ];
         foreach($pers as $per) {
            $permission = Permission::create([
@@ -77,6 +83,21 @@ class DatabaseSeeder extends Seeder
           $role->givePermissionTo($permission);
         }
 
+        //Create Currency
+        \App\Models\Currency::create([
+            'user_id' => 1,
+            'name_en' => 'Suadian Ryial',
+            'name_ar' => 'ريال سعودي',
+            'convert_value' => 1,
+            'symbol' => 'SAR'
+        ]);
+
+        // Create Wallet
+        \App\Models\Wallet::create([
+            'user_id' => 1,
+            'currency_id' => 1,
+            'amount' => 0,
+        ]);
 
         // Create Genders
         \App\Models\Gender::create(

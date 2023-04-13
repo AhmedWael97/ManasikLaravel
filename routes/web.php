@@ -20,6 +20,8 @@ Route::get('/', function () {
     return view('Auth.login');
 })->name('login');
 
+Route::get('/Logout','App\Http\Controllers\AuthController@logout')->name('Logout');
+
 // Auth
 Route::post('/login','App\Http\Controllers\AuthController@login')->name('Login');
 
@@ -34,6 +36,17 @@ Route::prefix('/Roles')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\RoleController@edit')->name('Roles-Edit');
     Route::post('/update','App\Http\Controllers\RoleController@update')->name('Roles-Update');
     Route::get('/delete/{id}','App\Http\Controllers\RoleController@destroy')->name('Roles-Delete');
+});
+
+
+//Wallet
+Route::prefix('/Wallet')->group(function() {
+    Route::get('/index','App\Http\Controllers\WalletController@index')->name('Wallet');
+    Route::get('/create','App\Http\Controllers\WalletController@create')->name('Wallet-Create');
+    Route::post('/store','App\Http\Controllers\WalletController@store')->name('Wallet-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\WalletController@edit')->name('Wallet-Edit');
+    Route::post('/update','App\Http\Controllers\WalletController@update')->name('Wallet-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\WalletController@destroy')->name('Wallet-Delete');
 });
 
 
