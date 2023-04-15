@@ -1,4 +1,5 @@
 <!-- Main Sidebar Container -->
+{{-- {{ updatePermissions('PaymentTypes') }} --}}
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('Home') }}" class="brand-link">
@@ -253,7 +254,31 @@
           </li>
           @endcan
 
+          @can('PaymentTypes')
+          <li class="nav-item">
+            <a href="{{ route('PaymentTypes') }}" class="nav-link {{ is_active('PaymentTypes')  ? 'active' : '' }}">
 
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                {{ translate('Payment Types') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('Orders')
+          <li class="nav-item">
+            <a href="{{ route('Orders') }}" class="nav-link {{ is_active('Orders')  ? 'active' : '' }}">
+
+              <i class="nav-icon fas fa-list"></i>
+              <p>
+                {{ translate('Orders') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
 
         </ul>
       </nav>

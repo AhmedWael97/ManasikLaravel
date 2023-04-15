@@ -144,5 +144,26 @@ Route::prefix('/KfaratChoice')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\KfaratChoiceController@edit')->name('KfaratChoice-Edit');
     Route::post('/update','App\Http\Controllers\KfaratChoiceController@update')->name('KfaratChoice-Update');
     Route::get('/delete/{id}','App\Http\Controllers\KfaratChoiceController@destroy')->name('KfaratChoice-Delete');
-    });
+});
+
+//PaymentTypes
+Route::prefix('/PaymentTypes')->group(function() {
+    Route::get('/index','App\Http\Controllers\PaymentTypeController@index')->name('PaymentTypes');
+    Route::get('/create','App\Http\Controllers\PaymentTypeController@create')->name('PaymentTypes-Create');
+    Route::post('/store','App\Http\Controllers\PaymentTypeController@store')->name('PaymentTypes-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\PaymentTypeController@edit')->name('PaymentTypes-Edit');
+    Route::post('/update','App\Http\Controllers\PaymentTypeController@update')->name('PaymentTypes-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\PaymentTypeController@destroy')->name('PaymentTypes-Delete');
+});
+
+
+//Orders
+Route::prefix('/Orders')->group(function() {
+    Route::get('/index','App\Http\Controllers\OrderController@index')->name('Orders');
+    Route::get('/create','App\Http\Controllers\OrderController@create')->name('Orders-Create');
+    Route::post('/store','App\Http\Controllers\OrderController@store')->name('Orders-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\OrderController@edit')->name('Orders-Edit');
+    Route::post('/update','App\Http\Controllers\OrderController@update')->name('Orders-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\OrderController@destroy')->name('Orders-Delete');
+});
 
