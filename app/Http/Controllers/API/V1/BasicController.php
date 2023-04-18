@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\ApplicationResponse;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Currency;
@@ -10,37 +11,76 @@ use App\Models\Gender;
 use App\Models\Nationality;
 use App\Models\Service;
 use App\Models\Job;
+use App\Models\KfaratChoice;
 use App\Models\Language;
+use App\Models\PaymentType;
+use App\Models\HajPurpose;
 use Illuminate\Support\Facades\Auth;
 
 class BasicController extends Controller
 {
 
-    public function getMyAccountDetails() {
-        return Auth::user();
+     public $response;
+
+    public function __construct()
+    {
+        $this->response = new ApplicationResponse();
     }
-    public function getMyBalance() {
-        return Auth::user()->wallet;
+
+    public function getMyAccountData(Request $request) {
+        if($request->user()) {
+            return $this->response->successResponse('User',$request->user());
+        } else {
+            return $this->response->unAuthroizeResponse();
+        }
+    }
+    public function getMyBalance(Request $request) {
+        if($request->user()) {
+            return $this->response->successResponse('Wallet',$request->user()->wallet);
+        } else {
+            return $this->response->unAuthroizeResponse();
+        }
     }
     public function getCountries() {
-        return Country::select(['id','name_ar','name_en','code'])->get();
+        return $this->response->successResponse('Country',Country::select(['id','name_ar','name_en','code'])->get());
     }
     public function getCurrency() {
-        return Currency::select(['id','name_ar','name_en','symbol'])->get();
+        return $this->response->successResponse('Currency',Currency::select(['id','name_ar','name_en','symbol'])->get());
     }
     public function getGender() {
-        return Gender::select(['id','name_ar','name_en'])->get();
+        return $this->response->successResponse('Gender',Gender::select(['id','name_ar','name_en'])->get());
     }
     public function getJob() {
-        return Job::select(['id','name_ar','name_en'])->get();
+        return $this->response->successResponse('Job',Job::select(['id','name_ar','name_en'])->get());
     }
     public function getLangs() {
-        return Language::select(['id','name_ar','name_en','code'])->get();
+        return $this->response->successResponse('Language',Language::select(['id','name_ar','name_en','code'])->get());
     }
     public function getNationality() {
-        return Nationality::select(['id','name_ar','name_en'])->get();
+        return $this->response->successResponse('Nationality',Nationality::select(['id','name_ar','name_en'])->get());
     }
     public function getServices() {
-        return Service::get();
+        $services = Service::select('id','name_en','name_ar','photo','price','max_limit_by_order')->with([
+        'steps' => function($query) {
+            $query->select('service_id','name_en','name_ar','photo');
+        }
+        ,'kfaratChoices'=> function($query) {
+            $query->select(['service_id','kfarat_choice_id'])->with(['kfaraChoice' => function($query) {
+                $query->select('id','name_en','name_ar','image','menu_image_path');
+            }]);
+        }])->get();
+        return $this->response->successResponse('Service', $services);
+    }
+
+    public function getKfaratChoices() {
+        return $this->response->successResponse('KfaratChoice',KfaratChoice::select('id','name_en','name_ar')->get());
+    }
+
+    public function getPaymentTypes() {
+        return $this->response->successResponse('PaymentType',PaymentType::select('id','name_en','name_ar')->get());
+    }
+
+    public function getHajPurpose() {
+        return $this->response->successResponse('HajPurpose',HajPurpose::select('id','name_en','name_ar')->get());
     }
 }

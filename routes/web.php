@@ -157,6 +157,27 @@ Route::prefix('/PaymentTypes')->group(function() {
 });
 
 
+//HajPurpose
+Route::prefix('/HajPurpose')->group(function() {
+    Route::get('/index','App\Http\Controllers\HajPurposeController@index')->name('HajPurpose');
+    Route::get('/create','App\Http\Controllers\HajPurposeController@create')->name('HajPurpose-Create');
+    Route::post('/store','App\Http\Controllers\HajPurposeController@store')->name('HajPurpose-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\HajPurposeController@edit')->name('HajPurpose-Edit');
+    Route::post('/update','App\Http\Controllers\HajPurposeController@update')->name('HajPurpose-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\HajPurposeController@destroy')->name('HajPurpose-Delete');
+});
+
+
+//Status
+Route::prefix('/Status')->group(function() {
+    Route::get('/index','App\Http\Controllers\StatusController@index')->name('Status');
+    Route::get('/create','App\Http\Controllers\StatusController@create')->name('Status-Create');
+    Route::post('/store','App\Http\Controllers\StatusController@store')->name('Status-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\StatusController@edit')->name('Status-Edit');
+    Route::post('/update','App\Http\Controllers\StatusController@update')->name('Status-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\StatusController@destroy')->name('Status-Delete');
+});
+
 //Orders
 Route::prefix('/Orders')->group(function() {
     Route::get('/index','App\Http\Controllers\OrderController@index')->name('Orders');

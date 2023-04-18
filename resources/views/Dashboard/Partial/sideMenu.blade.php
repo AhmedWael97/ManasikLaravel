@@ -1,5 +1,4 @@
 <!-- Main Sidebar Container -->
-{{-- {{ updatePermissions('PaymentTypes') }} --}}
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('Home') }}" class="brand-link">
@@ -157,7 +156,7 @@
 
           @can('Country_View')
           <li class="nav-item">
-            <a href="{{ route('country-index') }}" class="nav-link {{ is_active('country-index')  ? 'active' : '' }}">
+            <a href="{{ route('country-index') }}" class="nav-link {{ is_active('country')  ? 'active' : '' }}">
               <i class="nav-icon fas fa-globe-europe"></i>
 
               <p>
@@ -169,7 +168,7 @@
           @endcan
           @can('Currency_View')
           <li class="nav-item">
-            <a href="{{ route('currency-index') }}" class="nav-link {{ is_active('currency-index')  ? 'active' : '' }}">
+            <a href="{{ route('currency-index') }}" class="nav-link {{ is_active('currency')  ? 'active' : '' }}">
 
               <i class="nav-icon fas fa-coins"></i>
               <p>
@@ -182,7 +181,7 @@
 
           @can('Gender_View')
           <li class="nav-item">
-            <a href="{{ route('gender-index') }}" class="nav-link {{ is_active('gender-index')  ? 'active' : '' }}">
+            <a href="{{ route('gender-index') }}" class="nav-link {{ is_active('gender')  ? 'active' : '' }}">
 
               <i class="nav-icon fas fa-venus-mars"></i>
               <p>
@@ -194,7 +193,7 @@
           @endcan
           @can('Job_View')
           <li class="nav-item">
-            <a href="{{ route('job-index') }}" class="nav-link {{ is_active('job-index')  ? 'active' : '' }}">
+            <a href="{{ route('job-index') }}" class="nav-link {{ is_active('job')  ? 'active' : '' }}">
 
               <i class="nav-icon fas fa-align-justify"></i>
               <p>
@@ -207,7 +206,7 @@
 
            @can('Language_View')
           <li class="nav-item">
-            <a href="{{ route('language-index') }}" class="nav-link {{ is_active('language-index')  ? 'active' : '' }}">
+            <a href="{{ route('language-index') }}" class="nav-link {{ is_active('language')  ? 'active' : '' }}">
 
               <i class="nav-icon fas fa-language"></i>
               <p>
@@ -220,7 +219,7 @@
 
            @can('Nationality_View')
           <li class="nav-item">
-            <a href="{{ route('nationality-index') }}" class="nav-link {{ is_active('nationality-index')  ? 'active' : '' }}">
+            <a href="{{ route('nationality-index') }}" class="nav-link {{ is_active('nationality')  ? 'active' : '' }}">
 
               <i class="nav-icon fas fa-globe"></i>
               <p>
@@ -261,6 +260,32 @@
               <i class="nav-icon fas fa-circle"></i>
               <p>
                 {{ translate('Payment Types') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('HajPurpose')
+          <li class="nav-item">
+            <a href="{{ route('HajPurpose') }}" class="nav-link {{ is_active('HajPurpose')  ? 'active' : '' }}">
+
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                {{ translate('Haj Purpose') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('Status')
+          <li class="nav-item">
+            <a href="{{ route('Status') }}" class="nav-link {{ is_active('Status')  ? 'active' : '' }}">
+
+              <i class="nav-icon fas fa-circle"></i>
+              <p>
+                {{ translate('Statuses') }}
 
               </p>
             </a>

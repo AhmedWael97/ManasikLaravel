@@ -13,8 +13,8 @@
         <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ Route('Home') }}">{{ translate('Home') }}</a></li>
-            <li class="breadcrumb-item"><a href="{{ Route('PaymentTypes') }}">{{ translate('Payemnt Types') }}</a></li>
-            <li class="breadcrumb-item active"> {{ translate('Edit Payment Type') }}</li>
+            <li class="breadcrumb-item"><a href="{{ Route('Status') }}">{{ translate('Status') }}</a></li>
+            <li class="breadcrumb-item active"> {{ translate('Edit Status') }}</li>
         </ol>
         </div>
     </div>
@@ -27,13 +27,13 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">
-                Edit Payment Type
+                {{ translate('Edit Status') }}
               </h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="form">
-                    <form method="post" action="{{ route('PaymentTypes-Update') }}">
+                    <form method="post" action="{{ route('Status-Update') }}">
                         @csrf
                         <input type="hidden" name="id" value="{{ $type->id }}" />
 
@@ -41,7 +41,7 @@
                             <div class="col-md-4">
                                 <div class="form-group mb-2">
                                     <label>
-                                        {{ translate('Payment Type Arabic Name') }}
+                                        {{ translate('Status Arabic Name') }}
                                     </label>
                                     <input type="text" value="{{ $type->name_ar }}" required name="name_ar" class="form-control" />
                                 </div>
@@ -50,7 +50,7 @@
                              <div class="col-md-4">
                                 <div class="form-group mb-2">
                                     <label>
-                                        {{ translate('Payment Type English Name') }}
+                                        {{ translate('Status English Name') }}
                                     </label>
                                     <input type="text" value="{{ $type->name_en }}" required name="name_en" class="form-control" />
                                 </div>
