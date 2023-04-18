@@ -26,7 +26,7 @@ class ApplicationResponse extends Model
             "Status" => 401,
             "MessageEN" => "UnAuthorized",
             "MessageAR" => "غير مسجل دخول",
-            "Data" => null
+
         ]);
     }
 
@@ -35,7 +35,7 @@ class ApplicationResponse extends Model
             "Status" => 500,
             "MessageEN" => $err,
             "MessageAR" => $err,
-            "Data" => null
+
         ]);
     }
 
