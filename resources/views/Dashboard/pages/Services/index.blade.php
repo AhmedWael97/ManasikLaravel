@@ -74,7 +74,11 @@
                                         {{ $service->executer_price }}
                                     </td>
                                     <td>
-                                        {{ $service->parent->name ?? translate('Parent Service') }}
+                                       @if($service->parent)
+                                        {{ $service->parent->name_en   }} || {{ $service->parent->name_ar  }}
+                                       @else
+                                       {{ translate('Parent Service') }}
+                                       @endif
                                     </td>
                                     <td>
                                         <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">

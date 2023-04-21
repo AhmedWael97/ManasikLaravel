@@ -60,14 +60,9 @@ class BasicController extends Controller
         return $this->response->successResponse('Nationality',Nationality::select(['id','name_ar','name_en'])->get());
     }
     public function getServices() {
-        $services = Service::select('id','name_en','name_ar','photo','price','max_limit_by_order')->with([
-        'steps' => function($query) {
-            $query->select('service_id','name_en','name_ar','photo');
-        }
-        ,'kfaratChoices'=> function($query) {
-            $query->select(['service_id','kfarat_choice_id'])->with(['kfaraChoice' => function($query) {
-                $query->select('id','name_en','name_ar','image','menu_image_path');
-            }]);
+        $services = Service::select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id')->where('parent_id','0')->with([
+        'childern' => function($query) {
+            $query->select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id');
         }])->get();
         return $this->response->successResponse('Service', $services);
     }

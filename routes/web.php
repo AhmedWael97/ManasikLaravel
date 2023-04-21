@@ -181,6 +181,7 @@ Route::prefix('/Status')->group(function() {
 //Orders
 Route::prefix('/Orders')->group(function() {
     Route::get('/index','App\Http\Controllers\OrderController@index')->name('Orders');
+    Route::get('/show/{id}','App\Http\Controllers\OrderController@show')->name('Orders-Show');
     Route::get('/create','App\Http\Controllers\OrderController@create')->name('Orders-Create');
     Route::post('/store','App\Http\Controllers\OrderController@store')->name('Orders-Store');
     Route::get('/edit/{id}','App\Http\Controllers\OrderController@edit')->name('Orders-Edit');
