@@ -3,23 +3,22 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\HajPurpose;
-use App\Models\KfaratChoice;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PaymentType;
 use App\Models\Service;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\ApplicationResponse;
+use App\Models\User;
 class OrderController extends Controller
 {
     public $response;
-
+    public $paymentController;
     public function __construct()
     {
         $this->response = new ApplicationResponse();
+        $this->paymentController = new PaymentController();
     }
     public function store(Request $request) {
         try {
@@ -59,6 +58,7 @@ class OrderController extends Controller
                     foreach($requestOrder->services as $minService) {
                         $service = Service::where('id',$minService->serviceId)->first();
                         $price += $service->price;
+                        $points += $service->earning_points;
                         $newOrderDetails = new OrderDetail([
                             'order_id' => $newOrder->id,
                             'service_id' => $service->id,
@@ -75,6 +75,25 @@ class OrderController extends Controller
 
                     $newOrder->price = $price;
                     $newOrder->save();
+
+                    $user = User::where('id',$request->user()->id)->select('id','points')->first();
+                    $user->points += $points;
+                    $user->save();
+
+                    // payments
+                    if( $paymentType->is_internal == 1 && $isWallet == 1) {
+                        $paymentRequest = [
+                            'order' => $newOrder,
+                            'user' => $request->user(),
+                        ];
+                        $this->paymentController->payWithWallet($paymentRequest);
+                    } else if ($paymentType->is_internal == 1 && $isWallet == 0) {
+                        $paymentRequest = [
+                            'order' => $newOrder,
+                            'user' => $request->user(),
+                        ];
+                        $this->paymentController->payWithPrize($paymentRequest);
+                    }
 
                     return $this->response->successResponse('Order',$newOrder);
                 }

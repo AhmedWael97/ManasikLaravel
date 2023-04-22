@@ -26,4 +26,8 @@ class Order extends Model
     public function status() {
         return $this->hasOne('\App\Models\Status','id','order_status_id');
     }
+
+    public function orderDetails() {
+        return $this->hasMany('\App\Models\OrderDetail','order_id','id');
+    }
 }

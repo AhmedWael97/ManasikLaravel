@@ -44,11 +44,9 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-
     Route::prefix('order')->group(function() {
         Route::controller(OrderController::class)->group(function() {
             Route::post('/store','store');
-
         });
     });
 
