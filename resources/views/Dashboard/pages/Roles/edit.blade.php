@@ -1,5 +1,8 @@
 @extends('Dashboard.Layout.app')
 @section('css')
+<!-- Select2 -->
+  <link rel="stylesheet" href="{{ url('/') }}/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ url('/') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 @endsection
 
 @section('content')
@@ -52,11 +55,12 @@
                                 <label>
                                     {{ translate('Permissions') }}
                                 </label>
-                                <br>
-                                @foreach ($Permissions as $permission)
-                                    <input type="checkbox" {{ $Role->hasPermissionTo($permission) ? 'checked' : '' }} name="permissions[]" value="{{ $permission->id }}" class="form-check-inline" /> {{ $permission->name }}
-                                    <br />
-                                @endforeach
+                                <select class="form-control select2" name="permissions[]" multiple>
+                                    @foreach ($Permissions as $permission)
+                                        <option {{ $Role->hasPermissionTo($permission) ? 'selected' : '' }}  value="{{ $permission->id }}"> {{ $permission->name }} </option>
+                                    @endforeach
+                                </select>
+
                             </div>
                         </div>
                     </form>
@@ -70,5 +74,14 @@
 
 @endsection
 
+
 @section('js')
+<!-- Select2 -->
+<script src="{{url('/')}}/plugins/select2/js/select2.full.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
 @endsection

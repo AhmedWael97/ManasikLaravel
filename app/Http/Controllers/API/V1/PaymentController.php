@@ -17,6 +17,7 @@ class PaymentController extends Controller
     {
         $this->response = new ApplicationResponse();
     }
+
     public function payWithWallet($request) {
         if( ! $request->user) {
             $this->response->unAuthroizeResponse();
@@ -25,6 +26,7 @@ class PaymentController extends Controller
         if(! $request->order) {
             $this->response->ErrorResponse("No Order Found");
         }
+
         $price = $request->order->price;
         $user = $request->user;
         $order = $request->order;

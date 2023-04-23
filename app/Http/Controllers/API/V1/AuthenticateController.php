@@ -68,15 +68,22 @@ class AuthenticateController extends Controller
             'country_id' => $request->has('country') ? $request->country : 1,
         ]);
         $newUser->save();
-        $role = Role::where('id',2)->first();
-        $newUser->assignRole($role);
+
+        $roles = Role::get();
+        foreach($roles as $role) {
+            if($role->hasPermissionTo('Mobile_Application_User')) {
+                $newUser->assignRole($role);
+            }
+        }
+
+
 
         $newWallet = new Wallet([
             'user_id' => $newUser->id,
             'currency_id' => 1,
             'amount' => 0,
         ]);
-
+        $newWallet->save();
         if(Auth::attempt(['email' => $newUser->email, 'password' => $request->password])) {
             return response([
                 "Status" => 200,
