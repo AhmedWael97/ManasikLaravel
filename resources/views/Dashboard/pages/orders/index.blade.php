@@ -44,10 +44,10 @@
                             </th>
 
                             <th>
-                                {{ translate('Payment Type Status') }}
+                                {{ translate('Payment Status') }}
                             </th>
                             <th>
-                                {{ translate('Order Status') }}
+                                {{ translate('Status') }}
                             </th>
                             <th>
                                 {{ translate('Price') }}
@@ -58,6 +58,7 @@
                         </thead>
                         <tbody>
                             @foreach($orders as $key => $order)
+                               <tr>
                                 <td>
                                     {{ ++$key }}
                                 </td>
@@ -85,6 +86,7 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
+                               </tr>
                             @endforeach
                         </tbody>
                     </table>
