@@ -174,7 +174,7 @@ class OrderController extends Controller
         }
 
 
-        $steps = OrderDetailStep::where('detail_id',$orderDetail->id)->with('status')->get();
+        $steps = OrderDetailStep::where('detail_id',$orderDetail->id)->with(['status','step'])->get();
 
 
         return $this->response->successResponse('OrderDetailStep',$steps);

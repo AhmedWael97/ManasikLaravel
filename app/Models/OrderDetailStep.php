@@ -13,4 +13,7 @@ class OrderDetailStep extends Model
     public function status() {
         return $this->hasOne('\App\Models\Status','id','step_status_id');
     }
+    public function step() {
+        return $this->hasOne('\App\Models\ServiceStep','id','service_step_id');
+    }
 }
