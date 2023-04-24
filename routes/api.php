@@ -49,6 +49,8 @@ Route::prefix('v1')->group(function () {
             Route::post('/store','store')->middleware('auth:sanctum');
             Route::get('/details/{id}','orderDetails')->middleware('auth:sanctum');
             Route::get('/orderDetail/{order_id}/steps/{service_id}','orderDetailStep')->middleware('auth:sanctum');
+            Route::get('/myOrders','myOrders')->middleware('auth:sanctum');
+
         });
     });
 

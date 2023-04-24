@@ -137,7 +137,7 @@ class OrderController extends Controller
             return $this->response->notFound('Order Not Found');
         }
 
-        $orderDetails = OrderDetail::where('order_id',$order->id)->with('service')->get();
+        $orderDetails = OrderDetail::where('order_id',$order->id)->with('service','hajPurpose','KfaraChoice')->get();
 
         return $this->response->successResponse('OrderDetail',$orderDetails);
 
@@ -178,5 +178,13 @@ class OrderController extends Controller
 
 
         return $this->response->successResponse('OrderDetailStep',$steps);
+    }
+
+    public function myOrders(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        return $this->response->successResponse('Order',Order::where('user_id',$request->user()->id)->get());
     }
 }

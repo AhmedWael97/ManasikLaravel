@@ -14,6 +14,14 @@ class OrderDetail extends Model
         return $this->hasOne('\App\Models\Service','id','service_id')->select('id','name_en','name_ar','photo','max_limit','price');
     }
 
+    public function hajPurpose() {
+        return $this->hasOne('\App\Models\HajPurpose','id','purpose_hag_id');
+    }
+
+    public function KfaraChoice() {
+        return $this->hasOne('\App\Models\KfaratChoice','id','kfarat_choice_id');
+    }
+
     public function steps() {
         return $this->hasMany('\App\Models\OrderDetailStep','detail_id','id');
     }
