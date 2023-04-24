@@ -25,6 +25,7 @@ class OrderController extends Controller
 
 
 
+
             if($request->user() == null) {
                 return $this->response->unAuthroizeResponse();
             }
@@ -50,13 +51,15 @@ class OrderController extends Controller
             if($request->has('cart') && count($request->cart) >= 1) {
                 foreach($request->cart as $requestOrder) {
 
-                    if( ! $requestOrder->services && ! count($requestOrder->services) >= 1 ) {
+                    if( ! $requestOrder['services'] && ! count($requestOrder['services']) >= 1 ) {
                         return $this->response->ErrorResponse("Invalid Child Services");
                     }
 
+
+
                     $newOrder = new Order([
                         'user_id' => $request->user()->id,
-                        'main_service_id' => $requestOrder->mainServiceId,
+                        'main_service_id' => $requestOrder['mainServiceId'],
                         'payment_type_id' => $payment_type_id,
                         'payment_status_id' => 1,
                         'order_code' => rand(9999,999999),
@@ -64,24 +67,27 @@ class OrderController extends Controller
                         'price' => 0,
                         'currency_id' => $request->user()->wallet->currency_id,
                         'is_from_wallet' => $isWallet,
+
                     ]);
                     $newOrder->save();
                     $price = 0;
                     $points = 0;
-                    foreach($requestOrder->services as $minService) {
-                        $service = Service::where('id',$minService->serviceId)->first();
+                    foreach($requestOrder['services'] as $minService) {
+
+                        $service = Service::where('id',$minService['ServiceId'])->first();
                         $price += $service->price;
                         $points += $service->earning_points;
                         $newOrderDetails = new OrderDetail([
                             'order_id' => $newOrder->id,
                             'service_id' => $service->id,
                             'order_status_id' => $newOrder->order_status_id,
-                            'full_name' => $minService->name,
+                            'full_name' => $minService['name'],
                             'currency_id' => $newOrder->currency_id,
                             'price' => $service->price,
                             'executer_price' => $service->executer_price,
-                            'no_of_kfara' => $minService->KfaraCount,
-                            'kfarat_choice_id' => $minService->KfaraChoiceId,
+                            'no_of_kfara' => $minService['kfaraCount'] ??  null ,
+                            'kfarat_choice_id' => $minService['KfaraChoiceId'] ?? null,
+                            'purpose_hag_id' => $minService['HajPurpose'],
                         ]);
                         $newOrderDetails->save();
                     }
@@ -119,7 +125,8 @@ class OrderController extends Controller
             return $this->successResponse('Order',$newOrder);
 
         } catch (Exception $e) {
-            return $this->ErrorResponse($e->getMessage());
+            $newOrder->delete();
+            return $this->response->ErrorResponse($e->getMessage());
         }
     }
 }

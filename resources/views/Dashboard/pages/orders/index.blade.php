@@ -62,13 +62,17 @@
                                     {{ ++$key }}
                                 </td>
                                 <td>
-                                    {{ $order->user }}
+                                    {{ $order->user->name . ' || ' . $order->user->name_ar }}
                                 </td>
                                 <td>
                                     {{ $order->mainService->name_en }} || {{ $order->mainService->name_ar }}
                                 </td>
                                 <td>
                                     {{ $order->paymentType->name_en }} || {{ $order->paymentType->name_ar }}
+                                </td>
+
+                                <td>
+                                    {{ $order->paymentTypeStatus->name_en }} || {{ $order->paymentTypeStatus->name_ar }}
                                 </td>
                                 <td>
                                     {{ $order->status->name_en }} || {{ $order->status->name_ar }}
