@@ -22,11 +22,16 @@ class OrderController extends Controller
     }
     public function store(Request $request) {
         try {
-            if(! $request->user()) {
+
+
+
+            if($request->user() == null) {
                 return $this->response->unAuthroizeResponse();
             }
-
-            $paymentType = PaymentType::find($request->paymentType)->select('id')->first();
+            if(! $request->has('paymentType') && $request->paymentType == null) {
+                return $this->response->ErrorResponse('No payment methods specified');
+            }
+            $paymentType = PaymentType::where('id',$request->paymentType)->select('id')->first();
             $isWallet = $request->isWallet;
             if($paymentType != null) {
                 $payment_type_id = $paymentType->id;

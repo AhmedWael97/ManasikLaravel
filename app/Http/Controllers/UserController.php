@@ -75,6 +75,11 @@ class UserController extends Controller
             $role = Role::findOrFail($request->role_id);
             $user->assignRole($role);
 
+            $user->is_active = $request->is_active;
+            $user->is_confirmed_executer = $request->is_confirmed_executer;
+            $user->is_allow_notification = $request->is_allow_notification;
+            $user->save();
+
             if($request->has('photo_path')) {
                 $imageName = 'photo_'.time().'.'.$request->photo_path->extension();
                 $request->photo_path->move(public_path('images/photos'), $imageName);
@@ -124,6 +129,8 @@ class UserController extends Controller
             'phone' => 'required',
             'role_id' => 'required',
         ]);
+
+
          try {
             $user = User::findOrFail($request->user_id);
             $user->passowrd;
@@ -138,7 +145,10 @@ class UserController extends Controller
             }
             $role = Role::findOrFail($request->role_id);
             $user->assignRole($role);
-
+            $user->is_active = $request->is_active;
+            $user->is_confirmed_executer = $request->is_confirmed_executer;
+            $user->is_allow_notification = $request->is_allow_notification;
+            $user->save();
             if($request->has('photo_path')) {
                 $imageName = 'photo_'.time().'.'.$request->photo_path->extension();
                 $request->photo_path->move(public_path('images/photos'), $imageName);
