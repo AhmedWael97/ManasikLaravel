@@ -28,11 +28,19 @@ class OrderController extends Controller
             if($request->user() == null) {
                 return $this->response->unAuthroizeResponse();
             }
-            if(! $request->has('paymentType') && $request->paymentType == null) {
+            if(! $request->has('paymentType') && ! $request->has('isWallet')) {
                 return $this->response->ErrorResponse('No payment methods specified');
             }
-            $paymentType = PaymentType::where('id',$request->paymentType)->select('id')->first();
             $isWallet = $request->isWallet;
+
+            if($request->paymentType == null && $isWallet == 1) {
+                $paymentType = PaymentType::where('id', 5)->select('id')->first();
+            } else {
+                $paymentType = PaymentType::where('id',$request->paymentType)->select('id')->first();
+            }
+
+
+
             if($paymentType != null) {
                 $payment_type_id = $paymentType->id;
             } else {
@@ -49,7 +57,7 @@ class OrderController extends Controller
                     $newOrder = new Order([
                         'user_id' => $request->user()->id,
                         'main_service_id' => $requestOrder->mainServiceId,
-                        'payment_type_id' => $paymentType->id,
+                        'payment_type_id' => $payment_type_id,
                         'payment_status_id' => 1,
                         'order_code' => rand(9999,999999),
                         'order_status_id' => 1,
