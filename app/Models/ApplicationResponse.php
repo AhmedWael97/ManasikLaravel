@@ -39,4 +39,13 @@ class ApplicationResponse extends Model
         ]);
     }
 
+    public function notFound($err) {
+        return response([
+            "Status" => 404,
+            "MessageEN" => $err,
+            "MessageAR" => $err,
+
+        ]);
+    }
+
 }

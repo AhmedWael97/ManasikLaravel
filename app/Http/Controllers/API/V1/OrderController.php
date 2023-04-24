@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\ApplicationResponse;
 use App\Models\User;
+use App\Models\OrderDetailStep;
 class OrderController extends Controller
 {
     public $response;
@@ -22,10 +23,6 @@ class OrderController extends Controller
     }
     public function store(Request $request) {
         try {
-
-
-
-
             if($request->user() == null) {
                 return $this->response->unAuthroizeResponse();
             }
@@ -128,5 +125,58 @@ class OrderController extends Controller
             $newOrder->delete();
             return $this->response->ErrorResponse($e->getMessage());
         }
+    }
+
+    public function orderDetails(Request $request,$id) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $order = Order::where(['user_id'=>$request->user()->id, 'id'=>$id])->first();
+        if($order == null) {
+            return $this->response->notFound('Order Not Found');
+        }
+
+        $orderDetails = OrderDetail::where('order_id',$order->id)->with('service')->get();
+
+        return $this->response->successResponse('OrderDetail',$orderDetails);
+
+    }
+
+    public function orderDetailStep(Request $request,$order_id, $service_id) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $order = Order::where(['user_id'=>$request->user()->id, 'id'=>$order_id])->first();
+        if($order == null) {
+            return $this->response->notFound('Order Not Found');
+        }
+
+        $orderDetail = OrderDetail::where(['order_id'=>$order_id,'service_id'=>$service_id])->first();
+        if($orderDetail == null) {
+            return $this->response->notFound('Order Detail Not Found');
+        }
+
+        if(count($orderDetail->steps) == 0) {
+            $service = Service::where('id',$service_id)->first();
+            if($service == null) {
+                return $this->response->notFound('No Service Found');
+            }
+            foreach($service->steps as $step) {
+                $newOrderDetailStep = new OrderDetailStep([
+                    'detail_id' => $orderDetail->id,
+                    'service_step_id' => $step->id,
+                    'step_status_id' => 1,
+                ]);
+                $newOrderDetailStep->save();
+            }
+        }
+
+
+        $steps = OrderDetailStep::where('detail_id',$orderDetail->id)->with('status')->get();
+
+
+        return $this->response->successResponse('OrderDetailStep',$steps);
     }
 }
