@@ -7,7 +7,7 @@ use App\Http\Controllers\API\V1\AuthenticateController;
 use App\Http\Controllers\API\V1\BasicController;
 use App\Http\Controllers\API\V1\OrderController;
 use App\Http\Controllers\API\V1\PaymentController;
-
+use App\Http\Controllers\API\V1\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -58,6 +58,13 @@ Route::prefix('v1')->group(function () {
     Route::prefix('wallet')->group(function() {
         Route::controller(PaymentController::class)->group(function() {
             Route::get('/history','MyBalanceHistory')->middleware('auth:sanctum');
+        });
+    });
+
+    Route::prefix('user')->group(function() {
+        Route::controller(UserController::class)->group(function() {
+            Route::get('/myInfo','getMyInfo')->middleware('auth:sanctum');
+            Route::post('/updateMyInfo','UpdateMyInfo')->middleware('auth:sanctum');
         });
     });
 
