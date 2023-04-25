@@ -85,8 +85,8 @@ class PaymentController extends Controller
             return $this->response->ErrorResponse('No wallet for current user');
         }
 
-        $totalInActions = WalletTransaction::where(['wallet_id'=>$wallet->id,'transfer_to',$request->user()->id])->with(['from','to','currency'])->get();
-        $totalOutActions = WalletTransaction::where(['wallet_id'=>$wallet->id,'transfer_from',$request->user()->id])->with(['from','to','currency'])->get();
+        $totalInActions = WalletTransaction::where(['wallet_id'=>$wallet->id, 'transfer_to'=>$request->user()->id])->with(['from','to','currency'])->get();
+        $totalOutActions = WalletTransaction::where(['wallet_id'=>$wallet->id,'transfer_from'=>$request->user()->id])->with(['from','to','currency'])->get();
 
         $walletTransactions = [
             'wallet' => $wallet,
