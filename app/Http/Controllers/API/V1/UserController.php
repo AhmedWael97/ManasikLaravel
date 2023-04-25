@@ -64,7 +64,7 @@ class UserController extends Controller
         }
 
         $user->save();
-        return $this->response->successResponse('User',$user->select('id','name','name_ar','email','phone'));
+        return $this->response->successResponse('User',$user->select('id','name','name_ar','email','phone')->first());
     }
 
 }
