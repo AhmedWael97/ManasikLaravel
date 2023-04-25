@@ -12,14 +12,14 @@ class WalletTransaction extends Model
     protected $fillable = ['wallet_id','amount','currency_id','is_transfered','transfer_from','transfer_to','reason','refer_order_id'];
 
     public function from() {
-        return $this->hasOne('\App\Models\User','id','transfer_from')->select('name','name_ar');
+        return $this->hasOne('\App\Models\User','id','transfer_from')->select('id','name','name_ar');
     }
 
     public function to() {
-        return $this->hasOne('\App\Models\User','id','transfer_to')->select('name','name_ar');
+        return $this->hasOne('\App\Models\User','id','transfer_to')->select('id','name','name_ar');
     }
 
     public function currency() {
-        return $this->hasOne('\App\Models\Currency','id','currency_id')->select('name_ar','name_en');
+        return $this->hasOne('\App\Models\Currency','id','currency_id')->select('id','name_ar','name_en');
     }
 }

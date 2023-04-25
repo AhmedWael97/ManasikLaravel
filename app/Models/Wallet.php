@@ -12,7 +12,7 @@ class Wallet extends Model
     protected $fillable = ['user_id', 'amount' ,'currency_id'];
 
     public function currency() {
-        return $this->hasOne('\App\Models\Currency','id','currency_id')->select('name_ar','name_en');
+        return $this->hasOne('\App\Models\Currency','id','currency_id')->select('id','name_ar','name_en');
     }
 
     public function user() {
