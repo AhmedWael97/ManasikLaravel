@@ -50,7 +50,7 @@ class UserController extends Controller
                 return $this->response->errorMessage('password and password confirmation not matched');
             }
 
-            if(count($request->password) < 8) {
+            if(strlen($request->password) < 8) {
                 return $this->response->errorMessage('Password must more than 8 letters or numbers');
             }
 
