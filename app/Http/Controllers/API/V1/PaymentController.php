@@ -74,4 +74,26 @@ class PaymentController extends Controller
             $this->response->ErrorResponse("No Order Found");
         }
     }
+
+    public function MyBalanceHistory(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $wallet = Wallet::where('user_id',$request->user()->id)->select('user_id','currency_id','amount')->with('currency')->first();
+        if($wallet == null) {
+            return $this->response->ErrorResponse('No wallet for current user');
+        }
+
+        $totalInActions = WalletTransaction::where(['wallet_id'=>$wallet->id,'transfer_to',$request->user()->id])->with(['from','to','currency'])->get();
+        $totalOutActions = WalletTransaction::where(['wallet_id'=>$wallet->id,'transfer_from',$request->user()->id])->with(['from','to','currency'])->get();
+
+        $walletTransactions = [
+            'wallet' => $wallet,
+            'Income' => $totalInActions,
+            'Paid' => $totalOutActions,
+        ];
+
+        return $this->response->successResponse('Wallet',$walletTransactions);
+    }
 }

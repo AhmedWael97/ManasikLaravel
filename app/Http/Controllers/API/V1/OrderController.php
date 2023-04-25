@@ -187,4 +187,22 @@ class OrderController extends Controller
 
         return $this->response->successResponse('Order',Order::where('user_id',$request->user()->id)->get());
     }
+
+    public function cancelMyOrder(Request $request,$order_id) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $order = Order::where(['user_id' => $request->user()->id, 'id' => $order_id])->first();
+        if($order == null) {
+            return $this->response->notFound('Order Not Found');
+        }
+
+        if($order->excuter_id != null) {
+            return $this->response->errorResponse('You can not cancel order already started');
+        }
+
+        $order->delete();
+        return $this->response->successResponse('Data',null);
+    }
 }

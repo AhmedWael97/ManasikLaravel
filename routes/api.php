@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\V1\AuthenticateController;
 use App\Http\Controllers\API\V1\BasicController;
 use App\Http\Controllers\API\V1\OrderController;
+use App\Http\Controllers\API\V1\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,12 +51,18 @@ Route::prefix('v1')->group(function () {
             Route::get('/details/{id}','orderDetails')->middleware('auth:sanctum');
             Route::get('/orderDetail/{order_id}/steps/{service_id}','orderDetailStep')->middleware('auth:sanctum');
             Route::get('/myOrders','myOrders')->middleware('auth:sanctum');
+            Route::get('/cancel-my-order/{order_id}','cancelMyOrder')->middleware('auth:sanctum');
+        });
+    });
 
+    Route::prefix('wallet')->group(function() {
+        Route::controller(PaymentController::class)->group(function() {
+            Route::get('/history','MyBalanceHistory')->middleware('auth:sanctum');
         });
     });
 
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
