@@ -141,8 +141,8 @@ class OrderController extends Controller
             return $this->response->notFound('Order Not Found');
         }
         $orderDetails = OrderDetail::where('order_id',$order->id)
-        ->select('order_id','purpose_hag_id','kfarat_choice_id','service_id',DB::raw('count(*) as total'))
-        ->groupBy('service_id','purpose_hag_id','kfarat_choice_id', 'order_id')
+        ->select('order_id','full_name','purpose_hag_id','kfarat_choice_id','service_id',DB::raw('count(*) as total'))
+        ->groupBy('service_id','full_name','purpose_hag_id','kfarat_choice_id', 'order_id')
         ->with('order.user','service','hajPurpose','KfaraChoice')->get();
         return $this->response->successResponse('OrderDetail',$orderDetails);
 
