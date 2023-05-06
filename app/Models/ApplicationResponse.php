@@ -48,4 +48,13 @@ class ApplicationResponse extends Model
         ]);
     }
 
+    public function noPermission() {
+        return response([
+            'Status' => 401,
+            'MessageEN' => "No Permission To Access That",
+            'MessageAR' => "ليس لديك صلاحية للوصول الي هذا",
+            'Data' => null
+        ]);
+    }
+
 }

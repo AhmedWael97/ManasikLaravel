@@ -25,4 +25,8 @@ class OrderDetail extends Model
     public function steps() {
         return $this->hasMany('\App\Models\OrderDetailStep','detail_id','id');
     }
+
+    public function order() {
+        return $this->belongsTo('\App\Models\Order','order_id','id');
+    }
 }

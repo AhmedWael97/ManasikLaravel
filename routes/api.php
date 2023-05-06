@@ -68,6 +68,22 @@ Route::prefix('v1')->group(function () {
         });
     });
 
+    Route::prefix('executer')->group(function() {
+        Route::prefix('auth')->group(function() {
+            Route::controller(AuthenticateController::class)->group(function(){
+                Route::post('/executer-login','executer_login');
+                Route::post('/executer-register','executer_register');
+            });
+        });
+        Route::prefix('order')->group(function() {
+            Route::controller(OrderController::class)->group(function() {
+                Route::get('/available-orders','executer_avaliavble_orders');
+                Route::post('/request-to-do','request_to_take_order');
+                Route::get('/my-requests/{status}','my_to_do_requests');
+            });
+        });
+
+    });
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

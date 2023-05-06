@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\ApplicationResponse;
 use App\Models\User;
 use App\Models\OrderDetailStep;
+use App\Models\ToDoOrder;
 use DB;
 
 class OrderController extends Controller
@@ -140,9 +141,9 @@ class OrderController extends Controller
             return $this->response->notFound('Order Not Found');
         }
         $orderDetails = OrderDetail::where('order_id',$order->id)
-        ->select('purpose_hag_id','kfarat_choice_id','service_id',DB::raw('count(*) as total'))
-        ->groupBy('service_id','purpose_hag_id','kfarat_choice_id')
-        ->with('service','hajPurpose','KfaraChoice')->get();
+        ->select('order_id','purpose_hag_id','kfarat_choice_id','service_id',DB::raw('count(*) as total'))
+        ->groupBy('service_id','purpose_hag_id','kfarat_choice_id', 'order_id')
+        ->with('order.user','service','hajPurpose','KfaraChoice')->get();
         return $this->response->successResponse('OrderDetail',$orderDetails);
 
     }
@@ -209,4 +210,81 @@ class OrderController extends Controller
         $order->delete();
         return $this->response->successResponse('Data',null);
     }
+
+    public function executer_avaliavble_orders (Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+        $user = User::where('id',$request->user())->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+
+        $orders = OrderDetail::where('executer_id',null)->orderBy('created_at','desc')->with([
+            'service', 'order' => function($query) {
+                $query->with('user');
+            }
+        ])->paginate(15);
+
+        return $this->response->successResponse('Order',$orders);
+
+    }
+
+    public function request_to_take_order (Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user())->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+
+        $order = OrderDetail::where('id',$request->order_id)->where('executer_id',null)->first();
+        if($order == null) {
+            return $this->response->errorMessage('Order Already Taken');
+        }
+
+        $newToDo = new ToDoOrder([
+            'executer_id' => $request->user()->id,
+            'order_detail_id' => $request->order_id,
+            'is_confirmed' => 0,
+        ]);
+        $newToDo->save();
+
+        return $this->response->successResponse('ToDoOrder',$newToDo);
+    }
+
+    public function my_to_do_requests(Request $request, $status) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user())->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+
+        if($status == null) {
+            return $this->response->errorMessage('Error Status');
+        }
+
+        if($status == 'in_progress') {
+            $status = 1;
+            $toDo = ToDoOrder::where('executer_id',$request->user()->id)->where('is_confirmed', $status)->with([
+                'orderDetails' => function ($query) {
+                    $query->with('order','steps','service','hajPurpose','KfaraChoice','order.user');
+                }
+            ])->get();
+        }
+
+        if($status == 'pending') {
+            $status = 0;
+            $toDo = ToDoOrder::where('executer_id',$request->user()->id)->where('is_confirmed', $status)->with([
+                'orderDetails'
+            ])->get();
+        }
+        return $this->response->successResponse('ToDoOrder',$toDo);
+    }
+
 }
