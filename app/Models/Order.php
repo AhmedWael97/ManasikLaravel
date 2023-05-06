@@ -16,7 +16,7 @@ class Order extends Model
     }
 
     public function user() {
-        return $this->hasOne('\App\Models\User','id','user_id')->select('id','name_ar','name_en');
+        return $this->hasOne('\App\Models\User','id','user_id')->select('id','name_ar','name');
     }
 
     public function paymentType() {
