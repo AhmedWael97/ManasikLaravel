@@ -87,7 +87,7 @@ class OrderController extends Controller
                             'executer_price' => $service->executer_price,
                             'no_of_kfara' => $minService['kfaraCount'] ??  null ,
                             'kfarat_choice_id' => $minService['KfaraChoiceId'] ?? null,
-                            'purpose_hag_id' => $minService['HajPurpose'],
+                            'purpose_hag_id' => $minService['HajPurpose'] ?? null,
                         ]);
                         $newOrderDetails->save();
                     }
