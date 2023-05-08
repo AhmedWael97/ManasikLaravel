@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -187,5 +188,7 @@ Route::prefix('/Orders')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\OrderController@edit')->name('Orders-Edit');
     Route::post('/update','App\Http\Controllers\OrderController@update')->name('Orders-Update');
     Route::get('/delete/{id}','App\Http\Controllers\OrderController@destroy')->name('Orders-Delete');
+    Route::post('chanage-status','App\Http\Controllers\OrderController@changeStatus')->name('ChangeStatus');
+    Route::post('/AssignExecuter','App\Http\Controllers\OrderController@AssignExecuter')->name('AssignExecuter');
 });
 

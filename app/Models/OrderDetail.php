@@ -29,4 +29,8 @@ class OrderDetail extends Model
     public function order() {
         return $this->belongsTo('\App\Models\Order','order_id','id');
     }
+
+    public function executer() {
+        return $this->hasOne('\App\Models\User','id','executer_id');
+    }
 }
