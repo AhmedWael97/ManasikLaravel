@@ -249,10 +249,10 @@
                                                     </div>
                                                 </div>
                                             @endif
-                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target=".bd-example-modal-lg">
+                                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target=".id-{{ $detail->id }}">
                                                 {{ translate('See Steps') }}
                                             </button>
-                                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                            <div class="modal fade bd-example-modal-lg id-{{ $detail->id }}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog  modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">

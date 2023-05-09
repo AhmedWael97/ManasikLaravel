@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderDetailStep;
+use App\Models\ServiceStep;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -54,6 +56,21 @@ class OrderController extends Controller
 
         $orderDetails->executer_id = $executer->id;
         $orderDetails->save();
+
+        if(count($orderDetails->steps) == 0) {
+            $serviceSteps = ServiceStep::where('service_id',$orderDetails->service_id)->select('id')->get();
+            foreach($serviceSteps as $step) {
+                $OrderDetailsStep = new OrderDetailStep([
+                    'detail_id' => $orderDetails->id,
+                    'service_step_id' => $step->id,
+                    'step_status_id' => 1,
+                ]);
+                $OrderDetailsStep->save();
+            }
+
+        }
+        //notify Executer
+
         return redirect()->route('Orders-Show',$orderDetails->order_id)->with('success',translate('Executer Assigned successfully and will be notified'));
 
     }
