@@ -82,7 +82,6 @@ Route::prefix('v1')->group(function () {
                 Route::get('/my-requests/{status}','my_to_do_requests');
             });
         });
-
     });
 });
 

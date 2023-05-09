@@ -49,6 +49,7 @@ class OrderController extends Controller
             }
 
             if($request->has('cart') && count($request->cart) >= 1) {
+                $orders = [];
                 foreach($request->cart as $requestOrder) {
 
                     if( ! $requestOrder['services'] && ! count($requestOrder['services']) >= 1 ) {
@@ -113,9 +114,11 @@ class OrderController extends Controller
                         ];
                         $this->paymentController->payWithPrize($paymentRequest);
                     }
-
-                    return $this->response->successResponse('Order',$newOrder);
+                    array_push($orders,$newOrder->id);
                 }
+
+
+                return $this->response->successResponse('Order',Order::whereIn('id',$orders)->get());
             } else {
                 return $this->response->ErrorResponse('No Services Selected');
             }
