@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('order_id');
-            $table->bigInteger('servie_id')->nullable();
+            $table->bigInteger('service_id')->nullable();
             $table->bigInteger('order_status_id')->nullable();
             $table->string('full_name');
             $table->bigInteger('executer_id')->nullable();

@@ -1,4 +1,5 @@
 <!-- Main Sidebar Container -->
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('Home') }}" class="brand-link">
@@ -299,6 +300,19 @@
               <i class="nav-icon fas fa-list"></i>
               <p>
                 {{ translate('Orders') }}
+
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('OrdersToDo')
+          <li class="nav-item">
+            <a href="{{ route('RequestToDo') }}" class="nav-link {{ is_active('RequestToDo')  ? 'active' : '' }}">
+
+              <i class="nav-icon fas fa-user-plus"></i>
+              <p>
+                {{ translate('Request To Do') }}
 
               </p>
             </a>

@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\API\V1\AuthenticateController;
 use App\Http\Controllers\API\V1\BasicController;
 use App\Http\Controllers\API\V1\OrderController;
-
+use App\Http\Controllers\API\V1\PaymentController;
+use App\Http\Controllers\API\V1\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,22 +39,53 @@ Route::prefix('v1')->group(function () {
             Route::get('/getLangs','getLangs');
             Route::get('/getNationality','getNationality');
             Route::get('/getServices','getServices');
+            Route::get('/getServices-auth','getServices')->middleware('auth:sanctum');
             Route::get('/getKfaratChoices','getKfaratChoices');
             Route::get('/getPaymentTypes','getPaymentTypes');
             Route::get('/getHajPurpose','getHajPurpose');
         });
     });
 
-
     Route::prefix('order')->group(function() {
         Route::controller(OrderController::class)->group(function() {
-            Route::get('/store','store')->middleware('auth:sanctum');
-
+            Route::post('/store','store')->middleware('auth:sanctum');
+            Route::get('/details/{id}','orderDetails')->middleware('auth:sanctum');
+            Route::get('/orderDetail/{order_id}/steps/{service_id}','orderDetailStep')->middleware('auth:sanctum');
+            Route::get('/myOrders','myOrders')->middleware('auth:sanctum');
+            Route::get('/cancel-my-order/{order_id}','cancelMyOrder')->middleware('auth:sanctum');
         });
     });
 
+    Route::prefix('wallet')->group(function() {
+        Route::controller(PaymentController::class)->group(function() {
+            Route::get('/history','MyBalanceHistory')->middleware('auth:sanctum');
+        });
+    });
+
+    Route::prefix('user')->group(function() {
+        Route::controller(UserController::class)->group(function() {
+            Route::get('/myInfo','getMyInfo')->middleware('auth:sanctum');
+            Route::post('/updateMyInfo','UpdateMyInfo')->middleware('auth:sanctum');
+        });
+    });
+
+    Route::prefix('executer')->group(function() {
+        Route::prefix('auth')->group(function() {
+            Route::controller(AuthenticateController::class)->group(function(){
+                Route::post('/executer-login','executer_login');
+                Route::post('/executer-register','executer_register');
+            });
+        });
+        Route::prefix('order')->group(function() {
+            Route::controller(OrderController::class)->group(function() {
+                Route::get('/available-orders','executer_avaliavble_orders');
+                Route::post('/request-to-do','request_to_take_order');
+                Route::get('/my-requests/{status}','my_to_do_requests');
+            });
+        });
+    });
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });

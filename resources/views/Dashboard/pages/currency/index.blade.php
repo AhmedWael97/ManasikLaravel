@@ -76,7 +76,7 @@
                                     <td>
                                         {{ $currency->symbol }}
                                     </td>
-                                  
+
                                     <td>
                                         <a href="{{ route('currency-edit',$currency->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>

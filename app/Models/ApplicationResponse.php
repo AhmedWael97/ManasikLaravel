@@ -39,4 +39,22 @@ class ApplicationResponse extends Model
         ]);
     }
 
+    public function notFound($err) {
+        return response([
+            "Status" => 404,
+            "MessageEN" => $err,
+            "MessageAR" => $err,
+
+        ]);
+    }
+
+    public function noPermission() {
+        return response([
+            'Status' => 401,
+            'MessageEN' => "No Permission To Access That",
+            'MessageAR' => "ليس لديك صلاحية للوصول الي هذا",
+            'Data' => null
+        ]);
+    }
+
 }

@@ -59,16 +59,45 @@ class BasicController extends Controller
     public function getNationality() {
         return $this->response->successResponse('Nationality',Nationality::select(['id','name_ar','name_en'])->get());
     }
-    public function getServices() {
-        $services = Service::select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id')->where('parent_id','0')->with([
+    public function getServices(Request $request) {
+        $services = Service::select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id')->where('parent_id','0')
+        ->with([
         'childern' => function($query) {
-            $query->select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id');
+            $query->select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id')->with([
+                'kfaratChoices' => function($query) {
+                    $query->select('id','service_id','kfarat_choice_id')->with([
+                        'kfaraChoice' => function($query) {
+                            $query->select('id','name_ar','name_en','menu_image_path');
+                        }
+                    ]);
+                }
+            ]);
+        },'kfaratChoices' => function($query) {
+            $query->select('id','service_id','kfarat_choice_id')->with([
+                'kfaraChoice' => function($query) {
+                    $query->select('id','name_ar','name_en','menu_image_path');
+                }
+            ]);
         }])->get();
+
+
+        if($request->user()) {
+            $wallet = \App\Models\Wallet::where('user_id',$request->user()->id)->first();
+            $curreny = \App\Models\Currency::where('id',$wallet->currency_id)->first();
+            foreach($services as $service) {
+                $service->user_amount = $service->price   * $curreny->convert_value;
+            }
+        } else {
+            foreach($services as $service) {
+                $service->user_amount = $service->price;
+            }
+        }
         return $this->response->successResponse('Service', $services);
     }
 
     public function getKfaratChoices() {
-        return $this->response->successResponse('KfaratChoice',KfaratChoice::select('id','name_en','name_ar')->get());
+        return $this->response->successResponse('KfaratChoice',
+        KfaratChoice::select('id','name_en','name_ar')->with( 'services.service')->get());
     }
 
     public function getPaymentTypes() {

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -119,6 +120,8 @@ Route::prefix('/Users')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\UserController@edit')->name('Users-Edit');
     Route::post('/update','App\Http\Controllers\UserController@update')->name('Users-Update');
     Route::get('/delete/{id}','App\Http\Controllers\UserController@destroy')->name('Users-Delete');
+    Route::get('/auto-assign/{id}','App\Http\Controllers\UserController@automateAssign')->name('Users-auto');
+    Route::post('/auto/assign/store','App\Http\Controllers\UserController@saveAutoAssign')->name('Users-Store-Auto');
 });
 
 
@@ -187,10 +190,26 @@ Route::prefix('/Orders')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\OrderController@edit')->name('Orders-Edit');
     Route::post('/update','App\Http\Controllers\OrderController@update')->name('Orders-Update');
     Route::get('/delete/{id}','App\Http\Controllers\OrderController@destroy')->name('Orders-Delete');
+    Route::post('chanage-status','App\Http\Controllers\OrderController@changeStatus')->name('ChangeStatus');
+    Route::post('/AssignExecuter','App\Http\Controllers\OrderController@AssignExecuter')->name('AssignExecuter');
+});
+
+=
+//Requests to do
+Route::prefix('/RequestToDo')->group(function() {
+    Route::get('/index','App\Http\Controllers\RequestToDoController@index')->name('RequestToDo');
+    Route::post('/accept/{id}','App\Http\Controllers\RequestToDoController@accept')->name('RequestToDo-accept');
+    Route::post('/refused/{id}','App\Http\Controllers\RequestToDoController@refused')->name('RequestToDo-refused');
+
+});
+
+
+
+Route::get('/test',function() {
+    return AssignServicesToExecuters();
 });
 
 Route::get('/return-count-admin' ,'App\Http\Controllers\UserController@getAdminCount');
 Route::get('/return-count-mobilApp' ,'App\Http\Controllers\UserController@getMobilAppCount');
 Route::get('/return-count-executer-dashboard' ,'App\Http\Controllers\UserController@getExecuterDashboardNo');
 Route::get('/return-count-executer-app' ,'App\Http\Controllers\UserController@getExecuterAppNo');
-

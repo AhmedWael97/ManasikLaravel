@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\Wallet;
+use App\Models\AutoAssignService;
 class UserController extends Controller
 {
     public function __construct() {
@@ -75,6 +76,11 @@ class UserController extends Controller
             $role = Role::findOrFail($request->role_id);
             $user->assignRole($role);
 
+            $user->is_active = $request->is_active;
+            $user->is_confirmed_executer = $request->is_confirmed_executer;
+            $user->is_allow_notification = $request->is_allow_notification;
+            $user->save();
+
             if($request->has('photo_path')) {
                 $imageName = 'photo_'.time().'.'.$request->photo_path->extension();
                 $request->photo_path->move(public_path('images/photos'), $imageName);
@@ -110,6 +116,7 @@ class UserController extends Controller
             $wallet->save();
             return redirect()->route('Users')->with('success',translate('Saved Successfully'));
         } catch(Exception $e) {
+            $user->delete();
             return back()->with('warning', $e->getMessage());
         }
 
@@ -124,6 +131,8 @@ class UserController extends Controller
             'phone' => 'required',
             'role_id' => 'required',
         ]);
+
+
          try {
             $user = User::findOrFail($request->user_id);
             $user->passowrd;
@@ -138,7 +147,10 @@ class UserController extends Controller
             }
             $role = Role::findOrFail($request->role_id);
             $user->assignRole($role);
-
+            $user->is_active = $request->is_active;
+            $user->is_confirmed_executer = $request->is_confirmed_executer;
+            $user->is_allow_notification = $request->is_allow_notification;
+            $user->save();
             if($request->has('photo_path')) {
                 $imageName = 'photo_'.time().'.'.$request->photo_path->extension();
                 $request->photo_path->move(public_path('images/photos'), $imageName);
@@ -183,6 +195,56 @@ class UserController extends Controller
     public function view($id) {
         $user = User::findOrFail($id);
         return view('Dashboard.pages.Users.show')->with('User',$user);
+    }
+
+
+    public function automateAssign($id) {
+        $user = User::findOrFail($id);
+        if(! $user->roles[0]->hasPermissionTo('Executer_Dashboard_Login')) {
+            return back()->with('warning', translate('this user not kfarat executer'));
+        }
+
+        $servicesId = \App\Models\ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
+        $services = \App\Models\Service::whereIn('id',$servicesId)->where('parent_id','<>',0)->where('price','<>',0)->get();
+
+        return view('dashboard.pages.users.automateAssign')->with([
+            'user' => $user,
+            'services' => $services
+        ]);
+
+    }
+
+    public function saveAutoAssign(Request $request) {
+
+        $user = User::findOrFail($request->id);
+
+
+        if($request->has('services') && count($request->services) > 0) {
+            foreach($request->services as $key=>$serviceId) {
+                $service = \App\Models\Service::findOrFail($serviceId);
+                $AutoService  = AutoAssignService::where(['executer_id' => $request->id , 'service_id' => $serviceId])->first();
+
+                if($AutoService != null) {
+
+                    $AutoService->maxCount = $request->maxCount[$key];
+                    $AutoService->save();
+
+                } else {
+
+                    $newAutoService = new AutoAssignService([
+                        'executer_id' => $request->id,
+                        'service_id' => $serviceId,
+                        'maxCount' => $request->maxCount[$key],
+                        'auto_assign' => 1
+                    ]);
+                    $newAutoService->save();
+                }
+
+            }
+            return redirect()->route('Users-auto',$user->id)->with('success' , translate('Saved Successfully'));
+        } else {
+            return back()->with('error', translate('Error in selected services'));
+        }
     }
 
     public function getAdminCount(Request $request){

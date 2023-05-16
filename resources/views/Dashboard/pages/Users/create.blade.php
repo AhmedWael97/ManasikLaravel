@@ -262,7 +262,7 @@
                                 </label>
                                 <select class="form-control" name="currency_id">
                                     @foreach($Currencies as $term)
-                                        <option {{ $term->id }}> {{ $term->name_en }} | {{ $term->name_ar }}</option>
+                                        <option value=" {{ $term->id }} "> {{ $term->name_en }} | {{ $term->name_ar }}</option>
                                     @endforeach
                                 </select>
                             </div>

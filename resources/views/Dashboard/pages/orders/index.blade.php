@@ -44,10 +44,10 @@
                             </th>
 
                             <th>
-                                {{ translate('Payment Type Status') }}
+                                {{ translate('Payment Status') }}
                             </th>
                             <th>
-                                {{ translate('Order Status') }}
+                                {{ translate('Status') }}
                             </th>
                             <th>
                                 {{ translate('Price') }}
@@ -58,17 +58,22 @@
                         </thead>
                         <tbody>
                             @foreach($orders as $key => $order)
+                               <tr>
                                 <td>
                                     {{ ++$key }}
                                 </td>
                                 <td>
-                                    {{ $order->user }}
+                                    {{ $order->user->name . ' || ' . $order->user->name_ar }}
                                 </td>
                                 <td>
                                     {{ $order->mainService->name_en }} || {{ $order->mainService->name_ar }}
                                 </td>
                                 <td>
                                     {{ $order->paymentType->name_en }} || {{ $order->paymentType->name_ar }}
+                                </td>
+
+                                <td>
+                                    {{ $order->paymentTypeStatus->name_en }} || {{ $order->paymentTypeStatus->name_ar }}
                                 </td>
                                 <td>
                                     {{ $order->status->name_en }} || {{ $order->status->name_ar }}
@@ -81,6 +86,7 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
+                               </tr>
                             @endforeach
                         </tbody>
                     </table>

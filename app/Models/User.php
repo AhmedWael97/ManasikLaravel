@@ -86,5 +86,9 @@ class User extends Authenticatable
         return $this->hasOne('\App\Models\Wallet','user_id','id');
     }
 
+    public function autoAssign() {
+        return $this->hasMany('\App\Models\AutoAssignService','executer_id','id');
+    }
+
 
 }
