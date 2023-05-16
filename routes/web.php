@@ -194,6 +194,7 @@ Route::prefix('/Orders')->group(function() {
     Route::post('/AssignExecuter','App\Http\Controllers\OrderController@AssignExecuter')->name('AssignExecuter');
 });
 
+=
 //Requests to do
 Route::prefix('/RequestToDo')->group(function() {
     Route::get('/index','App\Http\Controllers\RequestToDoController@index')->name('RequestToDo');
@@ -207,3 +208,8 @@ Route::prefix('/RequestToDo')->group(function() {
 Route::get('/test',function() {
     return AssignServicesToExecuters();
 });
+
+Route::get('/return-count-admin' ,'App\Http\Controllers\UserController@getAdminCount');
+Route::get('/return-count-mobilApp' ,'App\Http\Controllers\UserController@getMobilAppCount');
+Route::get('/return-count-executer-dashboard' ,'App\Http\Controllers\UserController@getExecuterDashboardNo');
+Route::get('/return-count-executer-app' ,'App\Http\Controllers\UserController@getExecuterAppNo');
