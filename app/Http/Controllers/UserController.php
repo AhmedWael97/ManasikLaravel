@@ -13,6 +13,7 @@ use App\Models\Nationality;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use App\Models\Wallet;
 class UserController extends Controller
 {
     public function __construct() {
@@ -64,6 +65,7 @@ class UserController extends Controller
             'phone' => 'required|unique:users',
             'password' => 'required|confirmed',
             'role_id' => 'required',
+            'currency_id' => 'required',
         ]);
 
         try {
@@ -99,6 +101,13 @@ class UserController extends Controller
 
             $user->save();
 
+            $wallet = new Wallet([
+                'user_id' => $user->id,
+                'amount' => 0,
+                'currency_id' => $request->currency_id
+            ]);
+
+            $wallet->save();
             return redirect()->route('Users')->with('success',translate('Saved Successfully'));
         } catch(Exception $e) {
             return back()->with('warning', $e->getMessage());

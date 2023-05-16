@@ -20,6 +20,8 @@ Route::get('/', function () {
     return view('Auth.login');
 })->name('login');
 
+Route::get('/Logout','App\Http\Controllers\AuthController@logout')->name('Logout');
+
 // Auth
 Route::post('/login','App\Http\Controllers\AuthController@login')->name('Login');
 
@@ -34,6 +36,17 @@ Route::prefix('/Roles')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\RoleController@edit')->name('Roles-Edit');
     Route::post('/update','App\Http\Controllers\RoleController@update')->name('Roles-Update');
     Route::get('/delete/{id}','App\Http\Controllers\RoleController@destroy')->name('Roles-Delete');
+});
+
+
+//Wallet
+Route::prefix('/Wallet')->group(function() {
+    Route::get('/index','App\Http\Controllers\WalletController@index')->name('Wallet');
+    Route::get('/create','App\Http\Controllers\WalletController@create')->name('Wallet-Create');
+    Route::post('/store','App\Http\Controllers\WalletController@store')->name('Wallet-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\WalletController@edit')->name('Wallet-Edit');
+    Route::post('/update','App\Http\Controllers\WalletController@update')->name('Wallet-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\WalletController@destroy')->name('Wallet-Delete');
 });
 
 
@@ -131,7 +144,50 @@ Route::prefix('/KfaratChoice')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\KfaratChoiceController@edit')->name('KfaratChoice-Edit');
     Route::post('/update','App\Http\Controllers\KfaratChoiceController@update')->name('KfaratChoice-Update');
     Route::get('/delete/{id}','App\Http\Controllers\KfaratChoiceController@destroy')->name('KfaratChoice-Delete');
-    });
+});
+
+//PaymentTypes
+Route::prefix('/PaymentTypes')->group(function() {
+    Route::get('/index','App\Http\Controllers\PaymentTypeController@index')->name('PaymentTypes');
+    Route::get('/create','App\Http\Controllers\PaymentTypeController@create')->name('PaymentTypes-Create');
+    Route::post('/store','App\Http\Controllers\PaymentTypeController@store')->name('PaymentTypes-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\PaymentTypeController@edit')->name('PaymentTypes-Edit');
+    Route::post('/update','App\Http\Controllers\PaymentTypeController@update')->name('PaymentTypes-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\PaymentTypeController@destroy')->name('PaymentTypes-Delete');
+});
+
+
+//HajPurpose
+Route::prefix('/HajPurpose')->group(function() {
+    Route::get('/index','App\Http\Controllers\HajPurposeController@index')->name('HajPurpose');
+    Route::get('/create','App\Http\Controllers\HajPurposeController@create')->name('HajPurpose-Create');
+    Route::post('/store','App\Http\Controllers\HajPurposeController@store')->name('HajPurpose-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\HajPurposeController@edit')->name('HajPurpose-Edit');
+    Route::post('/update','App\Http\Controllers\HajPurposeController@update')->name('HajPurpose-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\HajPurposeController@destroy')->name('HajPurpose-Delete');
+});
+
+
+//Status
+Route::prefix('/Status')->group(function() {
+    Route::get('/index','App\Http\Controllers\StatusController@index')->name('Status');
+    Route::get('/create','App\Http\Controllers\StatusController@create')->name('Status-Create');
+    Route::post('/store','App\Http\Controllers\StatusController@store')->name('Status-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\StatusController@edit')->name('Status-Edit');
+    Route::post('/update','App\Http\Controllers\StatusController@update')->name('Status-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\StatusController@destroy')->name('Status-Delete');
+});
+
+//Orders
+Route::prefix('/Orders')->group(function() {
+    Route::get('/index','App\Http\Controllers\OrderController@index')->name('Orders');
+    Route::get('/show/{id}','App\Http\Controllers\OrderController@show')->name('Orders-Show');
+    Route::get('/create','App\Http\Controllers\OrderController@create')->name('Orders-Create');
+    Route::post('/store','App\Http\Controllers\OrderController@store')->name('Orders-Store');
+    Route::get('/edit/{id}','App\Http\Controllers\OrderController@edit')->name('Orders-Edit');
+    Route::post('/update','App\Http\Controllers\OrderController@update')->name('Orders-Update');
+    Route::get('/delete/{id}','App\Http\Controllers\OrderController@destroy')->name('Orders-Delete');
+});
 
 Route::get('/return-count-admin' ,'App\Http\Controllers\UserController@getAdminCount');
 Route::get('/return-count-mobilApp' ,'App\Http\Controllers\UserController@getMobilAppCount');

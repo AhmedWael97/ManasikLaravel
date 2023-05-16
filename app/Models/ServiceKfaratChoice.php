@@ -10,4 +10,8 @@ class ServiceKfaratChoice extends Model
     use HasFactory;
 
     protected $fillable = ['service_id','kfarat_choice_id'];
+
+    public function kfaraChoice() {
+        return $this->belongsTo('\App\Models\KfaratChoice','kfarat_choice_id','id');
+    }
 }

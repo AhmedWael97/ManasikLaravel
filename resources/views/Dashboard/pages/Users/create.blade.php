@@ -256,6 +256,16 @@
                                 </label>
                                 <input type="text" name="iban" required="false" class="form-control" />
                             </div>
+                            <div class="col-md-3 mb-2">
+                                <label>
+                                    {{ translate('Currency') }}
+                                </label>
+                                <select class="form-control" name="currency_id">
+                                    @foreach($Currencies as $term)
+                                        <option {{ $term->id }}> {{ $term->name_en }} | {{ $term->name_ar }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                     </div>
                 </div>
             </div>

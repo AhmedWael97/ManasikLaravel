@@ -82,6 +82,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function wallet(){
+        return $this->hasOne('\App\Models\Wallet','user_id','id');
+    }
 
 
 }

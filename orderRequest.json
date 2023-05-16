@@ -1,0 +1,29 @@
+{
+    "main_service_id" : "integer|nullable",
+    "payment_type_id" : "integer",
+    "is_from_wallet" : "boolean 0 or 1",
+    "order_details" : {
+        {
+            "servie_id" : "integer",
+            "no_of_kfara" : "integer | nullable",
+            "purpose_hag_id" : "integer | nullable",
+            "kfarat_choice_id" : "integer | nullable",
+            "required_date" : "string Date | nullable => default now date",
+        },
+        {
+            "servie_id" : "integer",
+            "no_of_kfara" : "integer | nullable",
+            "purpose_hag_id" : "integer | nullable",
+            "kfarat_choice_id" : "integer | nullable",
+            "required_date" : "string Date",
+        },
+        {
+            "servie_id" : "integer",
+            "no_of_kfara" : "integer | nullable",
+            "purpose_hag_id" : "integer | nullable",
+            "kfarat_choice_id" : "integer | nullable",
+            "required_date" : "string Date | nullable => default now date",
+        },
+    }
+}
+

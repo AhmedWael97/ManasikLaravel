@@ -26,7 +26,7 @@ class ServiceController extends Controller
 
     public function create() {
         return view('Dashboard.pages.Services.create')->with([
-            'parents' => Service::select('id','name_en','name_ar')->get(),
+            'parents' => Service::select('id','name_en','name_ar','parent_id')->get(),
             'kfaratChoices' => KfaratChoice::get(),
         ]);
     }
@@ -82,7 +82,7 @@ class ServiceController extends Controller
 
         return redirect()->route('Services')->with('success',translate('Saved Successfully'));
       } catch(Exception $e) {
-        return back()->with('warning', $e->getMessage());
+        return redirect()->route('Services')->with('warning', $e->getMessage());
       }
     }
 

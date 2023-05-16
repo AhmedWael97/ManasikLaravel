@@ -5,12 +5,12 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>{{ translate('Services') }}</h1>
+            <h1>{{ translate('Payment Types') }}</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ Route('Home') }}">{{ translate('Home') }}</a></li>
-                <li class="breadcrumb-item active"> {{ translate('Services') }}</li>
+                <li class="breadcrumb-item active"> {{ translate('Payment Types') }}</li>
             </ol>
             </div>
         </div>
@@ -23,9 +23,9 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
-                    <a href="{{ route('Services-Create') }}" class="btn btn-primary">
+                    <a href="{{ route('PaymentTypes-Create') }}" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i>
-                        {{ translate('Add New Service') }}
+                        {{ translate('Add New Payment Type') }}
                     </a>
                   </h3>
                 </div>
@@ -37,57 +37,41 @@
                                 #
                             </th>
                             <th>
-                                {{ translate('Name') }}
+                                {{ translate('Added By') }}
                             </th>
                             <th>
-                                {{ translate('Max Limit') }}
+                                {{ translate('Arabic Name') }}
                             </th>
                             <th>
-                                {{ translate('Price') }}
+                                {{ translate('English Name') }}
                             </th>
-                            <th>
-                                {{ translate('Executer Price') }}
-                            </th>
-                            <th>
-                                {{ translate('Serivce Parent') }}
-                            </th>
+
                             <th>
                                 {{ translate('Actions') }}
                             </th>
                         </thead>
                         <tbody>
-                            @foreach ($Services as $key=>$service)
+                            @foreach ($types as $key=>$type)
                                 <tr>
                                     <td>
                                         {{ ++$key }}
                                     </td>
                                     <td>
-                                        {{ $service->name_en }} | {{ $service->name_ar }}
+                                        {{ $type->user->name }}
                                     </td>
                                     <td>
-                                        {{ $service->max_limit }}
+                                        {{ $type->name_ar }}
                                     </td>
                                     <td>
-                                        {{ $service->price }}
+                                        {{ $type->name_en }}
                                     </td>
+
+
                                     <td>
-                                        {{ $service->executer_price }}
-                                    </td>
-                                    <td>
-                                       @if($service->parent)
-                                        {{ $service->parent->name_en   }} || {{ $service->parent->name_ar  }}
-                                       @else
-                                       {{ translate('Parent Service') }}
-                                       @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
+                                        <a href="{{ route('PaymentTypes-Edit',$type->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('Services-Delete',$service->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
+                                        <a href="{{ route('PaymentTypes-Delete',$type->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
                                             <i class="fas fa-trash"></i>
                                         </a>
 

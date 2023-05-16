@@ -5,12 +5,12 @@
         <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-            <h1>{{ translate('Services') }}</h1>
+            <h1>{{ translate('Wallets') }}</h1>
             </div>
             <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ Route('Home') }}">{{ translate('Home') }}</a></li>
-                <li class="breadcrumb-item active"> {{ translate('Services') }}</li>
+                <li class="breadcrumb-item active"> {{ translate('Wallets') }}</li>
             </ol>
             </div>
         </div>
@@ -23,10 +23,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
-                    <a href="{{ route('Services-Create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle"></i>
-                        {{ translate('Add New Service') }}
-                    </a>
+                    {{ translate('Make Transactions And See Credits') }}
                   </h3>
                 </div>
                 <!-- /.card-header -->
@@ -37,58 +34,42 @@
                                 #
                             </th>
                             <th>
-                                {{ translate('Name') }}
+                                {{ translate('User') }}
                             </th>
                             <th>
-                                {{ translate('Max Limit') }}
+                                {{ translate('Amount') }}
                             </th>
                             <th>
-                                {{ translate('Price') }}
-                            </th>
-                            <th>
-                                {{ translate('Executer Price') }}
-                            </th>
-                            <th>
-                                {{ translate('Serivce Parent') }}
+                                {{ translate('Currency') }}
                             </th>
                             <th>
                                 {{ translate('Actions') }}
                             </th>
                         </thead>
                         <tbody>
-                            @foreach ($Services as $key=>$service)
+                            @foreach ($Wallets as $key=>$wallet)
                                 <tr>
                                     <td>
                                         {{ ++$key }}
                                     </td>
                                     <td>
-                                        {{ $service->name_en }} | {{ $service->name_ar }}
+                                        {{ $wallet->user->name }} | {{ $wallet->user->name_ar }}
                                     </td>
                                     <td>
-                                        {{ $service->max_limit }}
+                                        {{ $wallet->amount }}
                                     </td>
                                     <td>
-                                        {{ $service->price }}
+                                        {{ $wallet->currency->symbol }}
                                     </td>
                                     <td>
-                                        {{ $service->executer_price }}
-                                    </td>
-                                    <td>
-                                       @if($service->parent)
-                                        {{ $service->parent->name_en   }} || {{ $service->parent->name_ar  }}
-                                       @else
-                                       {{ translate('Parent Service') }}
-                                       @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
-                                            <i class="fas fa-eye"></i>
+                                        <a href="#" class="btn btn-primary btn-sm mr-2 mt-2">
+                                            <i class="fas fa-plus-circle"></i> {{ translate('Make Transaction') }}
                                         </a>
-                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="#" class="btn btn-danger btn-sm mr-2 mt-2">
+                                            <i class="fas fa-minus-circle"></i> {{ translate('Remove Transaction') }}
                                         </a>
-                                        <a href="{{ route('Services-Delete',$service->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
-                                            <i class="fas fa-trash"></i>
+                                        <a href="#" class="btn btn-default btn-sm mr-2 mt-2">
+                                            <i class="fas fa-eye"></i> {{ translate('See Transactions') }}
                                         </a>
 
                                     </td>
