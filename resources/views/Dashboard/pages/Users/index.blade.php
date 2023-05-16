@@ -1,4 +1,5 @@
 @extends('Dashboard.Layout.app')
+
 @section('content')
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -31,8 +32,9 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table class="table table-striped dataTable">
+                    <table class="display table table-striped  " id="example">
                         <thead>
+                        <tr>
                             <th>
                                 #
                             </th>
@@ -54,6 +56,7 @@
                             <th>
                                 {{ translate('Actions') }}
                             </th>
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach ($Users as $key=>$user)
@@ -110,5 +113,12 @@
           </div>
         </div>
     </section>
+
+    
+
+
+
+
+    
 @endsection
 
