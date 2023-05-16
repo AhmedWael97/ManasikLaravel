@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\ApplicationResponse;
 use App\Models\User;
 use App\Models\OrderDetailStep;
+use App\Models\ServiceStep;
 use App\Models\ToDoOrder;
 use DB;
 
@@ -66,7 +67,7 @@ class OrderController extends Controller
                         'order_code' => rand(9999,999999),
                         'order_status_id' => 1,
                         'price' => 0,
-                        'currency_id' => $request->user()->wallet->currency_id,
+                        'currency_id' => 1,
                         'is_from_wallet' => $isWallet,
 
                     ]);
@@ -78,6 +79,10 @@ class OrderController extends Controller
                         $service = Service::where('id',$minService['ServiceId'])->first();
                         $price += $service->price;
                         $points += $service->earning_points;
+                        $executer_id = null ;
+                        if($service->price == 0) {
+                            $executer_id = $request->user()->id;
+                        }
                         $newOrderDetails = new OrderDetail([
                             'order_id' => $newOrder->id,
                             'service_id' => $service->id,
@@ -89,6 +94,7 @@ class OrderController extends Controller
                             'no_of_kfara' => $minService['kfaraCount'] ??  null ,
                             'kfarat_choice_id' => $minService['KfaraChoiceId'] ?? null,
                             'purpose_hag_id' => $minService['HajPurpose'] ?? null,
+                            'executer_id' => $executer_id,
                         ]);
                         $newOrderDetails->save();
                     }
@@ -223,7 +229,7 @@ class OrderController extends Controller
             return $this->response->noPermission();
         }
 
-        $orders = OrderDetail::where('executer_id',null)->orderBy('created_at','desc')->with([
+        $orders = OrderDetail::where('executer_id',null)->where('payment_status_id',8)->orderBy('created_at','desc')->with([
             'service', 'order' => function($query) {
                 $query->with('user');
             }
@@ -251,9 +257,13 @@ class OrderController extends Controller
         $newToDo = new ToDoOrder([
             'executer_id' => $request->user()->id,
             'order_detail_id' => $request->order_id,
-            'is_confirmed' => 0,
+            'is_confirmed' => 1,
         ]);
         $newToDo->save();
+
+        $order->executer_id = $request->user()->id;
+        $order->order_status_id = 6;
+        $order->save();
 
         return $this->response->successResponse('ToDoOrder',$newToDo);
     }
@@ -288,6 +298,29 @@ class OrderController extends Controller
             ])->get();
         }
         return $this->response->successResponse('ToDoOrder',$toDo);
+    }
+
+    public function startSteps(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user())->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+
+        $order = Order::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
+        if($order == null) {
+            return $this->response->errorMessage('Error in order');
+        }
+
+        // check step needed and check if it ended or not and if old steps is already done or not !!
+
+        $step = ServiceStep::where(['service_id' => $request->service_id , 'id' => $request->step_id])->first();
+        if($step == null) {
+            return $this->response->errorMessage('Error In Step');
+        }
     }
 
 }

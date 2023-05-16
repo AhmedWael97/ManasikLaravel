@@ -308,7 +308,7 @@
 
           @can('OrdersToDo')
           <li class="nav-item">
-            <a href="{{ route('Orders') }}" class="nav-link {{ is_active('Orders')  ? 'active' : '' }}">
+            <a href="{{ route('RequestToDo') }}" class="nav-link {{ is_active('RequestToDo')  ? 'active' : '' }}">
 
               <i class="nav-icon fas fa-user-plus"></i>
               <p>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationResponse;
 use App\Models\Currency;
+use App\Models\OrderDetail;
 use App\Models\Order;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -59,6 +60,13 @@ class PaymentController extends Controller
 
             $orderDB = Order::where('id',$order->id)->select('id','payment_status_id')->first();
             $orderDB->payment_status_id = 8;
+            $orderDB->save();
+
+            $orderDetails = OrderDetail::where('order_id',$order->id)->get();
+            foreach($orderDetails as $orderDetail) {
+                $orderDetail->is_confirmed = 1;
+                $orderDetail->save();
+            }
             return true;
         } else {
             return false;

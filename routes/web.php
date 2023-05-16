@@ -120,6 +120,8 @@ Route::prefix('/Users')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\UserController@edit')->name('Users-Edit');
     Route::post('/update','App\Http\Controllers\UserController@update')->name('Users-Update');
     Route::get('/delete/{id}','App\Http\Controllers\UserController@destroy')->name('Users-Delete');
+    Route::get('/auto-assign/{id}','App\Http\Controllers\UserController@automateAssign')->name('Users-auto');
+    Route::post('/auto/assign/store','App\Http\Controllers\UserController@saveAutoAssign')->name('Users-Store-Auto');
 });
 
 
@@ -192,3 +194,16 @@ Route::prefix('/Orders')->group(function() {
     Route::post('/AssignExecuter','App\Http\Controllers\OrderController@AssignExecuter')->name('AssignExecuter');
 });
 
+//Requests to do
+Route::prefix('/RequestToDo')->group(function() {
+    Route::get('/index','App\Http\Controllers\RequestToDoController@index')->name('RequestToDo');
+    Route::post('/accept/{id}','App\Http\Controllers\RequestToDoController@accept')->name('RequestToDo-accept');
+    Route::post('/refused/{id}','App\Http\Controllers\RequestToDoController@refused')->name('RequestToDo-refused');
+
+});
+
+
+
+Route::get('/test',function() {
+    return AssignServicesToExecuters();
+});

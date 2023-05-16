@@ -59,7 +59,7 @@ class BasicController extends Controller
     public function getNationality() {
         return $this->response->successResponse('Nationality',Nationality::select(['id','name_ar','name_en'])->get());
     }
-    public function getServices() {
+    public function getServices(Request $request) {
         $services = Service::select('id','name_en','name_ar','photo','price','max_limit_by_order','parent_id')->where('parent_id','0')
         ->with([
         'childern' => function($query) {
@@ -71,6 +71,19 @@ class BasicController extends Controller
                 }
             ]);
         }])->get();
+
+
+        if($request->user()) {
+            $wallet = \App\Models\Wallet::where('user_id',$request->user()->id)->first();
+            $curreny = \App\Models\Currency::where('id',$wallet->currency_id)->first();
+            foreach($services as $service) {
+                $service->user_amount = $service->price   * $curreny->convert_value;
+            }
+        } else {
+            foreach($services as $service) {
+                $service->user_amount = $service->price;
+            }
+        }
         return $this->response->successResponse('Service', $services);
     }
 

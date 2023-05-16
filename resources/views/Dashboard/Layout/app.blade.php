@@ -64,7 +64,7 @@
 <!-- AdminLTE App -->
 <script src="{{ url('/') }}/assets/js/adminlte.js"></script>
 
-@yield('js')
+
 
 <script>
     $(".dataTable").DataTable({
@@ -72,5 +72,6 @@
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 </script>
+@yield('js')
 </body>
 </html>

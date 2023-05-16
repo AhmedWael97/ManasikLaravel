@@ -37,22 +37,36 @@
                                 {{ translate('Executer Name') }}
                             </th>
                             <th>
-                                {{ translate('Executer Orders') }}
-                            </th>
-                            <th>
                                 {{ translate('Service Name') }}
                             </th>
-
-                            <th>
-                                {{ translate('Service Price') }}
-                            </th>
-
                             <th>
                                 {{ translate('Actions') }}
                             </th>
                         </thead>
                         <tbody>
-
+                            <tbody>
+                                @foreach($requests as $key=>$request)
+                                    <tr>
+                                        <td>
+                                            {{ ++$key }}
+                                        </td>
+                                        <td>
+                                            {{ $request->executer->name_ar }}
+                                        </td>
+                                        <td>
+                                            {{ $request->orderDetails->name_ar }}
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('RequestToDo-accept',$request->id) }}" class="btn btn-success btn-sm">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                            <a href="{{ route('RequestToDo-refused',$request->id) }}" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </tbody>
                     </table>
                 </div>

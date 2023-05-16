@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/getLangs','getLangs');
             Route::get('/getNationality','getNationality');
             Route::get('/getServices','getServices');
+            Route::get('/getServices-auth','getServices')->middleware('auth:sanctum');
             Route::get('/getKfaratChoices','getKfaratChoices');
             Route::get('/getPaymentTypes','getPaymentTypes');
             Route::get('/getHajPurpose','getHajPurpose');
