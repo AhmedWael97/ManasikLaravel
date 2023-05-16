@@ -323,4 +323,129 @@ class OrderController extends Controller
         }
     }
 
+    // user
+    public function my_order_steps(Request $request ,$order_detail_id) {
+
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user()->id)->first();
+
+        if(! $user->roles[0]->hasPermissionTo('Mobile_Application_User')) {
+            return $this->response->noPermission();
+        }
+
+        $order = OrderDetail::where('id',$order_detail_id)->with('order','steps')->first();
+
+        if($order->order->user_id != $user->id) {
+            return $this->response->noPermission();
+        }
+
+        if($order->executer_id == null) {
+            return $this->response->errorMessage('No Steps Found');
+        }
+
+        if(in_array($order->order_status_id,[1,2,7,9,10])) {
+            return $this->response->errorMessage('Order is' . $order->status->name_en);
+        }
+
+        $steps = OrderDetailStep::where('detail_id', $order->id)->with('status','step')->get();;
+        return $this->response->successMessage('Steps' , $steps);
+    }
+
+    public function ask_image(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user()->id)->first();
+
+        if(! $user->roles[0]->hasPermissionTo('Mobile_Application_User')) {
+            return $this->response->noPermission();
+        }
+
+        $order = OrderDetail::where('id',$request->order_detail_id)->with('order','steps')->first();
+
+        if($order->order->user_id != $user->id) {
+            return $this->response->noPermission();
+        }
+
+        if($order->executer_id == null) {
+            return $this->response->errorMessage('No Steps Found');
+        }
+
+        if(in_array($order->order_status_id,[1,2,7,9,10])) {
+            return $this->response->errorMessage('Order is' . $order->status->name_en);
+        }
+
+        $step = OrderDetailStep::where('id',$request->step_id)->first();
+        if($step->end_in == null) {
+            return $this->response->errorMessage('Step is already ended');
+        }
+
+        if($step->start_in == null) {
+            return $this->response->errorMessage('Step Not Statred Yet');
+        }
+
+        // create request to ask image
+
+    }
+
+    public function ask_live_location(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user()->id)->first();
+
+        if(! $user->roles[0]->hasPermissionTo('Mobile_Application_User')) {
+            return $this->response->noPermission();
+        }
+
+        $order = OrderDetail::where('id',$request->order_detail_id)->with('order','steps')->first();
+
+        if($order->order->user_id != $user->id) {
+            return $this->response->noPermission();
+        }
+
+        if($order->executer_id == null) {
+            return $this->response->errorMessage('No Steps Found');
+        }
+
+        if(in_array($order->order_status_id,[1,2,7,9,10])) {
+            return $this->response->errorMessage('Order is' . $order->status->name_en);
+        }
+
+        $step = OrderDetailStep::where('id',$request->step_id)->first();
+        if($step->end_in == null) {
+            return $this->response->errorMessage('Step is already ended');
+        }
+
+        if($step->start_in == null) {
+            return $this->response->errorMessage('Step Not Statred Yet');
+        }
+
+        // create request to live Location
+    }
+
+    // end users
+
+    // executers
+    public function start_step(Request $request) {
+
+    }
+
+    public function end_step(Request $request) {
+
+    }
+
+    public function send_image(Request $request) {
+
+    }
+
+    public function send_live_location(Request $request) {
+
+    }
+    //end executers
 }

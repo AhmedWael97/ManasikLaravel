@@ -53,6 +53,9 @@ Route::prefix('v1')->group(function () {
             Route::get('/orderDetail/{order_id}/steps/{service_id}','orderDetailStep')->middleware('auth:sanctum');
             Route::get('/myOrders','myOrders')->middleware('auth:sanctum');
             Route::get('/cancel-my-order/{order_id}','cancelMyOrder')->middleware('auth:sanctum');
+            Route::get('/my_order_steps/{order_detail_id}','my_order_steps');
+            Route::post('/ask_image','ask_image')->middleware('auth:sanctum');;
+            Route::post('/ask_live_location','ask_live_location')->middleware('auth:sanctum');
         });
     });
 
@@ -81,6 +84,10 @@ Route::prefix('v1')->group(function () {
                 Route::get('/available-orders','executer_avaliavble_orders');
                 Route::post('/request-to-do','request_to_take_order');
                 Route::get('/my-requests/{status}','my_to_do_requests');
+                Route::post('/start_step','startStep');
+                Route::post('/end_step','end_step');
+                Route::post('/send_image','send_image');
+                Route::post('/send_live_location','send_live_loction');
             });
         });
     });
