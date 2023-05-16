@@ -197,6 +197,7 @@ class UserController extends Controller
         return view('Dashboard.pages.Users.show')->with('User',$user);
     }
 
+
     public function automateAssign($id) {
         $user = User::findOrFail($id);
         if(! $user->roles[0]->hasPermissionTo('Executer_Dashboard_Login')) {
@@ -245,4 +246,46 @@ class UserController extends Controller
             return back()->with('error', translate('Error in selected services'));
         }
     }
+
+    public function getAdminCount(Request $request){
+        $users = User::permission('Admin_Dashboard_Login')->get();
+        $no_admin_dashboard_login = count($users);
+        if ($request->ajax()) {
+            return response()->json([
+                'admin_no' => $no_admin_dashboard_login,
+            ]);
+        }
+    }
+    public function getMobilAppCount(Request $request){
+        $users = User::permission('Mobile_Application_User')->get();
+        $no_mobil_app_user = count($users);
+        if ($request->ajax()) {
+            return response()->json([
+                'app_user_no' => $no_mobil_app_user,
+            ]);
+        }
+    }
+
+    public function getExecuterDashboardNo(Request $request){
+        $users = User::permission('Executer_Dashboard_Login')->get();
+        $no_executer_dashboard_user = count($users);
+        if ($request->ajax()) {
+            return response()->json([
+                'executer_dashboard__no' => $no_executer_dashboard_user,
+            ]);
+        }
+    }
+
+    public function getExecuterAppNo(Request $request){
+        $users = User::permission('Executer_Mobile_Application')->get();
+        $no_executer_app_user = count($users);
+        if ($request->ajax()) {
+            return response()->json([
+                'executer_app__no' => $no_executer_app_user,
+            ]);
+        }
+    }
+
+    
+    
 }
