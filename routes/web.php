@@ -194,7 +194,6 @@ Route::prefix('/Orders')->group(function() {
     Route::post('/AssignExecuter','App\Http\Controllers\OrderController@AssignExecuter')->name('AssignExecuter');
 });
 
-=
 //Requests to do
 Route::prefix('/RequestToDo')->group(function() {
     Route::get('/index','App\Http\Controllers\RequestToDoController@index')->name('RequestToDo');

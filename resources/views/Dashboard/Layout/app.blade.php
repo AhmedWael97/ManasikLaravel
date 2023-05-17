@@ -19,7 +19,11 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('/') }}/assets/css/adminlte.min.css">
 
-
+    <style>
+        thead input {
+            width: 100%;
+        }
+    </style>
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
@@ -65,33 +69,34 @@
 <script src="{{ url('/') }}/assets/js/adminlte.js"></script>
 
 
-
+{{--
 <script>
     $(".dataTable").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-</script>
+</script> --}}
 
 @yield('js')
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/fixedheader/3.2.3/js/dataTables.fixedHeader.min.js"></script>
 <script>
   $(document).ready(function () {
     // Setup - add a text input to each footer cell
-    $('#example thead tr')
+    $('#filtersIns thead tr')
         .clone(true)
         .addClass('filters')
-        .appendTo('#example thead');
- 
-    var table = $('#example').DataTable({
+        .appendTo('#filtersIns thead');
+
+    var table = $('#filtersIns').DataTable({
+        responsive: true,
+         lengthChange: false,
+         autoWidth: false,
         orderCellsTop: true,
         fixedHeader: true,
         initComplete: function () {
             var api = this.api();
- 
+
             // For each column
             api
                 .columns()
@@ -102,45 +107,48 @@
                         $(api.column(colIdx).header()).index()
                     );
                     var title = $(cell).text();
-                    if ($(api.column(colIdx).header()).index() >= 0) {
-                     $(cell).html('<input type="text" placeholder="' + title + '"/>');
-}
-                 
- 
-                    // On every keypress in this input
-                    $(
-                        'input',
-                        $('.filters th').eq($(api.column(colIdx).header()).index())
-                    )
-                        .off('keyup change')
-                        .on('change', function (e) {
-                            // Get the search value
-                            
-                            $(this).attr('title', $(this).val());
-                            var regexr = '({search})'; //$(this).parents('th').find('select').val();
- 
-                            var cursorPosition = this.selectionStart;
-                            // Search the column for that value
-                            api
-                                .column(colIdx)
-                                .search(
-                                    this.value != ''
-                                        ? regexr.replace('{search}', '(((' + this.value + ')))')
-                                        : '',
-                                    this.value != '',
-                                    this.value == ''
-                                )
-                                .draw();
-                        })
-                        .on('keyup', function (e) {
-                            e.stopPropagation();
- 
-                            $(this).trigger('change');
-                            $(this)
-                                .focus()[0]
-                                .setSelectionRange(cursorPosition, cursorPosition);
-                        });
-                });
+
+                        if ($(api.column(colIdx).header()).index() >= 1 ) {
+                                $(cell).html('<input type="text" />');
+                                    }
+
+
+                                    // On every keypress in this input
+                                    $(
+                                        'input',
+                                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                                    )
+                                        .off('keyup change')
+                                        .on('change', function (e) {
+                                            // Get the search value
+
+                                            $(this).attr('title', $(this).val());
+                                            var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                            var cursorPosition = this.selectionStart;
+                                            // Search the column for that value
+                                            api
+                                                .column(colIdx)
+                                                .search(
+                                                    this.value != ''
+                                                        ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                                        : '',
+                                                    this.value != '',
+                                                    this.value == ''
+                                                )
+                                                .draw();
+                                        })
+                                        .on('keyup', function (e) {
+                                            e.stopPropagation();
+
+                                            $(this).trigger('change');
+                                            $(this)
+                                                .focus()[0]
+                                                .setSelectionRange(cursorPosition, cursorPosition);
+                                        });
+
+
+                    });
         },
     });
 });

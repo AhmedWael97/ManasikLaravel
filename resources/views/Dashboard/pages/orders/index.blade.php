@@ -28,7 +28,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table class="table table-striped dataTable">
+                    <table class="table table-striped dataTable" id="filtersIns">
                         <thead>
                             <th>
                                 #
@@ -52,9 +52,9 @@
                             <th>
                                 {{ translate('Price') }}
                             </th>
-                            <th>
+                            <td>
                                 {{ translate('Actions') }}
-                            </th>
+                            </td>
                         </thead>
                         <tbody>
                             @foreach($orders as $key => $order)

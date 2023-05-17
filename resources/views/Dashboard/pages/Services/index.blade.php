@@ -31,7 +31,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table class="table table-striped dataTable">
+                    <table class="table table-striped dataTable" id="filtersIns">
                         <thead>
                             <th>
                                 #
@@ -51,9 +51,9 @@
                             <th>
                                 {{ translate('Serivce Parent') }}
                             </th>
-                            <th>
+                            <td>
                                 {{ translate('Actions') }}
-                            </th>
+                            </td>
                         </thead>
                         <tbody>
                             @foreach ($Services as $key=>$service)

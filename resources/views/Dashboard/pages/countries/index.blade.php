@@ -31,7 +31,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table class="table table-striped " id="example">
+                    <table class="table table-striped " id="filtersIns">
                         <thead>
                             <th>
                                 #
@@ -48,9 +48,9 @@
                             <th>
                                 {{ translate('Code') }}
                             </th>
-                            <th>
+                            <td>
                                 {{ translate('Actions') }}
-                            </th>
+                            </td>
                         </thead>
                         <tbody>
                             @foreach ($countries as $key=>$country)
@@ -70,7 +70,7 @@
                                     <td>
                                         {{ $country->code }}
                                     </td>
-                                  
+
                                     <td>
                                         <a href="{{ route('country-edit',$country->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>

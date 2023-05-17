@@ -32,9 +32,9 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table class="display table table-striped  " id="example">
+                    <table class="display table table-striped" id="filtersIns">
                         <thead>
-                        <tr>
+
                             <th>
                                 #
                             </th>
@@ -53,10 +53,10 @@
                             <th>
                                 {{ translate('Is Active') }}
                             </th>
-                            <th>
+                            <td>
                                 {{ translate('Actions') }}
-                            </th>
-                            </tr>
+                            </td>
+
                         </thead>
                         <tbody>
                             @foreach ($Users as $key=>$user)
@@ -115,11 +115,11 @@
         </div>
     </section>
 
-    
 
 
 
 
-    
+
+
 @endsection
 

@@ -31,7 +31,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table class="table table-striped dataTable">
+                    <table class="table table-striped dataTable" id="filtersIns">
                         <thead>
                             <th>
                                 #
@@ -45,10 +45,10 @@
                             <th>
                                 {{ translate('English Name') }}
                             </th>
-                           
-                            <th>
+
+                            <td>
                                 {{ translate('Actions') }}
-                            </th>
+                            </td>
                         </thead>
                         <tbody>
                             @foreach ($genders as $key=>$gender)
@@ -65,8 +65,8 @@
                                     <td>
                                         {{ $gender->name_en }}
                                     </td>
-                                    
-                                  
+
+
                                     <td>
                                         <a href="{{ route('gender-edit',$gender->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>
