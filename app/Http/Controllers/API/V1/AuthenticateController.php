@@ -17,7 +17,17 @@ class AuthenticateController extends Controller
     public function login(Request $request) {
 
         $user = User::where('email',$request->email)->orWhere('phone',$request->email)->first();
-       if($user != null ) {
+
+        if($user == null) {
+            return response([
+                "Status" => 500,
+                "MessageEN" => "Email , phone or Password is wrong",
+                "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
+                "Data" => null
+            ]);
+        }
+
+        if($user != null ) {
         $email = $user->email;
        } else {
         $email = "";
@@ -210,7 +220,17 @@ class AuthenticateController extends Controller
 
     public function executer_login(Request $request) {
 
-        $user = User::where('email',$request->email)->orWhere('phone',$request->email)->first();
+       $user = User::where('email',$request->email)->orWhere('phone',$request->email)->first();
+
+       if($user == null) {
+            return response([
+                "Status" => 500,
+                "MessageEN" => "Email , phone or Password is wrong",
+                "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
+                "Data" => null
+            ]);
+        }
+
        if($user != null ) {
             $email = $user->email;
        } else {
