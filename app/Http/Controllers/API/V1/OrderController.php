@@ -15,6 +15,7 @@ use App\Models\OrderDetailStep;
 use App\Models\ServiceStep;
 use App\Models\ToDoOrder;
 use DB;
+use \App\Models\DetailStepRequest;
 
 class OrderController extends Controller
 {
@@ -300,28 +301,7 @@ class OrderController extends Controller
         return $this->response->successResponse('ToDoOrder',$toDo);
     }
 
-    public function startSteps(Request $request) {
-        if($request->user() == null) {
-            return $this->response->unAuthroizeResponse();
-        }
 
-        $user = User::where('id',$request->user())->first();
-        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
-            return $this->response->noPermission();
-        }
-
-        $order = Order::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
-        if($order == null) {
-            return $this->response->errorMessage('Error in order');
-        }
-
-        // check step needed and check if it ended or not and if old steps is already done or not !!
-
-        $step = ServiceStep::where(['service_id' => $request->service_id , 'id' => $request->step_id])->first();
-        if($step == null) {
-            return $this->response->errorMessage('Error In Step');
-        }
-    }
 
     // user
     public function my_order_steps(Request $request ,$order_detail_id) {
@@ -376,7 +356,7 @@ class OrderController extends Controller
         }
 
         if(in_array($order->order_status_id,[1,2,7,9,10])) {
-            return $this->response->errorMessage('Order is' . $order->status->name_en);
+            return $this->response->errorMessage('Order status is' . $order->status->name_en);
         }
 
         $step = OrderDetailStep::where('id',$request->step_id)->first();
@@ -389,7 +369,13 @@ class OrderController extends Controller
         }
 
         // create request to ask image
+        $newRequest = new DetailStepRequest([
+            'type' => 0,
+            'order_detail_step_id' => $step->id,
+        ]);
+        $newRequest->save();
 
+        return $this->successResponse('DetailRequest',$newRequest);
     }
 
     public function ask_live_location(Request $request) {
@@ -427,12 +413,49 @@ class OrderController extends Controller
         }
 
         // create request to live Location
+        $newRequest = new DetailStepRequest([
+            'type' => 1,
+            'order_detail_step_id' => $step->id,
+        ]);
+        $newRequest->save();
+
+        return $this->successResponse('DetailRequest',$newRequest);
     }
 
     // end users
 
     // executers
-    public function start_step(Request $request) {
+    public function startSteps(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = User::where('id',$request->user())->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+
+        $order = Order::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
+        if($order == null) {
+            return $this->response->errorMessage('Error in order');
+        }
+
+        // check step needed and check if it ended or not and if old steps is already done or not !!
+
+        $step = ServiceStep::where(['service_id' => $request->service_id , 'id' => $request->step_id])->first();
+        if($step == null) {
+            return $this->response->errorMessage('Error In Step');
+        }
+
+        //
+        $orderStep = OrderDetailStep::where('id',$request->step_id)->first();
+        if($orderStep == null) {
+            return $this->response->errorMessage('Error In Step');
+        }
+        if($orderStep->startIn != null) {
+            return $this->response->errorMessage('It is already started');
+        }
+
 
     }
 

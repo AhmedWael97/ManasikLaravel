@@ -16,4 +16,7 @@ class OrderDetailStep extends Model
     public function step() {
         return $this->hasOne('\App\Models\ServiceStep','id','service_step_id');
     }
+    public function requests() {
+        return $this->hasMany('\App\Models\DetailStepRequest','order_detail_step_id','id');
+    }
 }
