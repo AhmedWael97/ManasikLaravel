@@ -83,12 +83,12 @@ Route::prefix('v1')->group(function () {
             Route::controller(OrderController::class)->group(function() {
                 Route::get('/available-orders','executer_avaliavble_orders');
                 Route::post('/request-to-do','request_to_take_order');
-                Route::get('/my-requests/{status}','my_to_do_requests');
+                Route::get('/my_to_do_orders','my_to_do_orders');
                 Route::post('/start_step','startSteps');
                 Route::post('/end_step','end_step');
                 Route::post('/send_image','send_image');
                 Route::post('/send_live_location','send_live_loction');
-            });
+            })->middleware('auth:sanctum');
         });
     });
 });

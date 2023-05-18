@@ -269,7 +269,7 @@ class OrderController extends Controller
         return $this->response->successResponse('ToDoOrder',$newToDo);
     }
 
-    public function my_to_do_requests(Request $request, $status) {
+    public function my_to_do_orders(Request $request) {
         if($request->user() == null) {
             return $this->response->unAuthroizeResponse();
         }
@@ -279,26 +279,8 @@ class OrderController extends Controller
             return $this->response->noPermission();
         }
 
-        if($status == null) {
-            return $this->response->errorMessage('Error Status');
-        }
-
-        if($status == 'in_progress') {
-            $status = 1;
-            $toDo = ToDoOrder::where('executer_id',$request->user()->id)->where('is_confirmed', $status)->with([
-                'orderDetails' => function ($query) {
-                    $query->with('order','steps','service','hajPurpose','KfaraChoice','order.user');
-                }
-            ])->get();
-        }
-
-        if($status == 'pending') {
-            $status = 0;
-            $toDo = ToDoOrder::where('executer_id',$request->user()->id)->where('is_confirmed', $status)->with([
-                'orderDetails'
-            ])->get();
-        }
-        return $this->response->successResponse('ToDoOrder',$toDo);
+        $todo = OrderDetail::where('executer_id',$request->auth()->id)->with('status')->get();
+        return $this->response->successResponse('ToDoOrder',$todo);
     }
 
 
