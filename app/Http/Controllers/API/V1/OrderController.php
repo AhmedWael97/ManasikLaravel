@@ -279,7 +279,8 @@ class OrderController extends Controller
             return $this->response->noPermission();
         }
 
-        $todo = OrderDetail::where('executer_id',$request->auth()->id)->with('status')->get();
+        $todo = OrderDetail::where('executer_id',$request->auth()->id)
+        ->with('order','hajPurpose','KfaraChoice','steps','orders','service')->get();
         return $this->response->successResponse('ToDoOrder',$todo);
     }
 
