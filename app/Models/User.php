@@ -86,6 +86,10 @@ class User extends Authenticatable
         return $this->hasOne('\App\Models\Wallet','user_id','id');
     }
 
+    public function country() {
+        return $this->hasOne('\App\Models\Country','id','country_id')->select('id','name_ar','name_en');
+    }
+
     public function autoAssign() {
         return $this->hasMany('\App\Models\AutoAssignService','executer_id','id');
     }

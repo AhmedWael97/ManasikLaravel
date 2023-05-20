@@ -21,7 +21,7 @@ class UserController extends Controller
         if($request->user() == null) {
             return $this->response->unAuthroizeResponse();
         }
-        $user = User::where('id',$request->user()->id)->select('id','name','name_ar','email','phone')->first();
+        $user = User::where('id',$request->user()->id)->select('id','name','name_ar','email','phone','country_id')->with('country','wallet.currency')->first();
         return $this->response->successResponse('User',$user);
     }
 
