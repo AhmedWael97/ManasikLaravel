@@ -153,7 +153,7 @@ class OrderController extends Controller
         $orderDetails = OrderDetail::where('order_id',$order->id)
         ->select('order_id','full_name','purpose_hag_id','kfarat_choice_id','service_id',DB::raw('count(*) as total'))
         ->groupBy('service_id','full_name','purpose_hag_id','kfarat_choice_id', 'order_id')
-        ->with('order.user','service','hajPurpose','KfaraChoice')->get();
+        ->with('order.user','service','hajPurpose','KfaraChoice','status')->get();
         return $this->response->successResponse('OrderDetail',$orderDetails);
 
     }
@@ -200,7 +200,7 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        return $this->response->successResponse('Order',Order::where('user_id',$request->user()->id)->get());
+        return $this->response->successResponse('Order',Order::where('user_id',$request->user()->id)->with('status','mainService')->get());
     }
 
     public function cancelMyOrder(Request $request,$order_id) {
