@@ -129,14 +129,22 @@ class AuthenticateController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'name_ar' => 'required|string',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'required|unique:users',
-            'password' => 'required',
-            'currency_id' => 'required',
-            'photo_path' => 'required',
-            'government_id_path' => 'required',
-            'activity_license_image_path' => 'required',
-            'commercial_registration_image_path' => 'required',
+            'password' => 'required|confirmed|min:10',
+            'currency_id' => 'required|exists:currencies,id',
+            'photo_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'government_id_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'activity_license_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'commercial_registration_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'job_id' => 'required|exists:jobs,id',
+            'gender' => 'required|exists:genders,id',
+            'birthdate' => 'required|date',
+            'id_number' => 'required|size:11',
+            'instituation_name' => 'required|string',
+            'bank_account_no' => 'required',
+            'bank_branch' => 'required',
+
         ]);
 
         if($validator->fails()) {
@@ -147,6 +155,16 @@ class AuthenticateController extends Controller
                 "Data" => $validator->errors()
             ]);
         }
+
+        if(count(explode($request->name, ' ')) < 3) {
+            return response([
+                "Status" => 500,
+                "MessageEN" => "Fullname must be at least 4 from your name",
+                "MessageAR" => "الاسم كاملا يجب ان يكون علي لاقل رباعي",
+                "Data" => null
+            ]);
+        }
+
 
         try {
             $user = new User($request->all());

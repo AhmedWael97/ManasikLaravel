@@ -92,7 +92,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                     <a href="{{ route('Users-auto',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1 text-white">
+                                        <a href="{{ route('Users-auto',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1 text-white mb-2">
                                              {{ translate('Automate Assigning') }}
                                         </a>
 

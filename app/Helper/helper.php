@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\NotificationController;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
     if(!function_exists('translate')){
@@ -71,5 +73,32 @@ use Spatie\Permission\Models\Role;
         }
     }
 
+
+    if(!function_exists('notify')) {
+         function notify($data) {
+            $notifyController = new NotificationController();
+            $notifyController->store($data);
+        }
+    }
+
+
+    if(!function_exists('countMyNotification')) {
+        function countMyNotification($user_id) {
+          return \App\Models\Notification::where('user_id',$user_id)->where('read_at',null)->count();
+       }
+
+       function myNotification($user_id){
+            $notifications = \App\Models\Notification::where('user_id',$user_id)->where('read_at',null)->get();
+            foreach($notifications as $notification){
+                $notification->recevied_at = Date('d-m-Y h:i A');
+                $notification->save();
+            }
+            return $notifications;
+       }
+
+       function totalNotificaiton($user_id) {
+            return \App\Models\Notification::where('user_id',$user_id)->orderBy('created_at','desc')->get();
+       }
+   }
 
 ?>
