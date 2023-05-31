@@ -136,6 +136,16 @@ class AuthenticateController extends Controller
             'government_id_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'chamber_of_commerce_registration' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'commercial_registration_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'id_number' => 'required|size:11',
+            'iban' => 'required',
+            'instituation_name' => 'required',
+            'bank' => 'required',
+            'tax_registration_number' => 'required',
+            'agency_address' => 'required',
+            'executer_area' => 'required',
+            'commercial_registration_no' => 'required',
+            'activity_license_number' => 'required',
+            'tax_registration_number' => 'required',
         ]);
 
         if($validator->fails()) {
