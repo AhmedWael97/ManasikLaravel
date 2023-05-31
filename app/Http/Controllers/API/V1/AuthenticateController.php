@@ -133,6 +133,8 @@ class AuthenticateController extends Controller
             'phone' => 'required|unique:users',
             'password' => 'required|min:10',
             'activity_license_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'government_id_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'chamber_of_commerce_registration' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'commercial_registration_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
         ]);
 
@@ -195,6 +197,14 @@ class AuthenticateController extends Controller
                 $request->commercial_registration_image_path->move(public_path('images/comm'), $imageName);
                 $user->commercial_registration_image_path = $imageName ;
             }
+
+            if($request->has('chamber_of_commerce_registration')) {
+                $imageName = 'chamber_'.time().'.'.$request->chamber_of_commerce_registration->extension();
+                $request->chamber_of_commerce_registration->move(public_path('images/chamber'), $imageName);
+                $user->chamber_of_commerce_registration = $imageName ;
+            }
+
+
 
             $user->save();
 
