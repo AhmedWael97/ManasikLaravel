@@ -131,20 +131,9 @@ class AuthenticateController extends Controller
             'name_ar' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|unique:users',
-            'password' => 'required|confirmed|min:10',
-            'currency_id' => 'required|exists:currencies,id',
-            'photo_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
-            'government_id_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'password' => 'required|min:10',
             'activity_license_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'commercial_registration_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
-            'job_id' => 'required|exists:jobs,id',
-            'gender' => 'required|exists:genders,id',
-            'birthdate' => 'required|date',
-            'id_number' => 'required|size:11',
-            'instituation_name' => 'required|string',
-            'bank_account_no' => 'required',
-            'bank_branch' => 'required',
-
         ]);
 
         if($validator->fails()) {
