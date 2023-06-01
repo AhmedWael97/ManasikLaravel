@@ -45,9 +45,6 @@
                                 {{ translate('Role') }}
                             </th>
                             <th>
-                                {{ translate('Email') }}
-                            </th>
-                            <th>
                                 {{ translate('Phone') }}
                             </th>
                             <th>
@@ -65,7 +62,7 @@
                                         {{ ++$key }}
                                     </td>
                                     <td>
-                                        {{ $user->name }} | {{ $user->name_ar }}
+                                        {{ $user->name }}
                                     </td>
                                     <td>
                                         @if(count($user->roles) >= 1)
@@ -74,9 +71,7 @@
                                             -
                                         @endif
                                     </td>
-                                    <td>
-                                        {{ $user->email }}
-                                    </td>
+
                                     <td>
                                         {{ $user->phone }}
                                     </td>
@@ -92,9 +87,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('Users-auto',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1 text-white mb-2">
-                                             {{ translate('Automate Assigning') }}
-                                        </a>
+
 
                                         <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>

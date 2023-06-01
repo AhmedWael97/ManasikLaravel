@@ -24,6 +24,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
+            <a href="{{ route('Users-auto',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1 text-white mb-2">
+                {{ translate('Automate Assigning') }}
+           </a>
           <form method="POST" action="{{ route('Users-Update') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="user_id" value="{{ $User->id }}" />

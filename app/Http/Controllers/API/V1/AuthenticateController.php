@@ -126,9 +126,6 @@ class AuthenticateController extends Controller
     }
 
     public function executer_register(Request $request) {
-
-
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'name_ar' => 'required|string',
@@ -277,11 +274,21 @@ class AuthenticateController extends Controller
        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return response([
                 "Status" => 500,
-                "MessageEN" => "Email , phone or Password is wrong",
-                "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
+                "MessageEN" => "Wrong Permission to login",
+                "MessageAR" => "ليس لديك الصلاحيات",
                 "Data" => null
             ]);
         }
+
+        if($user->is_active == 0) {
+            return response([
+                "Status" => 500,
+                "MessageEN" => "Please wait till admin activate your account",
+                "MessageAR" => "لم يتم تفعيل حسابك ، من فضلك إنتظر المسئول للموافقة علي حسابك",
+                "Data" => null
+            ]);
+        }
+
         if(Auth::attempt(['email' => $email, 'password' => $request->password])) {
             return response([
                 "Status" => 200,
