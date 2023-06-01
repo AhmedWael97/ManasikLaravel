@@ -128,7 +128,6 @@ class AuthenticateController extends Controller
     public function executer_register(Request $request) {
 
 
-        return $request->all();
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
