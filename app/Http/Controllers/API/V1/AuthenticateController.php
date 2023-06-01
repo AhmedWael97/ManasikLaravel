@@ -171,8 +171,6 @@ class AuthenticateController extends Controller
         try {
             $user = new User($request->all());
             $user->password = Hash::make($request->password);
-
-
            $roles = Role::get();
             foreach($roles as $role) {
                 if($role->hasPermissionTo('Executer_Mobile_Application')) {
@@ -222,7 +220,7 @@ class AuthenticateController extends Controller
             $wallet = new Wallet([
                 'user_id' => $user->id,
                 'amount' => 0,
-                'currency_id' => $request->currency_id
+                'currency_id' => 1,
             ]);
 
             $wallet->save();
