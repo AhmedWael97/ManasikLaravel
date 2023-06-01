@@ -280,16 +280,22 @@ class AuthenticateController extends Controller
             ]);
         }
 
-        if($user->is_active == 0) {
-            return response([
-                "Status" => 500,
-                "MessageEN" => "Please wait till admin activate your account",
-                "MessageAR" => "لم يتم تفعيل حسابك ، من فضلك إنتظر المسئول للموافقة علي حسابك",
-                "Data" => null
-            ]);
-        }
+
 
         if(Auth::attempt(['email' => $email, 'password' => $request->password])) {
+
+            if($user->is_active == 0) {
+                Auth::logout();
+                return response([
+                    "Status" => 500,
+                    "MessageEN" => "Please wait till admin activate your account",
+                    "MessageAR" => "لم يتم تفعيل حسابك ، من فضلك إنتظر المسئول للموافقة علي حسابك",
+                    "Data" => null
+                ]);
+            }
+
+
+
             return response([
                 "Status" => 200,
                 "MessageEN" => "Sueccssfully Logged",

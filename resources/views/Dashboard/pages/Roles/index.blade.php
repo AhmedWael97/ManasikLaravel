@@ -39,9 +39,7 @@
                             <th>
                                 {{ translate('Name') }}
                             </th>
-                            <th>
-                                {{ translate('Permissions') }}
-                            </th>
+
                             <td>
                                 {{ translate('Actions') }}
                             </td>
@@ -54,11 +52,6 @@
                                     </td>
                                     <td>
                                         {{ $role->name }}
-                                    </td>
-                                    <td>
-                                        @foreach( $role->permissions->pluck('name')  as $n)
-                                            <span class="badge badge-primary"> {{ $n }} </span>
-                                        @endforeach
                                     </td>
                                     <td>
                                         <a href="{{ route('Roles-Edit',$role->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
