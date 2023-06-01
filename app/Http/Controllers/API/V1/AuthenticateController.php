@@ -136,6 +136,7 @@ class AuthenticateController extends Controller
             'government_id_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'chamber_of_commerce_registration' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'commercial_registration_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
+            'photo_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'id_number' => 'required|size:11',
             'iban' => 'required',
             'instituation_name' => 'required',
@@ -157,14 +158,14 @@ class AuthenticateController extends Controller
             ]);
         }
 
-        if(count(explode($request->name, ' ')) < 3) {
-            return response([
-                "Status" => 500,
-                "MessageEN" => "Fullname must be at least 4 from your name",
-                "MessageAR" => "الاسم كاملا يجب ان يكون علي لاقل رباعي",
-                "Data" => null
-            ]);
-        }
+        // if(count(explode($request->name, ' ')) < 3) {
+        //     return response([
+        //         "Status" => 500,
+        //         "MessageEN" => "Fullname must be at least 4 from your name",
+        //         "MessageAR" => "الاسم كاملا يجب ان يكون علي لاقل رباعي",
+        //         "Data" => null
+        //     ]);
+        // }
 
 
         try {
