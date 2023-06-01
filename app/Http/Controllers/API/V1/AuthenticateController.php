@@ -150,6 +150,7 @@ class AuthenticateController extends Controller
             'commercial_registration_no' => 'required',
             'activity_license_number' => 'required',
             'tax_registration_number' => 'required',
+            'certificate_registration_tax' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048'
         ]);
 
         if($validator->fails()) {
@@ -216,6 +217,13 @@ class AuthenticateController extends Controller
                 $user->chamber_of_commerce_registration = $imageName ;
             }
 
+            if($request->has('certificate_registration_tax')) {
+                $imageName = 'crt_'.time().'.'.$request->certificate_registration_tax->extension();
+                $request->certificate_registration_tax->move(public_path('images/crt'), $imageName);
+                $user->certificate_registration_tax = $imageName ;
+            }
+
+            //
 
 
             $user->save();
