@@ -115,7 +115,7 @@
             <a href="{{ route('Home') }}" class="nav-link {{ is_active('Home')  ? 'active' : '' }}">
               <i class="nav-icon fas fa-home"></i>
               <p>
-                Home
+                {{ translate('Home') }}
               </p>
             </a>
           </li>
