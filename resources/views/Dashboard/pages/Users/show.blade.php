@@ -144,7 +144,7 @@
                                     <a href="{{ url('/images/comm') }}/{{ $User->commercial_registration_image_path }}" target="_blank" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-primary btn-sm">
+                                    <a href="{{ url('/images/comm') }}/{{ $User->commercial_registration_image_path }}" download class="btn btn-primary btn-sm">
                                         <i class="fas fa-download"></i>
                                     </a>
                                 </span>
