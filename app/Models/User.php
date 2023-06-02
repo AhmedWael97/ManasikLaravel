@@ -94,5 +94,9 @@ class User extends Authenticatable
         return $this->hasMany('\App\Models\AutoAssignService','executer_id','id');
     }
 
+    public function gender_method() {
+        return $this->hasOne('\App\Models\Gender','id','gender');
+    }
+
 
 }

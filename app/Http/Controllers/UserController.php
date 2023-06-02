@@ -286,6 +286,64 @@ class UserController extends Controller
         }
     }
 
+    public function quickActions($type , $id) {
+
+        if($type == 'Active_Executer_User') {
+            $user = User::findOrFail($id);
+            $user->is_active = 1;
+            $user->is_confirmed_executer = 1;
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        if($type == 'Deactive_Executer_User') {
+            $user = User::findOrFail($id);
+            $user->is_active = 0;
+            $user->is_confirmed_executer = 0;
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        if($type == 'Deactive_Executer_User') {
+            $user = User::findOrFail($id);
+            $user->is_active = 0;
+            $user->is_confirmed_executer = 0;
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        if($type == 'Allow_Notification') {
+            $user = User::findOrFail($id);
+            $user->is_allow_notification = 1;
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        if($type == 'Diallow_Notification') {
+            $user = User::findOrFail($id);
+            $user->is_allow_notification = 0;
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        if($type == 'Enable_SOS_Status') {
+            $user = User::findOrFail($id);
+            $user->sos_status = 1;
+            $user->sos_start_date = Date('d-m-Y h:i A');
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        if($type == 'Disable_SOS_Status') {
+            $user = User::findOrFail($id);
+            $user->sos_status = 0;
+            $user->sos_start_date = Date('d-m-Y h:i A');
+            $user->save();
+            return back()->with('success',translate('Success'));
+        }
+
+        abort(404);
+    }
 
 
 }

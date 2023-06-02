@@ -88,6 +88,9 @@
                                     </td>
                                     <td>
 
+                                        <a href="{{ route('Users-View',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
 
                                         <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
                                             <i class="fas fa-edit"></i>

@@ -259,8 +259,8 @@ class AuthenticateController extends Controller
        if($user == null) {
             return response([
                 "Status" => 500,
-                "MessageEN" => "Email , phone or Password is wrong",
-                "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
+                "MessageEN" => "ُEmail or Phone not found",
+                "MessageAR" => "البريد الالكتروني او رقم الهاتف خطأ",
                 "Data" => null
             ]);
         }
@@ -308,8 +308,8 @@ class AuthenticateController extends Controller
         } else {
             return response([
                 "Status" => 500,
-                "MessageEN" => "Email , phone or Password is wrong",
-                "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
+                "MessageEN" => "Invalid Password",
+                "MessageAR" => "كلمة المرور غير صحيحة",
                 "Data" => null
             ]);
         }

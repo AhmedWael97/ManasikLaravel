@@ -122,6 +122,7 @@ Route::prefix('/Users')->group(function() {
     Route::get('/delete/{id}','App\Http\Controllers\UserController@destroy')->name('Users-Delete');
     Route::get('/auto-assign/{id}','App\Http\Controllers\UserController@automateAssign')->name('Users-auto');
     Route::post('/auto/assign/store','App\Http\Controllers\UserController@saveAutoAssign')->name('Users-Store-Auto');
+    Route::get('/quick-actions/{type}/{id}','App\Http\Controllers\UserController@quickActions')->name('Users-quick-actions');
 });
 
 
