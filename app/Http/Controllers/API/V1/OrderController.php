@@ -236,18 +236,8 @@ class OrderController extends Controller
         $excludedServices = ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
 
 
-        $orders =
-         OrderDetail::where('executer_id',null)
-           ->whereNotIn('service_id',$excludedServices)
-          ->where('price','<>', 0)
-          ->where([function($query){
-            $query->order->where('payment_status_id',11);
-          }])
-           ->orderBy('created_at','desc')->with([
-            'service', 'order' => function($query) {
-                   $query->with('user');
-               }
-          ])->with(['hajPurpose'])->paginate(15);
+        $orders = DB::table('order_details')->whereNotIn('order_details.service_id',$excludedServices)->where('executer_id','=', null)->join('orders','orders.id','=','order_details.order_id')->where('orders.payment_status_id','=',11)->join('services','services.id' ,'=' ,'order_details.service_id')->join('haj_purposes','haj_purposes.id','=','order_details.purpose_hag_id')->join('users','users.id','=','orders.user_id')->select('order_details.id as id','order_details.executer_price as reward','services.name_ar as service_name_ar','services.name_en as service_name_en' ,'haj_purposes.name_ar as haj_purpose_name_ar','haj_purposes.name_en as haj_purpose_name_en','users.name_ar as requester_name_ar' ,'users.name as requester_name_en')->get();
+
 
 
         return $this->response->successResponse('Order',$orders);
