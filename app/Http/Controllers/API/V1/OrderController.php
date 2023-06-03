@@ -224,9 +224,10 @@ class OrderController extends Controller
 
     public function executer_avaliavble_orders (Request $request) {
 
-        // if($request->user() == null) {
-        //     return $this->response->unAuthroizeResponse();
-        // }
+        return $request->user();
+        if($request->user()->id == null) {
+            return $this->response->unAuthroizeResponse();
+        }
         $user = User::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
@@ -235,7 +236,6 @@ class OrderController extends Controller
         $excludedServices = ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
 
         $orders = OrderDetail::where('executer_id',null)
-        ->where('payment_status_id',8)
         ->whereNotIn('service_id',$excludedServices)
         ->where('price','<>', 0)
         ->orderBy('created_at','desc')->with([
