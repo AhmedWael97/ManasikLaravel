@@ -300,12 +300,28 @@ class OrderController extends Controller
 
         $order->executer_id = $request->user()->id;
         $order->order_status_id = 6;
-
-        // actual date
-
+        $order->required_date = $request->start_date;
         // required date
 
         $order->save();
+        // actual date
+        if($request->start_date != null) {
+            $startDate = Date('d-m-Y h:i A',strtotime($request->start_date));
+            foreach($order->service->steps as $step) {
+                $stepDetailForService = new OrderDetailStep();
+                $stepDetailForService->detail_id = $order->id;
+                $stepDetailForService->service_step_id = $step->id;
+                $stepDetailForService->start_in = $startDate;
+                $endDate = Date('d-m-Y h:i A', strtotime($startDate.' + '. $step->max_time_in_minute .' minutes' ));
+                $stepDetailForService->end_in = $endDate;
+                $stepDetailForService->step_status_id = 1;
+                $stepDetailForService->save();
+
+                $startDate = $endDate;
+            }
+        }
+
+
 
         return $this->response->successResponse('ToDoOrder',$newToDo);
     }
