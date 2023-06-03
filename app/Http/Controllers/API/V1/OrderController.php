@@ -280,7 +280,7 @@ class OrderController extends Controller
             $previousOrders = OrderDetail::
             where([
                 'executer_id'=>$user->id,
-                ['purpose_haj_id' , null],
+                ['purpose_hag_id' , null],
                 ['order_status_id' , '<>' , 11],
                 ])
             ->WhereYear('created_at',Date('YY'))->count();
