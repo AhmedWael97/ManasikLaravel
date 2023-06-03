@@ -72,7 +72,7 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    Route::prefix('executer')->group(function() {
+    Route::middleware('auth:sanctum')->prefix('executer')->group(function() {
         Route::prefix('auth')->group(function() {
             Route::controller(AuthenticateController::class)->group(function(){
                 Route::post('/executer-login','executer_login');

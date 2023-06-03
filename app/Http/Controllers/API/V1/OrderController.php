@@ -223,10 +223,11 @@ class OrderController extends Controller
     }
 
     public function executer_avaliavble_orders (Request $request) {
-        if($request->user() == null) {
-            return $this->response->unAuthroizeResponse();
-        }
-        $user = User::where('id',$request->user())->first();
+
+        // if($request->user() == null) {
+        //     return $this->response->unAuthroizeResponse();
+        // }
+        $user = User::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
