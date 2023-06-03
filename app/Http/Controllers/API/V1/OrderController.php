@@ -253,7 +253,7 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user())->first();
+        $user = User::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
