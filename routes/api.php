@@ -88,7 +88,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('/end_step','end_step');
                 Route::post('/send_image','send_image');
                 Route::post('/send_live_location','send_live_loction');
-            })->middleware('auth:sanctum');
+            });
         });
     });
 });

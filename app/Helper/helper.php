@@ -99,6 +99,19 @@ use Spatie\Permission\Models\Role;
        function totalNotificaiton($user_id) {
             return \App\Models\Notification::where('user_id',$user_id)->orderBy('created_at','desc')->get();
        }
-   }
+    }
+
+    if(!function_exists('precent')) {
+        function precent($value, $total) {
+            if($value == 0) {
+                return 0;
+            }
+            return round(($total/$value)*100 ,2);
+        }
+
+        function differenceInDate($date1,$date2) {
+
+        }
+    }
 
 ?>

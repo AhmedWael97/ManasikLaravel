@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use App\Models\Wallet;
 use App\Models\AutoAssignService;
+use DB;
+use App\Models\OrderDetail;
 class UserController extends Controller
 {
     public function __construct() {
@@ -25,10 +27,37 @@ class UserController extends Controller
         $this->middleware("Permission:Users_Delete",['only'=>['destroy']]);
     }
 
-    public function index() {
-        return view('Dashboard.pages.Users.index')->with([
-            'Users' => User::select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
-        ]);
+    public function index($term = null) {
+        if($term == null) {
+            return view('Dashboard.pages.Users.index')->with([
+                'Users' => User::select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+            ]);
+        } else if ($term == 'Super_Admin') {
+            $users_ids = DB::table('model_has_roles')->where('role_id',1)->select('model_id')->get()->pluck('model_id');
+            return view('Dashboard.pages.Users.index')->with([
+                'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+            ]);
+        } else if ($term == 'Executers') {
+            $users_ids = DB::table('model_has_roles')->where('role_id',3)->select('model_id')->get()->pluck('model_id');
+            return view('Dashboard.pages.Users.index')->with([
+                'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+            ]);
+        } else if ($term == 'Application_Users') {
+            $users_ids = DB::table('model_has_roles')->where('role_id',4)->select('model_id')->get()->pluck('model_id');
+            return view('Dashboard.pages.Users.index')->with([
+                'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+            ]);
+        } else if ($term == 'Kfarat_Executers') {
+            $users_ids = DB::table('model_has_roles')->where('role_id',2)->select('model_id')->get()->pluck('model_id');
+            return view('Dashboard.pages.Users.index')->with([
+                'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+            ]);
+            return view('Dashboard.pages.Users.index')->with([
+                'Users' => User::select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+            ]);
+        }
+
+
     }
 
     public function create() {
@@ -129,28 +158,17 @@ class UserController extends Controller
             'name_ar' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required',
-            'role_id' => 'required',
         ]);
 
 
          try {
             $user = User::findOrFail($request->user_id);
-            $user->passowrd;
-
-            if($request->has('password')) {
-                $user->password = Hash::make($request->password);
-            }else {
-                $old_pass = $user->password;
-                $user->update($request->all());
-                $user->password = $old_pass;
-
-            }
-            $role = Role::findOrFail($request->role_id);
-            $user->assignRole($role);
-            $user->is_active = $request->is_active;
-            $user->is_confirmed_executer = $request->is_confirmed_executer;
-            $user->is_allow_notification = $request->is_allow_notification;
+            $old_password = $user->password;
+            $old_pass = $user->password;
+            $user->update($request->all());
+            $user->password = $old_pass;
             $user->save();
+
             if($request->has('photo_path')) {
                 $imageName = 'photo_'.time().'.'.$request->photo_path->extension();
                 $request->photo_path->move(public_path('images/photos'), $imageName);
@@ -194,7 +212,21 @@ class UserController extends Controller
 
     public function view($id) {
         $user = User::findOrFail($id);
-        return view('Dashboard.pages.Users.show')->with('User',$user);
+        $orders = OrderDetail::where('executer_id',$id)->get();
+        $analysisBag = [
+            'orders' => $orders->count(),
+            'pendingOrders' => $orders->whereIn('order_status_id',[1,6])->count(),
+            'inProgressOrders' => $orders->where('order_status_id',3)->count(),
+            'canceledOrders' => $orders->where('order_status_id',2)->count(),
+            'completedOrders' => $orders->where('order_status_id',11)->count(),
+            'skippedOrders' => $orders->where('order_status_id',4)->count(),
+            'delayedOrders' => $orders->where('order_status_id',5)->count(),
+            'refusedOrders' => $orders->where('order_status_id',7)->count(),
+            'sosOrders' => $orders->where('order_status_id',10)->count(),
+        ];
+        return view('Dashboard.pages.Users.show')->with([
+            'User'=>$user, 'analysisBag' => $analysisBag
+        ]);
     }
 
 

@@ -54,13 +54,13 @@
                   <div class="card-body">
                      <div class="row">
                         <div class="col-md-6">
-                            <p> {{ translate('Order Status') }} : <b>{{ $order->status->name_ar }}</b> </p>
+                            <p> {{ translate('Order Status') }} : <b>{{ $order->status->name_en }}</b> </p>
                             <p> {{ translate('Total Order') }} : <b>{{ $order->price }} ({{ $order->user->wallet->currency->symbol}})</b> </p>
                         </div>
                         <div class="col-md-6">
                             <div class="mainInfo">
-                                <p> {{ translate('Payment Status') }} : <b>{{ $order->paymentTypeStatus->name_ar }}</b> </p>
-                                <p> {{ translate('Payment Type') }} : <b>{{ $order->paymentType->name_ar }}</b> </p>
+                                <p> {{ translate('Payment Status') }} : <b>{{ $order->paymentTypeStatus->name_en }}</b> </p>
+                                <p> {{ translate('Payment Type') }} : <b>{{ $order->paymentType->name_en }}</b> </p>
                             </div>
                         </div>
                         <div class="col-md-12 mt-2">
@@ -89,7 +89,7 @@
                                             <select class="form-control" name="status_id">
                                                 @foreach($statuses as $status)
                                                     <option value="{{ $status->id }}" {{ $order->order_status_id == $status->id ? 'selected' : '' }}>
-                                                        {{ $status->name_ar }}
+                                                        {{ $status->name_en }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -143,16 +143,16 @@
                                             {{ ++$key }}
                                         </td>
                                         <td>
-                                            {{ $detail->service->name_ar }}
+                                            {{ $detail->service->name_en }}
                                         </td>
                                         <td>
                                             {{ $detail->full_name }}
                                         </td>
                                         <td>
-                                            {{ $detail->KfaraChoice != null ? $detail->KfaraChoice->name_ar : '-' }}
+                                            {{ $detail->KfaraChoice != null ? $detail->KfaraChoice->name_en : '-' }}
                                         </td>
                                         <td>
-                                            {{ $detail->hajPurpose != null ? $detail->hajPurpose->name_ar : '-' }}
+                                            {{ $detail->hajPurpose != null ? $detail->hajPurpose->name_en : '-' }}
                                         </td>
                                         <td>
                                             {{ $detail->required_date }}
@@ -164,14 +164,17 @@
                                             {{ $detail->price }}
                                         </td>
                                         <td>
-                                            {{ $detail->executer != null ?  $detail->executer->name_ar : '-'}}
+                                            {{ $detail->executer != null ?  $detail->executer->name : '-'}}
                                         </td>
                                         <td>
                                             @if($detail->executer == null)
-                                                <button class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#AssignExecuter">
+                                                <?php
+                                                    $rand = rand(1,50000);
+                                                ?>
+                                                <button class="btn btn-primary btn-sm"  data-toggle="modal" data-target="#AssignExecuter{{ $rand }}">
                                                     {{ translate('Assign to Executer') }}
                                                 </button>
-                                                <div class="modal fade" id="AssignExecuter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="AssignExecuter{{ $rand }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -192,7 +195,7 @@
                                                                 <select class="form-control select2" name="executer_id">
                                                                     @foreach($executers as $executer)
                                                                         <option value="{{ $executer->id }}">
-                                                                            {{ $executer->name_ar }}
+                                                                            {{ $executer->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
@@ -208,11 +211,14 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#AssignExecuter">
+                                            <?php
+                                                $rand = rand(1,50000);
+                                            ?>
+                                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ChangeExecuter{{ $rand }}">
                                                     {{ translate('Change Executer') }}
                                                 </button>
 
-                                                <div class="modal fade" id="AssignExecuter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="ChangeExecuter{{ $rand }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -233,7 +239,7 @@
                                                                 <select class="form-control select2" name="executer_id">
                                                                     @foreach($executers as $executer)
                                                                         <option value="{{ $executer->id }}" {{ $executer->id == $detail->executer_id ? 'selected' : '' }}>
-                                                                            {{ $executer->name_ar }}
+                                                                            {{ $executer->name }}
                                                                         </option>
                                                                     @endforeach
                                                                 </select>
@@ -276,7 +282,7 @@
                                                                     @foreach($detail->steps as $step)
                                                                         <tr>
                                                                             <td>
-                                                                                {{ $step->step->name_ar }}
+                                                                                {{ $step->step->name_en }}
                                                                             </td>
                                                                             <td>
                                                                                 {{ $step->start_in }}
@@ -285,7 +291,7 @@
                                                                                 {{ $step->end_in }}
                                                                             </td>
                                                                             <td>
-                                                                                {{ $step->status->name_ar }}
+                                                                                {{ $step->status->name_en }}
                                                                             </td>
 
                                                                         </tr>

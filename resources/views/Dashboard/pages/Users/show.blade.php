@@ -33,7 +33,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row p-0 m-0">
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-5 mb-2">
                             <label class="d-block">
                                 {{ translate('User Image') }}
                             </label>
@@ -42,12 +42,12 @@
                                 <a href="{{ url('/images/photos') }}/{{ $User->photo_path }}" target="_blank" class="btn btn-primary btn-sm">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <a href="#" class="btn btn-primary btn-sm">
+                                <a href="{{ url('/images/photos') }}/{{ $User->photo_path }}" download class="btn btn-primary btn-sm">
                                     <i class="fas fa-download"></i>
                                 </a>
                             </span>
                         </div>
-                        <div class="col-md-8 mb-2">
+                        <div class="col-md-7 mb-2">
                             <span class="d-block">
                                 {{ translate('Role Name') }} : <label> {{ $User->roles[0]->name }} </label>
                             </span>
@@ -87,7 +87,7 @@
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row p-0 m-0">
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-5 mb-2">
                             <span class="d-block">
                                 {{ translate('Government ID Image') }}
                                 <img style="width:auto; height: 160px;margin-top:10px;" src="{{ url('/images/govs') }}/{{ $User->government_id_path }}" />
@@ -95,7 +95,7 @@
                                     <a href="{{ url('/images/govs') }}/{{ $User->government_id_path }}" target="_blank" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-primary btn-sm">
+                                    <a href="{{ url('/images/govs') }}/{{ $User->government_id_path }}" download class="btn btn-primary btn-sm">
                                         <i class="fas fa-download"></i>
                                     </a>
                                 </span>
@@ -107,7 +107,7 @@
                                     <a href="{{ url('/images/act') }}/{{ $User->activity_license_image_path }}" target="_blank" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-primary btn-sm">
+                                    <a href="{{ url('/images/act') }}/{{ $User->activity_license_image_path }}" download class="btn btn-primary btn-sm">
                                         <i class="fas fa-download"></i>
                                     </a>
                                 </span>
@@ -119,7 +119,7 @@
                                     <a href="{{ url('/images/crt') }}/{{ $User->certificate_registration_tax }}" target="_blank" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-primary btn-sm">
+                                    <a href="{{ url('/images/crt') }}/{{ $User->certificate_registration_tax }}" download class="btn btn-primary btn-sm">
                                         <i class="fas fa-download"></i>
                                     </a>
                                 </span>
@@ -132,7 +132,7 @@
                                     <a href="{{ url('/images/chamber') }}/{{ $User->chamber_of_commerce_registration }}" target="_blank" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-primary btn-sm">
+                                    <a href="{{ url('/images/chamber') }}/{{ $User->chamber_of_commerce_registration }}" download class="btn btn-primary btn-sm">
                                         <i class="fas fa-download"></i>
                                     </a>
                                 </span>
@@ -150,7 +150,7 @@
                                 </span>
                             </span>
                         </div>
-                        <div class="col-md-8 mb-2">
+                        <div class="col-md-7 mb-2">
                             <span class="d-block">
                                 {{ translate('Id Number') }} : <label>{{ $User->id_number }} </label>
                             </span>
@@ -213,7 +213,7 @@
                         </div>
                         <div class="col-md-3 mb-2">
                             <span class="d-block">
-                                {{ translate('Wallet Balance') }} : <label>{{ $User->wallet?->amount }} {{ $User->wallet?->currency?->code }} </label>
+                                {{ translate('Wallet Balance') }} : <label>{{ $User->wallet?->amount }} {{ $User->wallet?->currency?->symbol }} </label>
                             </span>
                         </div>
                         <div class="col-md-12">
@@ -243,16 +243,16 @@
                                 <label>{{ translate('Quick Analysis Overview') }}</label>
                             </h6>
                             <span class="d-block">
-                                {{ translate('Total Orders') }} : <label> 0 </label>
+                                {{ translate('Total Orders') }} : <label> {{ $analysisBag['orders'] }} </label>
                             </span>
                             <span class="d-block">
-                                {{ translate('Total Pending Orders') }} : <label> 0 </label> (0 %)
+                                {{ translate('Total Pending Orders') }} : <label> {{ $analysisBag['pendingOrders'] }} </label> ( {{ precent($analysisBag['pendingOrders'], $analysisBag['orders']) }} % )
                             </span>
                             <span class="d-block">
-                                {{ translate('Total InProgress Orders') }} : <label> 0 </label> (0 %)
+                                {{ translate('Total InProgress Orders') }} : <label> {{ $analysisBag['inProgressOrders'] }} </label> ( {{ precent($analysisBag['inProgressOrders'], $analysisBag['orders']) }} % )
                             </span>
                             <span class="d-block">
-                                {{ translate('Total Canceled Orders') }} : <label> 0 </label> (0 %)
+                                {{ translate('Total Canceled Orders') }} : <label> {{ $analysisBag['canceledOrders'] }} </label> ( {{ precent($analysisBag['canceledOrders'], $analysisBag['orders']) }} % )
                             </span>
                         </div>
                         <div class="col-md-3 mb-2">
@@ -260,7 +260,7 @@
                                 <label>{{ translate('Quick Latency Analysis Overview') }}</label>
                             </h6>
                             <span class="d-block">
-                                {{ translate('Latency Orders') }} : <label> 0 </label>
+                                {{ translate('Latency Orders') }} : <label> {{ $analysisBag['delayedOrders'] }} </label>
                             </span>
                             <span class="d-block">
                                 {{ translate('Average Latency In Minutes') }} : <label> 0 </label>
@@ -289,7 +289,7 @@
 
                         </div>
                         <div class="col-md-12">
-                            <a href="#" class="btn btn-default btn-sm mb-2">
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 1]) }}" class="btn btn-default btn-sm mb-2">
                                <i class="fas fa-eye"></i> {{ translate('View Total Orders') }} (0)
                             </a>
                             <a href="#" class="btn btn-default btn-sm mb-2">
@@ -321,6 +321,9 @@
                     <div class="row p-0 m-0">
 
                         <div class="col-md-12">
+                            <a href="{{ route('Users-auto',$User->id) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-circle"></i>  {{ translate('Automate Assigning') }}
+                           </a>
                             @if($User->is_active == 0)
                                 <a href="{{ Route('Users-quick-actions',['type'=>'Active_Executer_User','id'=>$User->id]) }}" class="btn btn-success btn-sm mb-2">
                                      <i class="fas fa-check"></i> {{ translate('Active User And Accept is As Executer') }}
@@ -355,6 +358,10 @@
                                     <i class="fas fa-check-circle"></i>  {{ translate('Remove From SOS Status') }}
                                 </a>
                             @endif
+
+                            <a href="{{ route('Users-Delete',$User->id) }}" class="btn btn-danger btn-sm mb-2">
+                                <i class="fas fa-trash"></i> {{ translate('Delete User') }}
+                            </a>
 
                         </div>
                     </div>

@@ -63,20 +63,20 @@
                                     {{ ++$key }}
                                 </td>
                                 <td>
-                                    {{ $order->user->name . ' || ' . $order->user->name_ar }}
+                                    {{ $order->user->name }}
                                 </td>
                                 <td>
-                                    {{ $order->mainService->name_en }} || {{ $order->mainService->name_ar }}
+                                    {{ $order->mainService->name_en }}
                                 </td>
                                 <td>
-                                    {{ $order->paymentType->name_en }} || {{ $order->paymentType->name_ar }}
+                                    {{ $order->paymentType->name_en }}
                                 </td>
 
                                 <td>
-                                    {{ $order->paymentTypeStatus->name_en }} || {{ $order->paymentTypeStatus->name_ar }}
+                                    {{ $order->paymentTypeStatus->name_en }}
                                 </td>
                                 <td>
-                                    {{ $order->status->name_en }} || {{ $order->status->name_ar }}
+                                    {{ $order->status->name_en }}
                                 </td>
                                 <td>
                                     {{ $order->price }} ({{ $order->user->wallet->currency->symbol }})

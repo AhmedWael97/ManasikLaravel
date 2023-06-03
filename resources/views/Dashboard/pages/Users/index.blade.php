@@ -22,14 +22,6 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">
-                    <a href="{{ route('Users-Create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle"></i>
-                        {{ translate('Add New User') }}
-                    </a>
-                  </h3>
-                </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table class="display table table-striped" id="filtersIns">
@@ -90,13 +82,6 @@
 
                                         <a href="{{ route('Users-View',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
                                             <i class="fas fa-eye"></i>
-                                        </a>
-
-                                        <a href="{{ route('Users-Edit',$user->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="{{ route('Users-Delete',$user->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
-                                            <i class="fas fa-trash"></i>
                                         </a>
 
                                     </td>

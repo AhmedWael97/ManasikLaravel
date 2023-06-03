@@ -24,9 +24,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-            <a href="{{ route('Users-auto',$user->id) }}" class="btn btn-warning btn-sm mr-1 ml-1 text-white mb-2">
-                {{ translate('Automate Assigning') }}
-           </a>
+
           <form method="POST" action="{{ route('Users-Update') }}" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="user_id" value="{{ $User->id }}" />
@@ -78,19 +76,6 @@
                                 {{ translate('Birthdate') }}
                             </label>
                             <input value="{{ $User->birthdate }}" type="date" name="birthdate"   class="form-control" />
-                        </div>
-
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Password') }}
-                            </label>
-                            <input type="password" name="password"   class="form-control" />
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Password Confirmation') }}
-                            </label>
-                            <input type="password" name="password_confirmation"   class="form-control" />
                         </div>
                     </div>
                     <div class="col-md-3 mb-2">
@@ -268,61 +253,7 @@
                                 </label>
                                 <input type="text" name="iban" value="{{ $User->iban }}"  class="form-control" />
                             </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">
-                    {{ translate('System Information') }}
-                  </h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body">
-                    <div class="row p-0 m-0">
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('SOS Status') }}
-                            </label>
-                            <input type="text" name="sos_status" value="{{ $User->sos_status }}"  class="form-control" />
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Sos Start Date') }}
-                            </label>
-                            <input type="date" name="sos_start_date" value="{{ $User->sos_start_date }}"  class="form-control" />
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Role') }}
-                            </label>
-                            <select class="form-control" name="role_id" required>
-                                @foreach ($Roles as $term)
-                                    <option value="{{ $term->id }}" {{ $User->roles[0]->id == $term->id ? 'selected' : '' }} > {{ $term->name }} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Allow Notification') }}
-                            </label>
-                            <input type="checkbox" value="1" {{ $User->is_allow_notification == 1 ? 'checked' : '' }} name="is_allow_notification"   class="form-check" />
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Is Active') }}
-                            </label>
-                            <input type="checkbox" value="1" name="is_active" {{ $User->is_active == 1 ? 'checked' : '' }}   class="form-check" />
-                        </div>
-                        <div class="col-md-3 mb-2">
-                            <label>
-                                {{ translate('Is Confirmed Eexcuter') }}
-                            </label>
-                            <input type="checkbox" value="1" name="is_confirmed_executer" {{ $User->is_confirmed_executer == 1 ? 'checked' : '' }}  class="form-check" />
-                        </div>
-                        <div class="col-md-12"></div>
+                            <div class="col-md-12"></div>
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
                             <input type="submit" class="btn btn-success w-100" value="{{ translate('Save') }}" />
@@ -330,6 +261,9 @@
                     </div>
                 </div>
             </div>
+
+
+
           </form>
         </div>
       </div>

@@ -16,6 +16,7 @@ use App\Models\ServiceStep;
 use App\Models\ToDoOrder;
 use DB;
 use \App\Models\DetailStepRequest;
+use App\Models\ServiceKfaratChoice;
 
 class OrderController extends Controller
 {
@@ -230,7 +231,13 @@ class OrderController extends Controller
             return $this->response->noPermission();
         }
 
-        $orders = OrderDetail::where('executer_id',null)->where('payment_status_id',8)->orderBy('created_at','desc')->with([
+        $excludedServices = ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
+
+        $orders = OrderDetail::where('executer_id',null)
+        ->where('payment_status_id',8)
+        ->whereNotIn('service_id',$excludedServices)
+        ->where('price','<>', 0)
+        ->orderBy('created_at','desc')->with([
             'service', 'order' => function($query) {
                 $query->with('user');
             }
@@ -257,9 +264,29 @@ class OrderController extends Controller
 
 
         // $order haj test
-
-
-        // order umara test
+        if($order->hajPurpose != null ) {
+            $previousOrders = OrderDetail::
+            where([
+                'executer_id'=>$user->id,
+                ['purpose_haj_id' , '<>' , null],
+                ['order_status_id' , '<>' , 11],
+                ])
+            ->WhereYear('created_at',Date('YY'))->count();
+            if($previousOrders >= 1) {
+                return $this->response->errorMessage('Already have a haj request');
+            }
+        } else {
+            $previousOrders = OrderDetail::
+            where([
+                'executer_id'=>$user->id,
+                ['purpose_haj_id' , null],
+                ['order_status_id' , '<>' , 11],
+                ])
+            ->WhereYear('created_at',Date('YY'))->count();
+            if($previousOrders >= 3) {
+                return $this->response->errorMessage('Already have a 3 Umra requests');
+            }
+        }
 
         $newToDo = new ToDoOrder([
             'executer_id' => $request->user()->id,
@@ -270,6 +297,11 @@ class OrderController extends Controller
 
         $order->executer_id = $request->user()->id;
         $order->order_status_id = 6;
+
+        // actual date
+
+        // required date
+
         $order->save();
 
         return $this->response->successResponse('ToDoOrder',$newToDo);

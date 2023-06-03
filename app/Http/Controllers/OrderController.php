@@ -75,6 +75,17 @@ class OrderController extends Controller
 
     }
 
+
+    public function specificExecuter($id,$type) {
+        $executer = User::findOrFail($id);
+        $status = Status::findOrFail($type);
+        $orders = OrderDetail::where(['order_status_id'=>$type,'executer_id'=>$id])->get();
+        return view('Dashboard.pages.orders.executer_orders')->with([
+            'orders' => $orders,
+            'executer' => $executer,
+            'status' => $status,
+        ]);
+    }
     public function edit($id) {
 
     }
