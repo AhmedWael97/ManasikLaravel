@@ -321,7 +321,7 @@ class OrderController extends Controller
         }
 
         $todo = OrderDetail::where('executer_id',$request->user()->id)
-        ->with('order','hajPurpose','KfaraChoice','steps','orders','service')->get();
+        ->with('order','hajPurpose','KfaraChoice','steps','service')->get();
         return $this->response->successResponse('ToDoOrder',$todo);
     }
 
