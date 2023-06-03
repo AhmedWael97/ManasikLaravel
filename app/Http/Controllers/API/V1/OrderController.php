@@ -245,7 +245,7 @@ class OrderController extends Controller
             *    }
           *  ])->with(['hajPurpose'])->paginate(15);
          */
-        $orders = DB::table('order_details')->whereNotIn('service_id', $excludedServices)->where('price','<>',0)->join('orders','order_details.order_id','=' ,'orders.id')->where('orders.payment_status_id','=',11)->join('services','services.id','=','order_details.service_id')->join('users','users.id','=','orders.user_id')->join('haj_purposes','haj_purposes.id','=','order_details.purpose_hag_id')->get();
+        $orders = DB::table('order_details')->whereNotIn('order_details.service_id', $excludedServices)->where('order_details.price','<>',0)->join('orders','order_details.order_id','=' ,'orders.id')->where('orders.payment_status_id','=',11)->join('services','services.id','=','order_details.service_id')->join('users','users.id','=','orders.user_id')->join('haj_purposes','haj_purposes.id','=','order_details.purpose_hag_id')->get();
         return $this->response->successResponse('Order',$orders);
 
     }
