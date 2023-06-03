@@ -43,7 +43,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/getKfaratChoices','getKfaratChoices');
             Route::get('/getPaymentTypes','getPaymentTypes');
             Route::get('/getHajPurpose','getHajPurpose');
-            Route::get('/getBank','getBank');
+            Route::get('/getBanks','getBanks');
             Route::get('/getBankBranches','getBankBranches');
         });
     });
