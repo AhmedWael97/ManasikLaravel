@@ -242,7 +242,7 @@ class OrderController extends Controller
             'service', 'order' => function($query) {
                 $query->with('user');
             }
-        ])->paginate(15);
+        ])->with(['hajPurpose'])->paginate(15);
 
         return $this->response->successResponse('Order',$orders);
 
