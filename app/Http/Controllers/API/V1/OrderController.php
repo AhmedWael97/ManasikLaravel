@@ -240,7 +240,9 @@ class OrderController extends Controller
          OrderDetail::where('executer_id',null)
            ->whereNotIn('service_id',$excludedServices)
           ->where('price','<>', 0)
-          ->where('order.payment_status_id',11)
+          ->where([function($query){
+            $query->order->where('payment_status_id',11);
+          }])
            ->orderBy('created_at','desc')->with([
             'service', 'order' => function($query) {
                    $query->with('user');
