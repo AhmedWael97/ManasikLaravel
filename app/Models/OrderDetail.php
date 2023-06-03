@@ -36,4 +36,8 @@ class OrderDetail extends Model
     public function executer() {
         return $this->hasOne('\App\Models\User','id','executer_id');
     }
+
+    public function currency() {
+        return $this->hasOne('\App\Models\Currency','id','currency_id');
+    }
 }

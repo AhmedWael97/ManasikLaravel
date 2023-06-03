@@ -15,6 +15,12 @@ use Spatie\Permission\Models\Role;
             $route_array = explode('-',$route);
             return $route_array[0] == $term;
         }
+
+        function is_sub_active($term) {
+            $route = url()->full();
+            $route_array = explode('/',$route);
+            return $route_array[count($route_array)-1] == $term;
+        }
     }
 
     if(!function_exists('updatePermissions')) {

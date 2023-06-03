@@ -39,9 +39,7 @@
                             <th>
                                 {{ translate('Name') }}
                             </th>
-                            <th>
-                                {{ translate('Max Limit') }}
-                            </th>
+
                             <th>
                                 {{ translate('Price') }}
                             </th>
@@ -64,9 +62,7 @@
                                     <td>
                                         {{ $service->name_en }} | {{ $service->name_ar }}
                                     </td>
-                                    <td>
-                                        {{ $service->max_limit }}
-                                    </td>
+
                                     <td>
                                         {{ $service->price }}
                                     </td>
@@ -81,13 +77,13 @@
                                        @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-warning btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-warning btn-sm mb-1 mr-1 ml-1">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-default btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Services-Edit',$service->id) }}" class="btn btn-default btn-sm mb-1 mr-1 ml-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="{{ route('Services-Delete',$service->id) }}" class="btn btn-danger btn-sm mr-1 ml-1">
+                                        <a href="{{ route('Services-Delete',$service->id) }}" class="btn btn-danger btn-sm mb-1 mr-1 ml-1">
                                             <i class="fas fa-trash"></i>
                                         </a>
 

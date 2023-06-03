@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApplicationResponse;
+use App\Models\Bank;
 use Illuminate\Http\Request;
 use App\Models\Country;
 use App\Models\Currency;
@@ -16,7 +17,7 @@ use App\Models\Language;
 use App\Models\PaymentType;
 use App\Models\HajPurpose;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\BankBarnch;
 class BasicController extends Controller
 {
 
@@ -106,5 +107,16 @@ class BasicController extends Controller
 
     public function getHajPurpose() {
         return $this->response->successResponse('HajPurpose',HajPurpose::select('id','name_en','name_ar')->get());
+    }
+
+    public function getBanks() {
+        return $this->response->successResponse('Bank',Bank::get());
+    }
+
+    public function getBankBranches(Request $request) {
+        if(! $request->has('id')) {
+            return $this->response->notFound('No Bank Id Found');
+        }
+        return $this->response->successResponse('BankBranches',BankBarnch::where('bank_id',$request->id)->get());
     }
 }

@@ -78,6 +78,8 @@
 
                 </div>
             </div>
+
+            @if( $User->roles[0]->name != 'Super Admin' && $User->roles[0]->name != 'Application User'  )
             <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
@@ -223,6 +225,9 @@
                             <a href="#" class="btn btn-default btn-sm">
                                 <i class="fas fa-eye"></i>  {{ translate('View Total Withdrawal Requests') }} (0)
                             </a>
+                            <a href="#" class="btn btn-default btn-sm">
+                                <i class="fas fa-dollar-sign"></i>  {{ translate('Transfer Money') }}
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -239,14 +244,15 @@
                 <div class="card-body">
                     <div class="row p-0 m-0">
                         <div class="col-md-3 mb-2">
-                            <h6>
-                                <label>{{ translate('Quick Analysis Overview') }}</label>
+                            <h5 class="mb-2 mt-2">
+                                <label> <i class="fas fa-align-left text-primary"></i> {{ translate('Quick Analysis Overview') }}</label>
                             </h6>
                             <span class="d-block">
                                 {{ translate('Total Orders') }} : <label> {{ $analysisBag['orders'] }} </label>
                             </span>
+
                             <span class="d-block">
-                                {{ translate('Total Pending Orders') }} : <label> {{ $analysisBag['pendingOrders'] }} </label> ( {{ precent($analysisBag['pendingOrders'], $analysisBag['orders']) }} % )
+                                {{ translate('Total Init Orders') }} : <label> {{ $analysisBag['InitOrders'] }} </label> ( {{ precent($analysisBag['InitOrders'], $analysisBag['orders']) }} % )
                             </span>
                             <span class="d-block">
                                 {{ translate('Total InProgress Orders') }} : <label> {{ $analysisBag['inProgressOrders'] }} </label> ( {{ precent($analysisBag['inProgressOrders'], $analysisBag['orders']) }} % )
@@ -256,8 +262,8 @@
                             </span>
                         </div>
                         <div class="col-md-3 mb-2">
-                            <h6>
-                                <label>{{ translate('Quick Latency Analysis Overview') }}</label>
+                            <h5 class="mb-2 mt-2">
+                                <label> <i class="fas fa-align-left text-primary"></i> {{ translate('Latency Analysis Overview') }}</label>
                             </h6>
                             <span class="d-block">
                                 {{ translate('Latency Orders') }} : <label> {{ $analysisBag['delayedOrders'] }} </label>
@@ -274,9 +280,9 @@
 
                         </div>
                         <div class="col-md-3 mb-2">
-                            <h6>
-                                <label>{{ translate('Total Average For Executer') }}</label>
-                            </h6>
+                            <h5 class="mb-2 mt-2">
+                                <label> <i class="fas fa-align-left text-primary"></i> {{ translate('Total Average For Executer') }}</label>
+                            </h5>
                             <span class="d-block">
                                 {{ translate('Orders Growth for last year') }} : <label> 0 % </label>
                             </span>
@@ -289,20 +295,35 @@
 
                         </div>
                         <div class="col-md-12">
-                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 1]) }}" class="btn btn-default btn-sm mb-2">
-                               <i class="fas fa-eye"></i> {{ translate('View Total Orders') }} (0)
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 0]) }}" class="btn btn-default btn-sm mb-2">
+                               <i class="fas fa-eye"></i> {{ translate('View Total Orders') }}
                             </a>
-                            <a href="#" class="btn btn-default btn-sm mb-2">
-                                <i class="fas fa-eye"></i>  {{ translate('View Total Pending Orders') }} (0)
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 6]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total Init Orders') }}
                             </a>
-                            <a href="#" class="btn btn-default btn-sm mb-2">
-                                <i class="fas fa-eye"></i>  {{ translate('View Total InProgress Orders') }} (0)
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 3]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total InProgress Orders') }}
                             </a>
-                            <a href="#" class="btn btn-default btn-sm mb-2">
-                                <i class="fas fa-eye"></i>  {{ translate('View Total Finished Orders') }} (0)
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 11]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total Finished Orders') }}
                             </a>
-                            <a href="#" class="btn btn-default btn-sm mb-2">
-                                <i class="fas fa-eye"></i>  {{ translate('View Total Canceled Orders') }} (0)
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 2]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total Canceled Orders') }}
+                            </a>
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 4]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total Skipped Orders') }}
+                            </a>
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 5]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total Delayed Orders') }}
+                            </a>
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 7]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total Refused Orders') }}
+                            </a>
+                            <a href="{{ route('specificExecuter',['id' => $User->id, 'status' => 10]) }}" class="btn btn-default btn-sm mb-2">
+                                <i class="fas fa-eye"></i>  {{ translate('View Total SOS Orders') }}
+                            </a>
+                            <a href="#" class="btn btn-success btn-sm mb-2">
+                                <i class="fas fa-charts"></i>  {{ translate('View AI Analysis') }}
                             </a>
                         </div>
                     </div>
@@ -324,6 +345,9 @@
                             <a href="{{ route('Users-auto',$User->id) }}" class="btn btn-default btn-sm mb-2">
                                 <i class="fas fa-circle"></i>  {{ translate('Automate Assigning') }}
                            </a>
+                           <a href="{{ Route('Users-Edit',$User->id) }}" class="btn btn-warning btn-sm mb-2 text-white">
+                                <i class="fas fa-edit"></i>  {{ translate('Edit User') }}
+                            </a>
                             @if($User->is_active == 0)
                                 <a href="{{ Route('Users-quick-actions',['type'=>'Active_Executer_User','id'=>$User->id]) }}" class="btn btn-success btn-sm mb-2">
                                      <i class="fas fa-check"></i> {{ translate('Active User And Accept is As Executer') }}
@@ -344,9 +368,7 @@
                                     <i class="fas fa-check"></i> {{ translate('Disallow Notification') }}
                                 </a>
                             @endif
-                            <a href="{{ Route('Users-Edit',$User->id) }}" class="btn btn-warning btn-sm mb-2 text-white">
-                                <i class="fas fa-eye"></i>  {{ translate('Edit User') }}
-                            </a>
+
                             @if($User->sos_status == 0)
                                 <a href="{{ Route('Users-quick-actions',['type'=>'Enable_SOS_Status','id'=>$User->id]) }}" class="btn btn-danger btn-sm mb-2">
                                     <i class="fas fa-times-circle"></i>  {{ translate('Adding To SOS Status') }}
@@ -367,6 +389,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
         </div>
       </div>

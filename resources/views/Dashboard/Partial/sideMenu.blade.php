@@ -134,8 +134,9 @@
 
           @can('Users')
 
-            <li class="nav-item">
-                <a href="#" class="nav-link {{ is_active('Users')  ? 'active' : '' }}">
+            <li class="nav-item {{ is_active('Users')  ? 'active menu-is-opening menu-open' : '' }}">
+                <a href="#" class="nav-link">
+
                     <i class="nav-icon fas fa-users"></i>
                     <p>
                         {{ translate('Users') }}
@@ -144,31 +145,32 @@
                     </a>
                 <ul class="nav nav-treeview ml-4">
                     <li class="nav-item">
-                        <a href="{{ route('Users') }}" class="nav-link">
+                        {{ is_sub_active('Index') }}
+                        <a href="{{ route('Users') }}" class="nav-link {{ is_sub_active('index') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
                         <p>{{ translate('Total Users') }}</p>
                         </a>
                     </li>
                 <li class="nav-item">
-                    <a href="{{ route('Users','Super_Admin') }}" class="nav-link">
+                    <a href="{{ route('Users','Super_Admin') }}" class="nav-link {{ is_sub_active('Super_Admin') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>{{ translate('Admins') }}</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Users','Executers') }}" class="nav-link">
+                    <a href="{{ route('Users','Executers') }}" class="nav-link {{ is_sub_active('Executers') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>{{ translate('Executers') }}</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Users','Kfarat_Executers') }}" class="nav-link">
+                    <a href="{{ route('Users','Kfarat_Executers') }}" class="nav-link {{ is_sub_active('Kfarat_Executers') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>{{ translate('Kfarat Executers') }}</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('Users','Application_Users') }}" class="nav-link">
+                    <a href="{{ route('Users','Application_Users') }}" class="nav-link {{ is_sub_active('Application_Users') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>{{ translate('Application Users') }}</p>
                     </a>

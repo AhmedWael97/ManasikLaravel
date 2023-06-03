@@ -55,7 +55,10 @@ class OrderController extends Controller
         $executer = User::findOrFail($request->executer_id);
 
         $orderDetails->executer_id = $executer->id;
+        $orderDetails->order_status_id = 6;
         $orderDetails->save();
+
+
 
         if(count($orderDetails->steps) == 0) {
             $serviceSteps = ServiceStep::where('service_id',$orderDetails->service_id)->select('id')->get();
@@ -78,8 +81,16 @@ class OrderController extends Controller
 
     public function specificExecuter($id,$type) {
         $executer = User::findOrFail($id);
-        $status = Status::findOrFail($type);
-        $orders = OrderDetail::where(['order_status_id'=>$type,'executer_id'=>$id])->get();
+        if($type != 0) {
+            $status = Status::findOrFail($type);
+            $orders = OrderDetail::where(['order_status_id'=>$type,'executer_id'=>$id])->get();
+            $status = $status->name_en . ' ' . translate('Orders');
+        } else {
+
+            $status = translate('Total Statuses');
+            $orders = OrderDetail::where(['executer_id'=>$id])->get();
+
+        }
         return view('Dashboard.pages.orders.executer_orders')->with([
             'orders' => $orders,
             'executer' => $executer,

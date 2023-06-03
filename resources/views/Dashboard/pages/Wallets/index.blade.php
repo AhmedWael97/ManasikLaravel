@@ -42,9 +42,7 @@
                             <th>
                                 {{ translate('Currency') }}
                             </th>
-                            <td>
-                                {{ translate('Actions') }}
-                            </td>
+
                         </thead>
                         <tbody>
                             @foreach ($Wallets as $key=>$wallet)
@@ -61,18 +59,7 @@
                                     <td>
                                         {{ $wallet->currency->symbol }}
                                     </td>
-                                    <td>
-                                        <a href="#" class="btn btn-primary btn-sm mr-2 mt-2">
-                                            <i class="fas fa-plus-circle"></i> {{ translate('Make Transaction') }}
-                                        </a>
-                                        <a href="#" class="btn btn-danger btn-sm mr-2 mt-2">
-                                            <i class="fas fa-minus-circle"></i> {{ translate('Remove Transaction') }}
-                                        </a>
-                                        <a href="#" class="btn btn-default btn-sm mr-2 mt-2">
-                                            <i class="fas fa-eye"></i> {{ translate('See Transactions') }}
-                                        </a>
 
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

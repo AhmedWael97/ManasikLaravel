@@ -29,32 +29,42 @@ class UserController extends Controller
 
     public function index($term = null) {
         if($term == null) {
+            $pageTitle = translate('Total Users');
             return view('Dashboard.pages.Users.index')->with([
                 'Users' => User::select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+                'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Super_Admin') {
+            $pageTitle = translate('Super Admin Users');
             $users_ids = DB::table('model_has_roles')->where('role_id',1)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
                 'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+                'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Executers') {
+            $pageTitle = translate('Executers');
             $users_ids = DB::table('model_has_roles')->where('role_id',3)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
                 'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+                'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Application_Users') {
+            $pageTitle = translate('Application Users');
             $users_ids = DB::table('model_has_roles')->where('role_id',4)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
                 'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+                'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Kfarat_Executers') {
+            $pageTitle = translate('Kfarat Executers');
             $users_ids = DB::table('model_has_roles')->where('role_id',2)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
                 'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+                'pageTitle' => $pageTitle,
             ]);
-            return view('Dashboard.pages.Users.index')->with([
-                'Users' => User::select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
-            ]);
+
+        } else {
+            abort(404);
         }
 
 
@@ -215,7 +225,7 @@ class UserController extends Controller
         $orders = OrderDetail::where('executer_id',$id)->get();
         $analysisBag = [
             'orders' => $orders->count(),
-            'pendingOrders' => $orders->whereIn('order_status_id',[1,6])->count(),
+            'InitOrders' => $orders->whereIn('order_status_id',[6])->count(),
             'inProgressOrders' => $orders->where('order_status_id',3)->count(),
             'canceledOrders' => $orders->where('order_status_id',2)->count(),
             'completedOrders' => $orders->where('order_status_id',11)->count(),
