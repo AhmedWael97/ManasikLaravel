@@ -235,17 +235,18 @@ class OrderController extends Controller
 
         $excludedServices = ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
 
-        /**
-         * OrderDetail::where('executer_id',null)
-          *  ->whereNotIn('service_id',$excludedServices)
-          * ->where('price','<>', 0)
-          *  ->orderBy('created_at','desc')->with([
-        *     'service', 'order' => function($query) {
-          *          $query->with('user');
-            *    }
-          *  ])->with(['hajPurpose'])->paginate(15);
-         */
-        $orders = DB::table('order_details')->whereNotIn('order_details.service_id', $excludedServices)->where('order_details.price','<>',0)->join('orders','order_details.order_id','=' ,'orders.id')->where('orders.payment_status_id','=',11)->join('services','services.id','=','order_details.service_id')->join('users','users.id','=','orders.user_id')->join('haj_purposes','haj_purposes.id','=','order_details.purpose_hag_id')->get();
+
+        $orders =
+         OrderDetail::where('executer_id',null)
+           ->whereNotIn('service_id',$excludedServices)
+          ->where('price','<>', 0)
+           ->orderBy('created_at','desc')->with([
+            'service', 'order' => function($query) {
+                   $query->where('payment_status_id',11)->with('user');
+               }
+          ])->with(['hajPurpose'])->paginate(15);
+
+
         return $this->response->successResponse('Order',$orders);
 
     }
