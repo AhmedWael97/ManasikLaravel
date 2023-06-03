@@ -72,14 +72,14 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    Route::middleware('auth:sanctum')->prefix('executer')->group(function() {
+    Route::prefix('executer')->group(function() {
         Route::prefix('auth')->group(function() {
             Route::controller(AuthenticateController::class)->group(function(){
                 Route::post('/executer-login','executer_login');
                 Route::post('/executer-register','executer_register');
             });
         });
-        Route::prefix('order')->group(function() {
+        Route::middleware('auth:sanctum')->prefix('order')->group(function() {
             Route::controller(OrderController::class)->group(function() {
                 Route::get('/available-orders','executer_avaliavble_orders');
                 Route::post('/request-to-do','request_to_take_order');
