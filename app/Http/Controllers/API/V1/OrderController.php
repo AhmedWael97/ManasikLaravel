@@ -495,6 +495,7 @@ class OrderController extends Controller
 
         $steps[$currentStepInOrder]->min_end_date = Date('d-m-Y h:i A', strtotime( $nextStepInOrder->start_in . ' + ' . $steps[$currentStepInOrder]->min_time_in_minute .' minutes'));
         $steps[$currentStepInOrder]->max_end_date = Date('d-m-Y h:i A', strtotime( $nextStepInOrder->start_in . ' + ' . $steps[$currentStepInOrder]->max_time_in_minute .' minutes'));
+        $steps[$currentStepInOrder]->start_in = $nextStepInOrder->start_in;
         return $this->response->successResponse('Step' , $steps[$currentStepInOrder]);
 
     }
