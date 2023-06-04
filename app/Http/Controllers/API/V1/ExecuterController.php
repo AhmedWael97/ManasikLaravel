@@ -46,7 +46,7 @@ class ExecuterController extends Controller
         }
 
 
-        $errors = [];
+
 
         $user = User::findOrFail($request->user()->id);
 
@@ -64,7 +64,7 @@ class ExecuterController extends Controller
 
         if($request->has('phone')){
             if(User::where(['phone'=>$request->phone, ['id' , '<>' ,$user->id]])->first()) {
-                $errors[] = translate('Phone Is Already Taken');
+               return $this->response->errorResponse('Phone Is Taken');
             } else {
                 $user->phone = $request->phone;
             }
@@ -73,7 +73,7 @@ class ExecuterController extends Controller
 
         if($request->has('email')){
             if(User::where(['email'=>$request->phone, ['id' , '<>' ,$user->id]])->first()) {
-                $errors[] = translate('Email Is Already Taken');
+                return $this->response->errorResponse('Email Is Taken');
             } else {
                 $user->email = $request->email;
             }
@@ -149,7 +149,7 @@ class ExecuterController extends Controller
         }
 
         $user->save();
-        return $this->successResponse('Info',$errors[]);
+        return $this->successResponse('Info','Success');
     }
 
     public function updateMyBankInfo (Request $request) {
