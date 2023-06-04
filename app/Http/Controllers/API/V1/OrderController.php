@@ -527,11 +527,11 @@ class OrderController extends Controller
             return $this->response->errorResponse('No Step Started');
         }
 
-        $currentDate = Date('d-m-Y h:i A');
-        $minMumEndDate = Date('d-m-Y h:i A',strtotime($orderCurrentStep->start_date . ' +' . $orderCurrentStep->step->min_time_in_minutes . ' minutes'));
-        if($currentDate > $minMumEndDate) {
-            return $this->response->errorResponse('Cannot end step now');
-        }
+        // $currentDate = Date('d-m-Y h:i A');
+        // $minMumEndDate = Date('d-m-Y h:i A',strtotime($orderCurrentStep->start_date . ' +' . $orderCurrentStep->step->min_time_in_minutes . ' minutes'));
+        // if($currentDate > $minMumEndDate) {
+        //     return $this->response->errorResponse('Cannot end step now');
+        // }
 
         $orderCurrentStep->end_in = Date('d-m-Y h:i A');
         $orderCurrentStep->step_status_id = 11;
