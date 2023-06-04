@@ -59,8 +59,9 @@ class OrderController extends Controller
                         return $this->response->ErrorResponse("Invalid Child Services");
                     }
 
+                    // if(reach_limit_for_max_limit($requestOrder['mainServiceId'])) {
 
-
+                    // }
                     $newOrder = new Order([
                         'user_id' => $request->user()->id,
                         'main_service_id' => $requestOrder['mainServiceId'],
@@ -236,7 +237,7 @@ class OrderController extends Controller
         $excludedServices = ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
 
 
-        $orders = DB::table('order_details')->whereNotIn('order_details.service_id',$excludedServices)->where('executer_id','=', null)->join('orders','orders.id','=','order_details.order_id')->where('orders.payment_status_id','=',11)->join('services','services.id' ,'=' ,'order_details.service_id')->join('haj_purposes','haj_purposes.id','=','order_details.purpose_hag_id')->join('users','users.id','=','orders.user_id')->select('order_details.id as id','order_details.executer_price as reward','services.name_ar as service_name_ar','services.name_en as service_name_en' ,'haj_purposes.name_ar as haj_purpose_name_ar','haj_purposes.name_en as haj_purpose_name_en','users.name_ar as requester_name_ar' ,'users.name as requester_name_en')->get();
+        $orders = DB::table('order_details')->whereNotIn('order_details.service_id',$excludedServices)->where('executer_id','=', null)->join('orders','orders.id','=','order_details.order_id')->where('orders.payment_status_id','=',11)->join('services','services.id' ,'=' ,'order_details.service_id')->leftJoin('haj_purposes','order_details.purpose_hag_id','=','haj_purposes.id')->join('users','users.id','=','orders.user_id')->select('order_details.id as id','order_details.executer_price as reward','services.name_ar as service_name_ar','services.name_en as service_name_en','haj_purposes.name_ar as haj_purpose_name_ar','haj_purposes.name_en as haj_purpose_name_en' ,'users.name_ar as requester_name_ar' ,'users.name as requester_name_en')->get();
 
 
 
@@ -254,14 +255,18 @@ class OrderController extends Controller
             return $this->response->noPermission();
         }
 
+
+
+
         $order = OrderDetail::where('id',$request->order_id)->where('executer_id',null)->first();
         if($order == null) {
-            return $this->response->errorMessage('Order Already Taken');
+            return $this->response->ErrorResponse('Order Already Taken');
         }
 
 
         // $order haj test
         if($order->hajPurpose != null ) {
+
             $previousOrders = OrderDetail::
             where([
                 'executer_id'=>$user->id,
@@ -270,7 +275,7 @@ class OrderController extends Controller
                 ])
             ->WhereYear('created_at',Date('YY'))->count();
             if($previousOrders >= 1) {
-                return $this->response->errorMessage('Already have a haj request');
+                return $this->response->ErrorResponse('Already have a haj request');
             }
         } else {
             $previousOrders = OrderDetail::
@@ -281,7 +286,7 @@ class OrderController extends Controller
                 ])
             ->WhereYear('created_at',Date('YY'))->count();
             if($previousOrders >= 3) {
-                return $this->response->errorMessage('Already reach a 3 Umra requests');
+                return $this->response->ErrorResponse('Already reach a 3 Umra requests');
             }
         }
 
@@ -296,26 +301,7 @@ class OrderController extends Controller
         $order->order_status_id = 6;
         $order->required_date = $request->start_date;
         // required date
-
         $order->save();
-        // actual date
-        if($request->start_date != null) {
-            $startDate = Date('d-m-Y h:i A',strtotime($request->start_date));
-            foreach($order->service->steps as $step) {
-                $stepDetailForService = new OrderDetailStep();
-                $stepDetailForService->detail_id = $order->id;
-                $stepDetailForService->service_step_id = $step->id;
-                $stepDetailForService->start_in = $startDate;
-                $endDate = Date('d-m-Y h:i A', strtotime($startDate.' + '. $step->max_time_in_minute .' minutes' ));
-                $stepDetailForService->end_in = $endDate;
-                $stepDetailForService->step_status_id = 1;
-                $stepDetailForService->save();
-
-                $startDate = $endDate;
-            }
-        }
-
-
 
         return $this->response->successResponse('ToDoOrder',$newToDo);
     }
@@ -357,15 +343,15 @@ class OrderController extends Controller
         }
 
         if($order->executer_id == null) {
-            return $this->response->errorMessage('No Steps Found');
+            return $this->response->ErrorResponse('No Steps Found');
         }
 
         if(in_array($order->order_status_id,[1,2,7,9,10])) {
-            return $this->response->errorMessage('Order is' . $order->status->name_en);
+            return $this->response->ErrorResponse('Order is' . $order->status->name_en);
         }
 
         $steps = OrderDetailStep::where('detail_id', $order->id)->with('status','step')->get();;
-        return $this->response->successMessage('Steps' , $steps);
+        return $this->response->successResponse('Steps' , $steps);
     }
 
     public function ask_image(Request $request) {
@@ -386,20 +372,20 @@ class OrderController extends Controller
         }
 
         if($order->executer_id == null) {
-            return $this->response->errorMessage('No Steps Found');
+            return $this->response->ErrorResponse('No Steps Found');
         }
 
         if(in_array($order->order_status_id,[1,2,7,9,10])) {
-            return $this->response->errorMessage('Order status is' . $order->status->name_en);
+            return $this->response->ErrorResponse('Order status is' . $order->status->name_en);
         }
 
         $step = OrderDetailStep::where('id',$request->step_id)->first();
         if($step->end_in == null) {
-            return $this->response->errorMessage('Step is already ended');
+            return $this->response->ErrorResponse('Step is already ended');
         }
 
         if($step->start_in == null) {
-            return $this->response->errorMessage('Step Not Statred Yet');
+            return $this->response->ErrorResponse('Step Not Statred Yet');
         }
 
         // create request to ask image
@@ -430,20 +416,20 @@ class OrderController extends Controller
         }
 
         if($order->executer_id == null) {
-            return $this->response->errorMessage('No Steps Found');
+            return $this->response->ErrorResponse('No Steps Found');
         }
 
         if(in_array($order->order_status_id,[1,2,7,9,10])) {
-            return $this->response->errorMessage('Order is' . $order->status->name_en);
+            return $this->response->ErrorResponse('Order is' . $order->status->name_en);
         }
 
         $step = OrderDetailStep::where('id',$request->step_id)->first();
         if($step->end_in == null) {
-            return $this->response->errorMessage('Step is already ended');
+            return $this->response->ErrorResponse('Step is already ended');
         }
 
         if($step->start_in == null) {
-            return $this->response->errorMessage('Step Not Statred Yet');
+            return $this->response->ErrorResponse('Step Not Statred Yet');
         }
 
         // create request to live Location
@@ -464,39 +450,99 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user())->first();
+        $user = User::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
-
-        $order = Order::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
+        $order = OrderDetail::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
         if($order == null) {
-            return $this->response->errorMessage('Error in order');
+            return $this->response->ErrorResponse('Error in order');
         }
 
-        // check step needed and check if it ended or not and if old steps is already done or not !!
+        // Check Services Step
 
-        $step = ServiceStep::where(['service_id' => $request->service_id , 'id' => $request->step_id])->first();
-        if($step == null) {
-            return $this->response->errorMessage('Error In Step');
+        $steps = ServiceStep::where(['service_id' => $order->service_id])->select('id','service_id','name_en','name_ar','min_time_in_minute','max_time_in_minute')->get();
+        if($steps == null || count($steps) == 0) {
+            return $this->response->ErrorResponse('Error In Step');
         }
 
+        $currentStepInOrder = $order->steps->count();
+
+
+        if(count($steps) == ($currentStepInOrder)) {
+            return $this->response->ErrorResponse('Steps Ended');
+        }
+
+
+        if(count($order->steps) > 0) {
+            if($order->steps[count($order->steps) -1]->end_in == null ) {
+                return $this->response->ErrorResponse('Please end step first');
+            }
+        }
+
+        $nextStep = $steps[$currentStepInOrder];
+        $nextStepInOrder = new OrderDetailStep();
+        $nextStepInOrder->detail_id = $nextStep->service_id;
+        $nextStepInOrder->service_step_id = $nextStep->id;
+        $nextStepInOrder->start_in = Date('d-m-Y h:i A');
+        $nextStepInOrder->step_status_id = 3;
+        $nextStepInOrder->save();
         //
-        $orderStep = OrderDetailStep::where('id',$request->step_id)->first();
-        if($orderStep == null) {
-            return $this->response->errorMessage('Error In Step');
-        }
-        if($orderStep->startIn != null) {
-            return $this->response->errorMessage('It is already started');
-        }
 
-        //** */
+        $order->order_status_id = 3;
+        $order->execution_date = $nextStepInOrder->start_in;
+        $order->save();
 
+        $steps[$currentStepInOrder]->min_end_date = Date('d-m-Y h:i A', strtotime( $nextStepInOrder->start_in . ' + ' . $steps[$currentStepInOrder]->min_time_in_minute .' minutes'));
+        $steps[$currentStepInOrder]->max_end_date = Date('d-m-Y h:i A', strtotime( $nextStepInOrder->start_in . ' + ' . $steps[$currentStepInOrder]->max_time_in_minute .' minutes'));
+        return $this->response->successResponse('Step' , $steps[$currentStepInOrder]);
 
     }
 
     public function end_step(Request $request) {
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
 
+        $user = User::where('id',$request->user()->id)->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+        $order = OrderDetail::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
+        if($order == null) {
+            return $this->response->ErrorResponse('Error in order');
+        }
+
+        $steps = ServiceStep::where(['service_id' => $order->service_id])->select('id','service_id','name_en','name_ar','min_time_in_minute','max_time_in_minute')->get();
+        if($steps == null || count($steps) == 0) {
+            return $this->response->ErrorResponse('Error In Step');
+        }
+
+        if(count($order->steps) == 0) {
+            return $this->response->ErrorResponse('No step is started');
+        }
+
+        $orderCurrentStep = $order->steps[count($order->steps)-1];
+        if($orderCurrentStep->end_in != null ) {
+            return $this->response->errorResponse('No Step Started');
+        }
+
+        $currentDate = Date('d-m-Y h:i A');
+        $minMumEndDate = Date('d-m-Y h:i A',strtotime($orderCurrentStep->start_date . ' +' . $orderCurrentStep->step->min_time_in_minutes . ' minutes'));
+        if($currentDate > $minMumEndDate) {
+            return $this->response->errorResponse('Cannot end step now');
+        }
+
+        $orderCurrentStep->end_in = Date('d-m-Y h:i A');
+        $orderCurrentStep->step_status_id = 11;
+        $orderCurrentStep->save();
+
+        if(count($order->steps) == count($steps)) {
+            return $this->response->successResponse('step',null);
+        }
+
+
+        return $this->response->successResponse('step',$steps[count($order->steps)]);
     }
 
     public function send_image(Request $request) {

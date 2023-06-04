@@ -3,6 +3,7 @@
 use App\Http\Controllers\NotificationController;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\Service;
     if(!function_exists('translate')){
         function translate($term) {
             return $term;
@@ -120,4 +121,16 @@ use Spatie\Permission\Models\Role;
         }
     }
 
+    if(!function_exists('reach_limit_for_max_limit')) {
+        function reach_limit_for_max_limit($service_id) {
+            $maxLimit = Service::where('id',$service_id)->select('max_limit')->first();
+            if($maxLimit == null) {
+                return false;
+            }
+            // check limit
+            // save a notify when this service get avaliable
+            return true;
+
+        }
+    }
 ?>
