@@ -81,6 +81,13 @@ Route::prefix('v1')->group(function () {
                 Route::post('/executer-register','executer_register');
             });
         });
+        Route::middleware('auth:sanctum')->prefix('info')->group(function() {
+            Route::controller(ExecuterController::class)->group(function() {
+                Route::get('myInfo','getMyInfo');
+                Route::post('update_my_info','updateMyInfo');
+                Route::post('update_my_bank','updateMyBankInfo');
+            });
+        });
         Route::middleware('auth:sanctum')->prefix('order')->group(function() {
             Route::controller(OrderController::class)->group(function() {
                 Route::get('/available-orders','executer_avaliavble_orders');
