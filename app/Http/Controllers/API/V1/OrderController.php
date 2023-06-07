@@ -343,6 +343,9 @@ class OrderController extends Controller
                     $query->select('id','name_ar as step_name_ar' ,'name_en as step_name_en' ,'max_time_in_minute' ,'min_time_in_minute');
                 }
             ])->orderBy('id','desc')->first();
+            if($lastStep == null) {
+                break;
+            }
             if($lastStep->end_in == null) {
                 $todo[$key]->steps = [
                     'need_to_finish' => 1,
