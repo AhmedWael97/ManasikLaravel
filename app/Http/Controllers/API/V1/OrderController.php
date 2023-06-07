@@ -350,7 +350,8 @@ class OrderController extends Controller
                 ];
                 break;
             } else {
-                $countOfServicesSteps = ServiceStep::where('service_id',$orderDetail->service_id)->get();
+                $countOfServicesSteps = ServiceStep::where('service_id',$orderDetail->service_id)
+                                        ->select('service_id','name_ar as step_name_ar' ,'name_en as step_name_en' ,'max_time_in_minute' ,'min_time_in_minute')->get();
                 $countOfDoneSteps = OrderDetailStep::where('detail_id',$orderDetail->id)->count();
                 if(count($countOfServicesSteps) == $countOfDoneSteps) {
                     $todo[$key]->steps = [
