@@ -345,8 +345,9 @@ class OrderController extends Controller
             ])->orderBy('id','desc')->first();
             if($lastStep->end_in == null) {
                 $todo[$key]->steps = [
-                    'finished_steps' => 0,
-                    'current_step' => $lastStep,
+                    'need_to_finish' => 1,
+                    'need_to_start' => 0,
+                    'step' => $lastStep,
                 ];
                 break;
             } else {
@@ -355,14 +356,16 @@ class OrderController extends Controller
                 $countOfDoneSteps = OrderDetailStep::where('detail_id',$orderDetail->id)->count();
                 if(count($countOfServicesSteps) == $countOfDoneSteps) {
                     $todo[$key]->steps = [
-                        'finished_steps' => 1,
-                        'current_step' => null,
+                        'need_to_finish' => 0,
+                        'need_to_start' => 0,
+                        'step' => null,
                     ];
                     break;
                 } else {
                     $todo[$key]->steps = [
-                        'finished_steps' => 0,
-                        'current_step' => $countOfServicesSteps[$countOfDoneSteps],
+                        'need_to_finish' => 0,
+                        'need_to_start' => 1,
+                        'step' => $countOfServicesSteps[$countOfDoneSteps],
                     ];
                     break;
                 }
