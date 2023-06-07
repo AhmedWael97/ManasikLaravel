@@ -38,10 +38,11 @@ class OrderController extends Controller
             $isWallet = $request->isWallet;
 
             if($request->paymentType == null && $isWallet == 1) {
-                $paymentType = PaymentType::where('id', 5)->select('id')->first();
+                $paymentType = PaymentType::where('id', 5)->select('id','is_internal')->first();
             } else {
-                $paymentType = PaymentType::where('id',$request->paymentType)->select('id')->first();
+                $paymentType = PaymentType::where('id',$request->paymentType)->select('id','is_internal')->first();
             }
+
 
 
 
@@ -115,6 +116,7 @@ class OrderController extends Controller
                             'order' => $newOrder,
                             'user' => $request->user(),
                         ];
+
                         $this->paymentController->payWithWallet($paymentRequest);
                     } else if ($paymentType->is_internal == 1 && $isWallet == 0) {
                         $paymentRequest = [

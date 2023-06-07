@@ -20,18 +20,19 @@ class PaymentController extends Controller
     }
 
     public function payWithWallet($request) {
-        if( ! $request->user) {
+        if( ! $request['user']) {
             $this->response->unAuthroizeResponse();
         }
 
-        if(! $request->order) {
+        if(! $request['order']) {
             $this->response->ErrorResponse("No Order Found");
         }
 
-        $price = $request->order->price;
-        $user = $request->user;
-        $order = $request->order;
-        $currency_id = $request->order->currency_id;
+
+        $price = $request['order']->price;
+        $user = $request['user'];
+        $order = $request['order'];
+        $currency_id = $request['order']->currency_id;
         $defaultCurrencyId = 1; // change to default currency from settings
         $adminWalletId =1;
         if($currency_id != $defaultCurrencyId) {
@@ -50,11 +51,11 @@ class PaymentController extends Controller
                 'refer_to_order_detail' => $order->id,
             ]);
             $newTransaction->save();
-            $adminWallet = Wallet::where('id',1)->firt();
+            $adminWallet = Wallet::where('user_id',1)->first();
             $adminWallet->amount += $price;
             $adminWallet->save();
 
-            $userWallet = Wallet::where('id',$user->id)->first();
+            $userWallet = Wallet::where('user_id',$user->id)->first();
             $userWallet->amount -= $price;
             $userWallet->save();
 
