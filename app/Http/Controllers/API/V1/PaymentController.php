@@ -38,7 +38,7 @@ class PaymentController extends Controller
             $price = round($price * $user->currency->convert_value,2);
         }
 
-        if($price >= $user->wallet->amount) {
+        if($price <= $user->wallet->amount) {
             $newTransaction = new WalletTransaction([
                 'wallet_id' => $adminWalletId,
                 'amount' => $price,
