@@ -31,6 +31,10 @@ class BasicController extends Controller
         $this->bankService = $bankService;
     }
 
+    public function timenow() {
+        return Date('d-m-Y h:i A');
+    }
+
     public function getMyAccountData(Request $request) {
         if($request->user()) {
             return $this->response->successResponse('User',$request->user());
