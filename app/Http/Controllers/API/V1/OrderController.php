@@ -316,8 +316,58 @@ class OrderController extends Controller
             return $this->response->noPermission();
         }
 
-        $todo = OrderDetail::where('executer_id',$request->user()->id)
-        ->with('order','hajPurpose','KfaraChoice','steps','steps.step','service')->get();
+        // $todo = OrderDetail::where('executer_id',$request->user()->id)
+        // ->with('order','hajPurpose','KfaraChoice','steps','steps.step','service')->get();
+
+        $todo = DB::table('order_details as od')->where('od.executer_id',$request->user()->id)
+            ->join('orders as o','od.order_id','=','o.id')
+            ->leftJoin('haj_purposes as  hp','hp.id','=','od.purpose_hag_id')
+
+            ->join('services as s' ,'s.id' , '=' , 'od.service_id')
+            ->join('users as u','u.id' ,'=' ,'o.user_id')
+            ->select('od.id'
+            ,'s.id as service_id'
+            ,'s.name_en as service_name_en'
+            ,'s.name_ar as service_name_ar'
+            ,'od.full_name'
+            ,'od.execution_date'
+            ,'od.required_date'
+            ,'od.executer_price as earnings'
+            ,'u.name as username_en',
+            'u.name_ar as username_ar'
+        )->get();
+
+        foreach($todo as $key=>$orderDetail) {
+            $lastStep = OrderDetailStep::where('detail_id',$orderDetail->id)->select('detail_id','service_step_id','start_in','end_in')->with([
+                'step' => function($query) {
+                    $query->select('id','name_ar as step_name_ar' ,'name_en as step_name_en' ,'max_time_in_minute' ,'min_time_in_minute');
+                }
+            ])->orderBy('id','desc')->first();
+            if($lastStep->end_in == null) {
+                $todo[$key]->steps = [
+                    'finished_steps' => 0,
+                    'current_step' => $lastStep,
+                ];
+                break;
+            } else {
+                $countOfServicesSteps = ServiceStep::where('service_id',$orderDetail->service_id)->get();
+                $countOfDoneSteps = OrderDetailStep::where('detail_id',$orderDetail->id)->count();
+                if(count($countOfServicesSteps) == $countOfDoneSteps) {
+                    $todo[$key]->steps = [
+                        'finished_steps' => 1,
+                        'current_step' => null,
+                    ];
+                    break;
+                } else {
+                    $todo[$key]->steps = [
+                        'finished_steps' => 0,
+                        'current_step' => $countOfServicesSteps[$countOfDoneSteps],
+                    ];
+                    break;
+                }
+            }
+        }
+
         return $this->response->successResponse('ToDoOrder',$todo);
     }
 

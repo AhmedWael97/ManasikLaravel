@@ -59,7 +59,7 @@ class PaymentController extends Controller
             $userWallet->save();
 
             $orderDB = Order::where('id',$order->id)->select('id','payment_status_id')->first();
-            $orderDB->payment_status_id = 8;
+            $orderDB->payment_status_id = 11;
             $orderDB->save();
 
             $orderDetails = OrderDetail::where('order_id',$order->id)->get();

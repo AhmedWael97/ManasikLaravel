@@ -18,14 +18,17 @@ use App\Models\PaymentType;
 use App\Models\HajPurpose;
 use Illuminate\Support\Facades\Auth;
 use App\Models\BankBarnch;
+use App\Services\BankService;
+
 class BasicController extends Controller
 {
 
      public $response;
-
-    public function __construct()
+     protected $bankService;
+    public function __construct(BankService $bankService)
     {
         $this->response = new ApplicationResponse();
+        $this->bankService = $bankService;
     }
 
     public function getMyAccountData(Request $request) {
@@ -110,7 +113,7 @@ class BasicController extends Controller
     }
 
     public function getBanks() {
-        return $this->response->successResponse('Bank',Bank::get());
+        return $this->response->successResponse('Bank',$this->bankService->getTotalBanks());
     }
 
     public function getBankBranches(Request $request) {
