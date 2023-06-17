@@ -23,10 +23,18 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">
+                    <span class="d-block badge badge-danger mt-2 mb-2">
+                        {{ translate('Values will update every 1 day automatically') }}
+                    </span>
                     <a href="{{ route('currency-create') }}" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i>
                         {{ translate('Add New Currency') }}
                     </a>
+                    <a href="{{ route('currency-update-values') }}" class="btn btn-primary">
+                        <i class="fas fa-refresh"></i>
+                        {{ translate('Manaual Update Values') }}
+                    </a>
+
                   </h3>
                 </div>
                 <!-- /.card-header -->
@@ -40,11 +48,9 @@
                                 {{ translate('Added By') }}
                             </th>
                             <th>
-                                {{ translate('Arabic Name') }}
+                                {{ translate('Name') }}
                             </th>
-                            <th>
-                                {{ translate('English Name') }}
-                            </th>
+
                             <th>
                                 {{ translate('Convert Value') }}
                             </th>
@@ -65,11 +71,9 @@
                                         {{ $currency->user->name }}
                                     </td>
                                     <td>
-                                        {{ $currency->name_ar }}
-                                    </td>
-                                    <td>
                                         {{ $currency->name_en }}
                                     </td>
+
                                     <td>
                                         {{ $currency->convert_value }}
                                     </td>

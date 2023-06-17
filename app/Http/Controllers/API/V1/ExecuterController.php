@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ApplicationResponse;
-use App\Models\User;
+use App\Models\Executer;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +24,7 @@ class ExecuterController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user()->id)->first();
+        $user = Executer::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
@@ -48,7 +48,7 @@ class ExecuterController extends Controller
 
 
 
-        $user = User::findOrFail($request->user()->id);
+        $user = Executer::findOrFail($request->user()->id);
 
         if($request->has('name')) {
             $user->name = $request->name;
@@ -63,7 +63,7 @@ class ExecuterController extends Controller
         }
 
         if($request->has('phone')){
-            if(User::where(['phone'=>$request->phone, ['id' , '<>' ,$user->id]])->first()) {
+            if(Executer::where(['phone'=>$request->phone, ['id' , '<>' ,$user->id]])->first()) {
                return $this->response->errorResponse('Phone Is Taken');
             } else {
                 $user->phone = $request->phone;
@@ -72,7 +72,7 @@ class ExecuterController extends Controller
         }
 
         if($request->has('email')){
-            if(User::where(['email'=>$request->phone, ['id' , '<>' ,$user->id]])->first()) {
+            if(Executer::where(['email'=>$request->phone, ['id' , '<>' ,$user->id]])->first()) {
                 return $this->response->errorResponse('Email Is Taken');
             } else {
                 $user->email = $request->email;
@@ -157,7 +157,7 @@ class ExecuterController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::findOrFail($request->user()->id);
+        $user = Executer::findOrFail($request->user()->id);
 
         if($request->has('bank')) {
             $user->bank = $request->bank;

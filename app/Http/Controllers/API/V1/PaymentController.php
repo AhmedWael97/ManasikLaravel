@@ -33,11 +33,11 @@ class PaymentController extends Controller
         $user = $request['user'];
         $order = $request['order'];
         $currency_id = $request['order']->currency_id;
-        $defaultCurrencyId = 1; // change to default currency from settings
+        //$defaultCurrencyId = 1; // change to default currency from settings
         $adminWalletId =1;
-        if($currency_id != $defaultCurrencyId) {
-            $price = round($price * $user->currency->convert_value,2);
-        }
+        // if($currency_id != $defaultCurrencyId) {
+        //     $price = round($price * $user->currency->convert_value,2);
+        // }
 
         if($price <= $user->wallet->amount) {
             $newTransaction = new WalletTransaction([
@@ -104,5 +104,27 @@ class PaymentController extends Controller
         ];
 
         return $this->response->successResponse('Wallet',$walletTransactions);
+    }
+
+    public function payWithOnlineGateways($request) {
+        $price = $request['order']->price;
+        $order = $request['order'];
+        $adminWalletId =1;
+
+        $adminWallet = Wallet::where('user_id',$adminWalletId)->first();
+            $adminWallet->amount += $price;
+            $adminWallet->save();
+
+            $orderDB = Order::where('id',$order->id)->select('id','payment_status_id')->first();
+            $orderDB->payment_status_id = 11;
+            $orderDB->save();
+
+            $orderDetails = OrderDetail::where('order_id',$order->id)->get();
+            foreach($orderDetails as $orderDetail) {
+                $orderDetail->is_confirmed = 1;
+                $orderDetail->save();
+            }
+            return true;
+
     }
 }

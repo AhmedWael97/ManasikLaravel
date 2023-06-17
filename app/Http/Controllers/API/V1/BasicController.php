@@ -19,16 +19,19 @@ use App\Models\HajPurpose;
 use Illuminate\Support\Facades\Auth;
 use App\Models\BankBarnch;
 use App\Services\BankService;
+use App\Services\HowToKnowService;
 
 class BasicController extends Controller
 {
 
      public $response;
      protected $bankService;
-    public function __construct(BankService $bankService)
+     protected $htks;
+    public function __construct(BankService $bankService, HowToKnowService $htks)
     {
         $this->response = new ApplicationResponse();
         $this->bankService = $bankService;
+        $this->htks = $htks;
     }
 
     public function timenow() {
@@ -125,5 +128,9 @@ class BasicController extends Controller
             return $this->response->notFound('No Bank Id Found');
         }
         return $this->response->successResponse('BankBranches',BankBarnch::where('bank_id',$request->id)->get());
+    }
+
+    public function how_to_know() {
+        return $this->response->successResponse('HowToKnow', $this->htks->getAll());
     }
 }

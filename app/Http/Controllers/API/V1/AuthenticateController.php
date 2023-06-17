@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Executer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -34,12 +35,12 @@ class AuthenticateController extends Controller
        }
 
        if(! $user->roles[0]->hasPermissionTo('Mobile_Application_User')) {
-        return response([
-            "Status" => 500,
-            "MessageEN" => "Email , phone or Password is wrong",
-            "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
-            "Data" => null
-        ]);
+            return response([
+                "Status" => 500,
+                "MessageEN" => "Email , phone or Password is wrong",
+                "MessageAR" => "كلمة المرور او البريد الالكتروني او رقم الهاتف خطا",
+                "Data" => null
+            ]);
        }
 
         if(Auth::attempt(['email' => $email, 'password' => $request->password])) {
@@ -90,7 +91,7 @@ class AuthenticateController extends Controller
         ]);
         $newUser->save();
 
-        $roles = Role::get();
+        $roles = Role::where('guard_name','web')->get();
         foreach($roles as $role) {
             if($role->hasPermissionTo('Mobile_Application_User')) {
                 $newUser->assignRole($role);
@@ -129,8 +130,8 @@ class AuthenticateController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'name_ar' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users',
+            'email' => 'required|email|unique:executers,email',
+            'phone' => 'required|unique:executers,phone',
             'password' => 'required|min:10',
             'activity_license_image_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
             'government_id_path' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048',
@@ -170,19 +171,21 @@ class AuthenticateController extends Controller
 
 
         try {
-            $user = new User($request->all());
+            $user = new Executer($request->all());
             $user->password = Hash::make($request->password);
-           $roles = Role::get();
-            foreach($roles as $role) {
-                if($role->hasPermissionTo('Executer_Mobile_Application')) {
-                    $user->assignRole($role);
-                }
-            }
-
             $user->is_active = 0;
             $user->is_confirmed_executer = 0;
             $user->is_allow_notification = 0;
             $user->save();
+            $roles = Role::where('guard_name','executer')->get();
+            foreach($roles as $role) {
+                if($role->hasPermissionTo('Executer_Mobile_Application')) {
+                    $user->assignRole($role);
+                    break;
+                }
+            }
+
+
 
             if($request->has('photo_path')) {
                 $imageName = 'photo_'.time().'.'.$request->photo_path->extension();
@@ -225,13 +228,13 @@ class AuthenticateController extends Controller
 
             $user->save();
 
-            $wallet = new Wallet([
-                'user_id' => $user->id,
-                'amount' => 0,
-                'currency_id' => 1,
-            ]);
+            // $wallet = new Wallet([
+            //     'user_id' => $user->id,
+            //     'amount' => 0,
+            //     'currency_id' => 1,
+            // ]);
 
-            $wallet->save();
+           // $wallet->save();
 
             return response([
                 "Status" => 200,
@@ -254,7 +257,7 @@ class AuthenticateController extends Controller
 
     public function executer_login(Request $request) {
 
-       $user = User::where('email',$request->email)->orWhere('phone',$request->email)->first();
+       $user = Executer::where('email',$request->email)->orWhere('phone',$request->email)->first();
 
        if($user == null) {
             return response([
@@ -282,7 +285,7 @@ class AuthenticateController extends Controller
 
 
 
-        if(Auth::attempt(['email' => $email, 'password' => $request->password])) {
+        if(Auth::guard('executer')->attempt(['email' => $email, 'password' => $request->password])) {
 
             if($user->is_active == 0) {
                 Auth::logout();
@@ -301,8 +304,8 @@ class AuthenticateController extends Controller
                 "MessageEN" => "Sueccssfully Logged",
                 "MessageAR" => "تم الدخول بنجاح",
                 "Data" => [
-                    "User" => Auth::user(),
-                    "AccessToken" => "Bearer " . Auth::user()->createToken($request->email)->plainTextToken,
+                    "User" => Auth::guard('executer')->user(),
+                    "AccessToken" => "Bearer " . Auth::guard('executer')->user()->createToken($request->email)->plainTextToken,
                 ]
             ]);
         } else {

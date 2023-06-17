@@ -17,6 +17,7 @@ use App\Models\ToDoOrder;
 use DB;
 use \App\Models\DetailStepRequest;
 use App\Models\ServiceKfaratChoice;
+use App\Models\Executer;
 
 class OrderController extends Controller
 {
@@ -32,15 +33,32 @@ class OrderController extends Controller
             if($request->user() == null) {
                 return $this->response->unAuthroizeResponse();
             }
-            if(! $request->has('paymentType') && ! $request->has('isWallet')) {
+            if(! $request->has('paymentTypeId') && ! $request->has('isWallet')) {
                 return $this->response->ErrorResponse('No payment methods specified');
             }
+
+
             $isWallet = $request->isWallet;
 
-            if($request->paymentType == null && $isWallet == 1) {
+            if($request->paymentTypeId == 0 && $isWallet == 1) {
                 $paymentType = PaymentType::where('id', 5)->select('id','is_internal')->first();
-            } else {
-                $paymentType = PaymentType::where('id',$request->paymentType)->select('id','is_internal')->first();
+            } else if ($request->paymentTypeId == 0 && $isWallet == 0) {
+
+                if($request->has('Payment')) {
+
+                    $type = $request->Payment['type'];
+                    if($type == null) {
+                        return $this->response->ErrorResponse("Invalid Payment Type");
+                    }
+
+                    $paymentType = PaymentType::where('name_en','like', '%'.$type.'%')->select('id','is_internal')->first();
+                    if($paymentType == null) {
+                            return $this->response->ErrorResponse("Invalid Payment Type");
+                        }
+               } else {
+                    return $this->response->ErrorResponse("Invalid Payment Type");
+               }
+
             }
 
 
@@ -124,6 +142,12 @@ class OrderController extends Controller
                             'user' => $request->user(),
                         ];
                         $this->paymentController->payWithPrize($paymentRequest);
+                    } else if ($paymentType->is_internal == 0 && $isWallet == 0) {
+                        $paymentRequest = [
+                            'order' => $newOrder,
+                            'user' => $request->user(),
+                        ];
+                        $this->paymentController->payWithOnlineGateways($paymentRequest);
                     }
                     array_push($orders,$newOrder->id);
                 }
@@ -136,10 +160,10 @@ class OrderController extends Controller
 
 
 
-            return $this->successResponse('Order',$newOrder);
+
 
         } catch (Exception $e) {
-            $newOrder->delete();
+            // $newOrder->delete();
             return $this->response->ErrorResponse($e->getMessage());
         }
     }
@@ -231,7 +255,7 @@ class OrderController extends Controller
         if($request->user() == null) {
             return $this->response->unAuthroizeResponse();
         }
-        $user = User::where('id',$request->user()->id)->first();
+        $user = Executer::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
@@ -239,7 +263,15 @@ class OrderController extends Controller
         $excludedServices = ServiceKfaratChoice::select('service_id')->distinct('service_id')->get()->pluck('service_id');
 
 
-        $orders = DB::table('order_details')->whereNotIn('order_details.service_id',$excludedServices)->where('executer_id','=', null)->join('orders','orders.id','=','order_details.order_id')->where('orders.payment_status_id','=',8)->join('services','services.id' ,'=' ,'order_details.service_id')->leftJoin('haj_purposes','order_details.purpose_hag_id','=','haj_purposes.id')->join('users','users.id','=','orders.user_id')->select('order_details.id as id','order_details.executer_price as reward','services.name_ar as service_name_ar','services.name_en as service_name_en','haj_purposes.name_ar as haj_purpose_name_ar','haj_purposes.name_en as haj_purpose_name_en' ,'users.name_ar as requester_name_ar' ,'users.name as requester_name_en')->get();
+        $orders = DB::table('order_details')
+        ->whereNotIn('order_details.service_id',$excludedServices)
+        ->where('executer_id','=', null)
+        ->join('orders','orders.id','=','order_details.order_id')
+        ->where('orders.payment_status_id','=',11)
+        ->join('services','services.id' ,'=' ,'order_details.service_id')
+        ->leftJoin('haj_purposes','order_details.purpose_hag_id','=','haj_purposes.id')
+        ->join('users','users.id','=','orders.user_id')
+        ->select('order_details.id as id','order_details.executer_price as reward','services.name_ar as service_name_ar','services.name_en as service_name_en','haj_purposes.name_ar as haj_purpose_name_ar','haj_purposes.name_en as haj_purpose_name_en' ,'users.name_ar as requester_name_ar' ,'users.name as requester_name_en')->get();
 
 
 
@@ -252,7 +284,7 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user()->id)->first();
+        $user = Executer::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
@@ -313,7 +345,7 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user()->id)->first();
+        $user = Executer::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
@@ -337,6 +369,8 @@ class OrderController extends Controller
                 ,'od.executer_price as earnings'
                 ,'u.name as username_en'
                 ,'u.name_ar as username_ar'
+                ,'hp.name_ar as haj_purpose_ar'
+                ,'hp.name_ar as haj_purpose_en'
             )->get();
 
         foreach($todo as $key=>$orderDetail) {
@@ -509,7 +543,7 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user()->id)->first();
+        $user = Executer::where('id',$request->user()->id)->first();
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }
@@ -564,7 +598,8 @@ class OrderController extends Controller
             return $this->response->unAuthroizeResponse();
         }
 
-        $user = User::where('id',$request->user()->id)->first();
+        $user = Executer::where('id',$request->user()->id)->first();
+
         if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
             return $this->response->noPermission();
         }

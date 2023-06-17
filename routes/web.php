@@ -69,6 +69,7 @@ Route::prefix('currency')->group(function() {
     Route::get('/edit/{id}','App\Http\Controllers\CurrencyController@edit')->name('currency-edit');
     Route::post('/update','App\Http\Controllers\CurrencyController@update')->name('currency-update');
     Route::get('/delete/{id}','App\Http\Controllers\CurrencyController@destroy')->name('currency-delete');
+    Route::get('/update-values','App\Http\Controllers\CurrencyController@update_values')->name('currency-update-values');
 });
 //Gender
 Route::prefix('gender')->group(function() {
@@ -204,11 +205,6 @@ Route::prefix('/RequestToDo')->group(function() {
 
 });
 
-
-
-Route::get('/test',function() {
-    return AssignServicesToExecuters();
-});
 
 Route::get('/return-count-admin' ,'App\Http\Controllers\UserController@getAdminCount');
 Route::get('/return-count-mobilApp' ,'App\Http\Controllers\UserController@getMobilAppCount');

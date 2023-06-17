@@ -70,9 +70,13 @@
                                     <input type="text" required name="symbol" class="form-control" />
                                 </div>
                             </div>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <input type="submit" value="{{ translate('Save') }}" class="btn btn-success w-100" />
 
+                            </div>
 
-                            <input type="submit" value="{{ translate('Save') }}" class="btn btn-success mt-6" />
                             </div>
                     </form>
                 </div>

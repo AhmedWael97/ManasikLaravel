@@ -43,7 +43,7 @@ class RoleController extends Controller
         ]);
 
         try {
-            $role = new Role(['name' => $request->name]);
+            $role = new Role(['name' => $request->name,'guard_name'=>'executer']);
            if(isset($request->permissions) && count($request->permissions) >= 1) {
             $role->save();
            } else {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NotificationController;
+use App\Models\Currency;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\Service;
@@ -131,6 +132,34 @@ use App\Models\Service;
             // save a notify when this service get avaliable
             return true;
 
+        }
+    }
+
+
+    if(!function_exists('get_convert_value')) {
+        function get_convert_value() {
+            $defaultCurrency = Currency::find(1);
+            if($defaultCurrency == null) {
+                return;
+            }
+             $anotherCurrencies = Currency::where('id','<>',1)->get();
+
+            foreach($anotherCurrencies as $curr) {
+                $req_url = 'https://api.exchangerate.host/convert?from='.$defaultCurrency->symbol.'&to='.$curr->symbol;
+                $response_json = file_get_contents($req_url);
+                if(false !== $response_json) {
+                    try {
+                        $response = json_decode($response_json);
+                        if($response->success === true) {
+
+                          $curr->convert_value = round($response->info->rate,2);
+                          $curr->save();
+                        }
+                    } catch(Exception $e) {
+                       var_dump($e);
+                    }
+                }
+            }
         }
     }
 ?>

@@ -17,6 +17,7 @@ use App\Models\Wallet;
 use App\Models\AutoAssignService;
 use DB;
 use App\Models\OrderDetail;
+use App\Models\Executer;
 class UserController extends Controller
 {
     public function __construct() {
@@ -43,9 +44,9 @@ class UserController extends Controller
             ]);
         } else if ($term == 'Executers') {
             $pageTitle = translate('Executers');
-            $users_ids = DB::table('model_has_roles')->where('role_id',3)->select('model_id')->get()->pluck('model_id');
+           // $users_ids = DB::table('model_has_roles')->where('model_type','App\Models\Executer')->where('role_id',3)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
-                'Users' => User::whereIn('id',$users_ids)->select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
+                'Users' => Executer::select(['id','name','name_ar','phone','email','is_active'])->with(['roles'])->get(),
                 'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Application_Users') {
@@ -221,7 +222,8 @@ class UserController extends Controller
     }
 
     public function view($id) {
-        $user = User::findOrFail($id);
+
+        $user = Executer::findOrFail($id);
         $orders = OrderDetail::where('executer_id',$id)->get();
         $analysisBag = [
             'orders' => $orders->count(),
@@ -331,7 +333,7 @@ class UserController extends Controller
     public function quickActions($type , $id) {
 
         if($type == 'Active_Executer_User') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->is_active = 1;
             $user->is_confirmed_executer = 1;
             $user->save();
@@ -339,7 +341,7 @@ class UserController extends Controller
         }
 
         if($type == 'Deactive_Executer_User') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->is_active = 0;
             $user->is_confirmed_executer = 0;
             $user->save();
@@ -347,7 +349,7 @@ class UserController extends Controller
         }
 
         if($type == 'Deactive_Executer_User') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->is_active = 0;
             $user->is_confirmed_executer = 0;
             $user->save();
@@ -355,21 +357,21 @@ class UserController extends Controller
         }
 
         if($type == 'Allow_Notification') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->is_allow_notification = 1;
             $user->save();
             return back()->with('success',translate('Success'));
         }
 
         if($type == 'Diallow_Notification') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->is_allow_notification = 0;
             $user->save();
             return back()->with('success',translate('Success'));
         }
 
         if($type == 'Enable_SOS_Status') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->sos_status = 1;
             $user->sos_start_date = Date('d-m-Y h:i A');
             $user->save();
@@ -377,7 +379,7 @@ class UserController extends Controller
         }
 
         if($type == 'Disable_SOS_Status') {
-            $user = User::findOrFail($id);
+            $user = Executer::findOrFail($id);
             $user->sos_status = 0;
             $user->sos_start_date = Date('d-m-Y h:i A');
             $user->save();

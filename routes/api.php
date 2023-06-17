@@ -47,6 +47,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/getBanks','getBanks');
             Route::get('/getBankBranches','getBankBranches');
             Route::get('/timenow','timenow');
+            Route::get('/how_to_know','how_to_know');
         });
     });
 
