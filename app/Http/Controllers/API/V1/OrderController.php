@@ -18,6 +18,7 @@ use DB;
 use \App\Models\DetailStepRequest;
 use App\Models\ServiceKfaratChoice;
 use App\Models\Executer;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -643,7 +644,62 @@ class OrderController extends Controller
 
     //executer
     public function send_image(Request $request) {
-        // order_id | step_id
+        // order_id | step_id || image
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|mimes:jpg,webp,png,jpeg,pdf|max:2048'
+        ]);
+
+        if($validator->fails()) {
+            return response([
+                "Status" => 500,
+                "MessageEN" => "Errors With Inputs",
+                "MessageAR" => "خطأ في المدخلات",
+                "Data" => $validator->errors()
+            ]);
+        }
+        if($request->user() == null) {
+            return $this->response->unAuthroizeResponse();
+        }
+
+        $user = Executer::where('id',$request->user()->id)->first();
+        if(! $user->roles[0]->hasPermissionTo('Executer_Mobile_Application')) {
+            return $this->response->noPermission();
+        }
+        $order = OrderDetail::where(['id' => $request->order_id , 'executer_id' => $request->user()->id])->first();
+        if($order == null) {
+            return $this->response->ErrorResponse('Error in order');
+        }
+
+        if(in_array($order->order_status_id,[1,2,7,9,10])) {
+            return $this->response->ErrorResponse('Order status is' . $order->status->name_en);
+        }
+
+        $step = OrderDetailStep::where('id',$request->step_id)->first();
+        if($step->end_in == null) {
+            return $this->response->ErrorResponse('Step is already ended');
+        }
+
+        if($step->start_in == null) {
+            return $this->response->ErrorResponse('Step Not Statred Yet');
+        }
+
+        $detailStepRequest = DetailStepRequest::where([
+            'type' => 0,
+            'order_detail_step_id' => $step->id,
+        ])->first();
+
+        if($detailStepRequest == null) {
+            return $this->response->ErrorResponse('No Request From User');
+        }
+
+        if($request->has('image')) {
+            $imageName = 'order_'.$order->order->id.'step_'.$step->id.'_'.time().'.'.$request->image->extension();
+            $request->image->move(public_path('orders/requests/photos'), $imageName);
+            $detailStepRequest->response = url(public_path('orders/requests/photos').'/'.$imageName);
+            $detailStepRequest->save();
+        }
+
+        return $this->response->successResponse('Success','Image Sent Successfully');
     }
 
     public function send_live_location(Request $request) {
