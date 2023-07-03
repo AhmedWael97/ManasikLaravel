@@ -27,9 +27,11 @@
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
-        @include('Dashboard.Partial.header')
-        @include('Dashboard.Partial.sideMenu')
-        <div class="content-wrapper">
+        @if(Auth::check())
+            @include('Dashboard.Partial.header')
+            @include('Dashboard.Partial.sideMenu')
+        @endif
+        <div class="{{ Auth::check() ? 'content-wrapper' : ''  }}">
 
            <div class="mr-2 ml-2 mt-2">
              @include('Dashboard.Partial.sessions')
@@ -42,7 +44,9 @@
                     <!-- Control sidebar content goes here -->
                 </aside>
                 <!-- /.control-sidebar -->
-        @include('Dashboard.Partial.footer')
+        @if(Auth::check())
+            @include('Dashboard.Partial.footer')
+        @endif
     </div>
 
 <!-- REQUIRED SCRIPTS -->
