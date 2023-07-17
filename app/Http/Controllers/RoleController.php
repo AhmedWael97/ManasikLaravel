@@ -32,7 +32,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         return view('Dashboard.pages.Roles.edit')->with([
             'Role' => $role,
-            'Permissions' => Permission::get(),
+            'Permissions' => Permission::where('guard_name','web')->get(),
         ]);
     }
 

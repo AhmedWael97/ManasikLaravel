@@ -5,9 +5,26 @@ use App\Models\Currency;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\Service;
+use Illuminate\Support\Facades\App;
+
     if(!function_exists('translate')){
         function translate($term) {
-            return $term;
+            $locale = App::getLocale();
+            $file_path = resource_path('lang/') . $locale.'.json';
+            if(file_exists($file_path)) {
+                $data = file_get_contents($file_path);
+                $data_array = json_decode($data, true);
+                if(array_key_exists($term,$data_array)) {
+                    echo $data_array[$term];
+                } else {
+                    $newArr[$term] = trim($term);
+                    $result = array_merge($data_array, $newArr);
+                    file_put_contents($file_path,json_encode($result));
+                    return $term;
+                }
+            } else {
+                return $term;
+            }
         }
     }
 
