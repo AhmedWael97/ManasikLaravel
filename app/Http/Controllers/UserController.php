@@ -53,7 +53,7 @@ class UserController extends Controller
             $pageTitle = translate('Application Users');
             $users_ids = DB::table('model_has_roles')->where('role_id',4)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
-                'Users' => User::whereIn('id',$users_ids)->select(['id','name','phone','email','is_active'])->with(['roles'])->get(),
+                'Users' => User::whereIn('id',$users_ids)->select(['id','name','phone','email' ])->with(['roles'])->get(),
                 'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Kfarat_Executers') {
