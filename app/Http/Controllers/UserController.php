@@ -32,14 +32,14 @@ class UserController extends Controller
         if($term == null) {
             $pageTitle = translate('Total Users');
             return view('Dashboard.pages.Users.index')->with([
-                'Users' => User::select(['id','name','phone','email','is_active'])->with(['roles'])->get(),
+                'Users' => User::select(['id','name','phone','email' ])->with(['roles'])->get(),
                 'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Super_Admin') {
             $pageTitle = translate('Super Admin Users');
             $users_ids = DB::table('model_has_roles')->where('role_id',1)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
-                'Users' => User::whereIn('id',$users_ids)->select(['id','name','phone','email','is_active'])->with(['roles'])->get(),
+                'Users' => User::whereIn('id',$users_ids)->select(['id','name','phone','email' ])->with(['roles'])->get(),
                 'pageTitle' => $pageTitle,
             ]);
         } else if ($term == 'Executers') {
@@ -60,7 +60,7 @@ class UserController extends Controller
             $pageTitle = translate('Kfarat Executers');
             $users_ids = DB::table('model_has_roles')->where('role_id',2)->select('model_id')->get()->pluck('model_id');
             return view('Dashboard.pages.Users.index')->with([
-                'Users' => Executer::whereIn('id',$users_ids)->select(['id','name','phone','email','is_active'])->with(['roles'])->get(),
+                'Users' => Executer::whereIn('id',$users_ids)->select(['id','name','phone','email' ])->with(['roles'])->get(),
                 'pageTitle' => $pageTitle,
             ]);
 
